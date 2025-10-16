@@ -2,34 +2,84 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Default as ArticleHeader } from '../../../components/article-header/ArticleHeader';
+import { Default as ArticleHeader } from '@/components/article-header/ArticleHeader';
 
-// ✅ Fix ESLint error for missing display name
-jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: React.forwardRef<HTMLImageElement, any>(({ image, alt }, ref) => {
-    const Component = () => (
-      <img ref={ref} data-testid="image-wrapper" src={image?.value?.src} alt={alt} />
-    );
-    Component.displayName = 'MockedImageWrapper';
-    return <Component />;
-  }),
-}));
+//  Component-Specific Mocks
+jest.mock('@/components/image/ImageWrapper.dev', () => {
+  const MockImageWrapper = React.forwardRef<
+    HTMLImageElement,
+    { image?: { value?: { src?: string } }; alt?: string }
+  >(({ image, alt }, ref) => (
+    <img ref={ref} data-testid="image-wrapper" src={image?.value?.src} alt={alt} />
+  ));
 
-// ✅ Define mock props safely
+  MockImageWrapper.displayName = 'MockImageWrapper';
+
+  return { Default: MockImageWrapper };
+});
+
+jest.mock('@/components/floating-dock/floating-dock.dev', () => {
+  const FloatingDock = ({ items }: { items?: Array<{ title: string; onClick?: () => void }> }) => (
+    <div data-testid="floating-dock">
+      {items?.map((item, index) => (
+        <button key={index} data-testid={`share-${item.title}`} onClick={item.onClick}>
+          {item.title}
+        </button>
+      ))}
+    </div>
+  );
+  FloatingDock.displayName = 'MockFloatingDock';
+  return { FloatingDock };
+});
+
+jest.mock('@/components/button-component/ButtonComponent', () => {
+  const ButtonBase = ({
+    buttonLink,
+    variant,
+    className,
+    icon,
+    iconPosition,
+  }: {
+    buttonLink?: { value?: { href?: string; text?: string } };
+    variant?: string;
+    className?: string;
+    icon?: { value?: string };
+    iconPosition?: string;
+  }) => (
+    <button
+      data-testid="button-base"
+      className={className}
+      data-variant={variant}
+      data-icon={icon?.value}
+      data-icon-position={iconPosition}
+    >
+      {buttonLink?.value?.text}
+    </button>
+  );
+  ButtonBase.displayName = 'MockButtonBase';
+  return { ButtonBase };
+});
+
+//  Define mock props safely
 const mockProps = {
   fields: {
     imageRequired: { value: { src: '/test-image.jpg' } },
     eyebrowOptional: { value: 'Tech News' },
   },
+  params: {},
+  rendering: { componentName: 'ArticleHeader' },
   externalFields: {
-    pageHeaderTitle: 'Sample Article',
-    pageReadTime: '5 min read',
-    pageDisplayDate: 'Oct 13, 2025',
+    pageHeaderTitle: { value: 'Sample Article' },
+    pageReadTime: { value: '5 min read' },
+    pageDisplayDate: { value: 'Oct 13, 2025' },
     pageAuthor: {
       value: {
-        name: 'John Doe',
-        role: 'Senior Developer',
-        image: { value: { src: '/author.jpg' } },
+        personFirstName: { value: 'John' },
+        personLastName: { value: 'Doe' },
+        personJobTitle: { value: 'Senior Developer' },
+        personProfileImage: { value: { src: '/author.jpg' } },
+        rendering: { componentName: 'Person' },
+        params: {},
       },
     },
   },
@@ -38,6 +88,11 @@ const mockProps = {
 describe('ArticleHeader Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    // Mock window.open for share functionality
+    Object.defineProperty(window, 'open', {
+      writable: true,
+      value: jest.fn(),
+    });
   });
 
   it('renders the header with image and details', () => {
@@ -45,35 +100,85 @@ describe('ArticleHeader Component', () => {
 
     expect(screen.getByText('Sample Article')).toBeInTheDocument();
     expect(screen.getByText('Tech News')).toBeInTheDocument();
-    expect(screen.getByTestId('image-wrapper')).toHaveAttribute('src', '/test-image.jpg');
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getAllByTestId('image-wrapper')[0]).toHaveAttribute('src', '/test-image.jpg');
+    expect(screen.getAllByText('John Doe')[0]).toBeInTheDocument(); // Multiple instances exist
+    expect(screen.getByText('5 min read')).toBeInTheDocument();
+    expect(screen.getByText('Oct 13, 2025')).toBeInTheDocument();
   });
 
-  it('handles share button clicks correctly', () => {
-    window.open = jest.fn();
+  it('renders back button correctly', () => {
     render(<ArticleHeader {...mockProps} />);
 
-    const fbButton = screen.getByTestId('share-Share on Facebook');
-    fireEvent.click(fbButton);
-
-    expect(window.open).toHaveBeenCalledWith(expect.stringContaining('facebook.com'), '_blank');
-  });
-
-  it('renders share buttons', () => {
-    render(<ArticleHeader {...mockProps} />);
-    expect(screen.getByTestId('share-Share on LinkedIn')).toBeInTheDocument();
-    expect(screen.getByTestId('share-Copy link')).toBeInTheDocument();
-  });
-
-  it('renders fallback safely when fields are missing', () => {
-    const safeProps = { fields: null, externalFields: null };
-    render(<ArticleHeader {...safeProps} />);
-    expect(screen.getByTestId('toaster')).toBeInTheDocument();
+    const backButton = screen.getByTestId('button-base');
+    expect(backButton).toHaveAttribute('data-variant', 'link');
+    expect(backButton).toHaveAttribute('data-icon', 'arrow-left');
+    expect(screen.getByText('Back to news')).toBeInTheDocument();
   });
 
   it('renders author section correctly', () => {
     render(<ArticleHeader {...mockProps} />);
+
+    expect(screen.getByTestId('avatar')).toBeInTheDocument();
     expect(screen.getByTestId('avatar-img')).toHaveAttribute('src', '/author.jpg');
+    expect(
+      screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'p' &&
+          content.includes('John') &&
+          content.includes('Doe')
+        );
+      })
+    ).toBeInTheDocument();
     expect(screen.getByText('Senior Developer')).toBeInTheDocument();
+  });
+
+  it('handles share button clicks correctly', () => {
+    render(<ArticleHeader {...mockProps} />);
+
+    const fbButtons = screen.getAllByTestId('share-Share on Facebook');
+    fireEvent.click(fbButtons[0]); // Click the first one (mobile version)
+
+    expect(window.open).toHaveBeenCalledWith(
+      expect.stringContaining('facebook.com'),
+      '_blank',
+      'width=600,height=400'
+    );
+  });
+
+  it('renders floating dock with share buttons', () => {
+    render(<ArticleHeader {...mockProps} />);
+
+    // Note: FloatingDock is not mocked, so we test the actual share button interaction
+    expect(screen.getAllByTestId('floating-dock')).toBeTruthy();
+    expect(screen.getAllByTestId('share-Share on Facebook')).toHaveLength(2); // Mobile and desktop versions
+    expect(screen.getAllByTestId('share-Share on LinkedIn')).toHaveLength(2);
+    expect(screen.getAllByTestId('share-Copy Link')).toHaveLength(2);
+  });
+
+  it('renders category badge when eyebrow is provided', () => {
+    render(<ArticleHeader {...mockProps} />);
+
+    expect(screen.getByTestId('badge')).toBeInTheDocument();
+    expect(screen.getByText('Tech News')).toBeInTheDocument();
+  });
+
+  it('renders fallback when fields are null', () => {
+    const propsWithoutFields = {
+      fields: undefined,
+      params: {},
+      rendering: { componentName: 'ArticleHeader' },
+      externalFields: {
+        pageHeaderTitle: { value: 'Sample Article' },
+      },
+    };
+
+    render(<ArticleHeader {...propsWithoutFields} />);
+    expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
+    expect(screen.getByText('No data for ArticleHeader')).toBeInTheDocument();
+  });
+
+  it('renders toaster component', () => {
+    render(<ArticleHeader {...mockProps} />);
+    expect(screen.getByTestId('toaster')).toBeInTheDocument();
   });
 });

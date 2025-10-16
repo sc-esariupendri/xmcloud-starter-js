@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as MediaSection } from '@/components/media-section/MediaSection.dev';
 
-// 🧪 Mock dependencies
+//  Mock dependencies
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => ({
     page: { mode: { isNormal: true } },
@@ -14,10 +14,24 @@ jest.mock('@/hooks/use-intersection-observer', () => ({
   useIntersectionObserver: () => [true, { current: document.createElement('div') }],
 }));
 
-jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  __esModule: true,
-  default: ({ image }: { image: any }) => <img src={image?.value?.src} alt="" />,
-}));
+jest.mock('@/components/image/ImageWrapper.dev', () => {
+  const ImageWrapper = ({
+    image,
+  }: {
+    image?: {
+      value?: {
+        src?: string;
+        width?: number;
+        height?: number;
+      };
+    };
+  }) => <img src={image?.value?.src} alt="" />;
+  ImageWrapper.displayName = 'MockImageWrapper';
+  return {
+    __esModule: true,
+    default: ImageWrapper,
+  };
+});
 
 beforeAll(() => {
   Object.defineProperty(HTMLMediaElement.prototype, 'play', {
