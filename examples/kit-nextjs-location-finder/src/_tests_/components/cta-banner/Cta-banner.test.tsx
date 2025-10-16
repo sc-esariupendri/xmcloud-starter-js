@@ -2,28 +2,18 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as CtaBanner } from '@/components/cta-banner/CtaBanner';
-import { TextProps } from 'recharts';
-import { LinkProps } from '@sitecore-content-sdk/nextjs';
 
-jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field, tag: Tag = 'div', ...props }: TextProps) => <Tag {...props}>{field?.value}</Tag>,
-  Link: ({ field }: LinkProps) => <a href={field?.value?.href}>{field?.value?.text}</a>,
-}));
+// Component-specific mocks (Sitecore components are already mocked globally)
+// Override if needed for specific testing requirements
 
-// 🧪 Mock other components
-jest.mock('@/components/ui/button', () => ({
-  Button: ({ children }: React.PropsWithChildren) => <button>{children}</button>,
-}));
-
-jest.mock('@/components/animated-section/AnimatedSection.dev', () => ({
-  Default: ({ children }: React.PropsWithChildren) => <div>{children}</div>,
-}));
-
-jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: { componentName: string }) => (
-    <div>No data for {componentName}</div>
-  ),
-}));
+// Component-specific mocks
+jest.mock('@/components/animated-section/AnimatedSection.dev', () => {
+  const AnimatedSection = ({ children }: React.PropsWithChildren) => (
+    <div data-testid="animated-section">{children}</div>
+  );
+  AnimatedSection.displayName = 'MockAnimatedSection';
+  return { Default: AnimatedSection };
+});
 
 describe('CtaBanner Component', () => {
   const mockProps = {
@@ -33,8 +23,9 @@ describe('CtaBanner Component', () => {
       linkOptional: { value: { href: '/cta-link', text: 'Click Here' } },
     },
     params: {
-      colorScheme: 'primary',
+      colorScheme: 'primary' as const,
     },
+    rendering: { componentName: 'CtaBanner' },
   };
 
   it('renders title, description, and link correctly', () => {
@@ -46,13 +37,25 @@ describe('CtaBanner Component', () => {
   });
 
   it('renders fallback when no fields are provided', () => {
-    render(<CtaBanner />);
-    expect(screen.getByText('No data for CTA Banner')).toBeInTheDocument();
+    const emptyProps = {
+      fields: undefined,
+      params: {},
+      rendering: { componentName: 'CtaBanner' },
+    };
+    render(<CtaBanner {...emptyProps} />);
+    expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
   });
 
   it('does not render link if linkOptional is missing', () => {
-    const { linkOptional, ...restFields } = mockProps.fields;
-    render(<CtaBanner fields={restFields} params={mockProps.params} />);
+    const propsWithoutLink = {
+      ...mockProps,
+      fields: {
+        titleRequired: mockProps.fields.titleRequired,
+        descriptionOptional: mockProps.fields.descriptionOptional,
+        // linkOptional is intentionally omitted
+      },
+    };
+    render(<CtaBanner {...propsWithoutLink} />);
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 });

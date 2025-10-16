@@ -25,7 +25,7 @@ type AlertBannerData = {
 };
 
 type AlertBannerFields = {
-  fields: {
+  fields?: {
     title: Field<string>; // Sitecore editable text field
     description: Field<string>; // Sitecore editable text field
     image?: ImageField; // Sitecore editable image field
@@ -35,10 +35,10 @@ type AlertBannerFields = {
 
 export const Default: React.FC<AlertBannerProps> = (props) => {
   const { fields } = props;
-  const { title, description, link } = fields;
   const [isHidden, setIsHidden] = useState(false);
 
   if (fields) {
+    const { title, description, link } = fields;
     return (
       <Alert className={cn('relative border-none', { hidden: isHidden })}>
         <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between gap-4 py-1 xl:px-8">
