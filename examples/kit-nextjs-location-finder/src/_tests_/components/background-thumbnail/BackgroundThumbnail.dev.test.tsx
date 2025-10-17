@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as BackgroundThumbnail } from '../../../components/background-thumbnail/BackgroundThumbnail.dev';
 
-// ✅ Mock useSitecore hook
+//  Mock useSitecore hook
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: jest.fn(),
 }));
@@ -28,9 +28,9 @@ describe('BackgroundThumbnail Component', () => {
       </BackgroundThumbnail>
     );
 
-    // ✅ Badge should appear
+    //  Badge should appear
     expect(screen.getByText('Update Background')).toBeInTheDocument();
-    // ✅ Child should appear
+    //  Child should appear
     expect(screen.getByTestId('child')).toBeInTheDocument();
   });
 
@@ -45,9 +45,9 @@ describe('BackgroundThumbnail Component', () => {
       </BackgroundThumbnail>
     );
 
-    // ✅ Badge should not appear
+    //  Badge should not appear
     expect(screen.queryByText('Update Background')).not.toBeInTheDocument();
-    // ✅ Child should not appear either (since returns null)
+    //  Child should not appear either (since returns null)
     expect(screen.queryByTestId('child')).not.toBeInTheDocument();
   });
 });

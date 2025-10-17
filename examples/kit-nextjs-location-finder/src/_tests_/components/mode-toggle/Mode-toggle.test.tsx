@@ -13,26 +13,30 @@ jest.mock('next-themes', () => ({
 // Note: The global mock provides basic Sun/Moon icons, but we override them here for specific testing needs
 jest.mock('lucide-react', () => {
   const createMockIcon = (name: string) => {
-    const MockIcon = ({ 
-      className, 
-      size, 
-      strokeWidth, 
-      absoluteStrokeWidth, 
-      ...props 
+    const MockIcon = ({
+      className,
+      size,
+      strokeWidth,
+      absoluteStrokeWidth,
+      ...props
     }: {
       className?: string;
       size?: number;
       strokeWidth?: number;
       absoluteStrokeWidth?: boolean;
     }) =>
-      React.createElement('span', {
-        'data-testid': `${name.toLowerCase()}-icon`,
-        className,
-        'data-size': size?.toString(),
-        'data-stroke-width': strokeWidth?.toString(),
-        'data-absolute-stroke-width': absoluteStrokeWidth?.toString(),
-        ...props,
-      }, name);
+      React.createElement(
+        'span',
+        {
+          'data-testid': `${name.toLowerCase()}-icon`,
+          className,
+          'data-size': size?.toString(),
+          'data-stroke-width': strokeWidth?.toString(),
+          'data-absolute-stroke-width': absoluteStrokeWidth?.toString(),
+          ...props,
+        },
+        name
+      );
     MockIcon.displayName = `Mock${name}`;
     return MockIcon;
   };
@@ -73,7 +77,7 @@ jest.mock('@/components/ui/dropdown-menu', () => ({
   ),
 }));
 
-// Override global button mock for this component's specific needs  
+// Override global button mock for this component's specific needs
 jest.mock('@/components/ui/button', () => ({
   Button: ({
     children,
