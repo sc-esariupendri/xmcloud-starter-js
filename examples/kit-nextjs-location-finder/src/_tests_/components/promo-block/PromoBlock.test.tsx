@@ -72,6 +72,7 @@ const renderPromo = (override: Partial<PromoProps> = {}) => {
     ...override,
   };
   // Type assertion is safe here as we're providing all required props for testing
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return render(<PromoBlock {...(props as any)} />);
 };
 
@@ -92,6 +93,7 @@ describe('PromoBlock', () => {
       rendering: { componentName: 'PromoBlock' },
     };
     // Testing edge case where fields are undefined - type assertion needed for test
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     render(<PromoBlock {...(emptyProps as any)} />);
     expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
   });
@@ -130,7 +132,7 @@ describe('PromoBlock', () => {
       rendering: { componentName: 'TextLink' },
     };
     // Testing TextLink component variant - type assertion for test compatibility
-    render(<TextLink {...(props as any)} />);
+    render(<TextLink {...props} />);
 
     // Variation two adds extra class on copy (relative p-6 bg-white)
     const copy = screen.getByText('Promo Description').parentElement as HTMLElement; // RichText in copy section
