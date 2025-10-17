@@ -6,7 +6,7 @@ import {
   ButtonComponentProps,
 } from '@/components/button-component/ButtonComponent';
 
-// 🧪 Mocks
+//  Mocks
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Link: ({
     field,
@@ -61,7 +61,7 @@ jest.mock('@/components/ui/button', () => ({
 }));
 
 // ----------------------
-// 🧪 Mock Data
+//  Mock Data
 // ----------------------
 const mockRendering = { componentName: 'Button' };
 const mockParams = {

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Card } from '@/components/card/Card.dev';
 
-// 🧪 Mocks
+//  Mocks
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field }: { field?: { value?: string } }) => <span>{field?.value}</span>,
   RichText: ({ field }: { field?: { value?: string } }) => <div>{field?.value}</div>,
@@ -51,7 +51,7 @@ jest.mock('@/components/ui/button', () => ({
 }));
 
 // ----------------------
-// 🧪 Mock Data
+//  Mock Data
 // ----------------------
 const mockProps = {
   heading: { value: 'Card Title' },
@@ -64,7 +64,7 @@ const mockProps = {
 } as unknown as React.ComponentProps<typeof Card>;
 
 // ----------------------
-// 🧪 Tests
+//  Tests
 // ----------------------
 describe('Card Component', () => {
   it('renders card with heading, description, image, and link', () => {

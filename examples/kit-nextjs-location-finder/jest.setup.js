@@ -18,6 +18,13 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     const linkText = field?.value?.text || children;
     return React.createElement('a', { href: field.value.href }, linkText);
   },
+  Placeholder: ({ name, rendering }) => {
+    return React.createElement('div', {
+      'data-testid': 'sitecore-placeholder',
+      'data-placeholder-name': name,
+      'data-rendering': rendering ? JSON.stringify(rendering) : undefined,
+    }, `Placeholder: ${name}`);
+  },
   useSitecore: () => ({
     page: {
       mode: {
@@ -95,6 +102,23 @@ jest.mock('lucide-react', () => {
     Delete: createMockIcon('Delete'),
     Plus: createMockIcon('Plus'),
     Minus: createMockIcon('Minus'),
+    // Carousel and navigation icons
+    ChevronLeft: createMockIcon('ChevronLeft'),
+    ChevronRight: createMockIcon('ChevronRight'),
+    Pause: createMockIcon('Pause'),
+    Play: createMockIcon('Play'),
+    // Modal and map icons
+    MapPin: createMockIcon('MapPin'),
+    // Accordion and expand icons
+    ChevronDown: createMockIcon('ChevronDown'),
+    ChevronUp: createMockIcon('ChevronUp'),
+    // Additional common icons
+    Eye: createMockIcon('Eye'),
+    EyeOff: createMockIcon('EyeOff'),
+    Calendar: createMockIcon('Calendar'),
+    Clock: createMockIcon('Clock'),
+    Globe: createMockIcon('Globe'),
+    Phone: createMockIcon('Phone'),
     // Add more icons as needed by your components
   };
 });
@@ -134,6 +158,84 @@ Object.defineProperty(window, 'open', {
 });
 
 // ---------------------------
+//  Mock HTMLMediaElement for video/audio testing
+// ---------------------------
+Object.defineProperty(HTMLMediaElement.prototype, 'play', {
+  writable: true,
+  value: jest.fn().mockImplementation(() => Promise.resolve()),
+});
+
+Object.defineProperty(HTMLMediaElement.prototype, 'pause', {
+  writable: true,
+  value: jest.fn(),
+});
+
+// ---------------------------
+//  Mock Geolocation API
+// ---------------------------
+Object.defineProperty(navigator, 'geolocation', {
+  writable: true,
+  value: {
+    getCurrentPosition: jest.fn((success) => 
+      success({
+        coords: {
+          latitude: 40.7128,
+          longitude: -74.0060,
+          accuracy: 10,
+        },
+      })
+    ),
+    watchPosition: jest.fn(),
+    clearWatch: jest.fn(),
+  },
+});
+
+// ---------------------------
+//  Global Timer Utilities
+// ---------------------------
+// Add global test utilities that can be used in any test
+global.setupTimers = () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
+};
+
+// ---------------------------
+//  Mock ResizeObserver
+// ---------------------------
+global.ResizeObserver = class ResizeObserver {
+  constructor(cb) {
+    this.cb = cb;
+  }
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+};
+
+// ---------------------------
+//  Mock localStorage and sessionStorage
+// ---------------------------
+const createStorageMock = () => {
+  let store = {};
+  return {
+    getItem: (key) => store[key] || null,
+    setItem: (key, value) => { store[key] = value.toString(); },
+    removeItem: (key) => { delete store[key]; },
+    clear: () => { store = {}; },
+    get length() { return Object.keys(store).length; },
+    key: (index) => Object.keys(store)[index] || null,
+  };
+};
+
+Object.defineProperty(window, 'localStorage', { value: createStorageMock() });
+Object.defineProperty(window, 'sessionStorage', { value: createStorageMock() });
+
+// ---------------------------
 //  Mock Common UI Components
 // ---------------------------
 jest.mock('@/components/ui/avatar', () => {
@@ -156,17 +258,29 @@ jest.mock('@/components/ui/avatar', () => {
 });
 
 jest.mock('@/components/ui/button', () => {
-  const Button = ({ children, variant, size, onClick, ...props }) => 
-    React.createElement('button', {
+  const Button = ({ children, variant, size, onClick, asChild, className, ...props }) => {
+    if (asChild && React.isValidElement(children)) {
+      return React.cloneElement(children, {
+        'data-testid': 'ui-button',
+        'data-variant': variant,
+        'data-size': size,
+        className,
+        ...props,
+      });
+    }
+    return React.createElement('button', {
       'data-testid': 'ui-button',
       'data-variant': variant,
       'data-size': size,
       onClick,
+      className,
       ...props
     }, children);
+  };
   Button.displayName = 'MockButton';
   return { Button };
 });
+
 
 jest.mock('@/components/ui/badge', () => {
   const Badge = ({ children, className }) => React.createElement('span', {
@@ -181,6 +295,189 @@ jest.mock('@/components/ui/toaster', () => {
   const Toaster = () => React.createElement('div', { 'data-testid': 'toaster' });
   Toaster.displayName = 'MockToaster';
   return { Toaster };
+});
+
+// Accordion components mock
+jest.mock('@/components/ui/accordion', () => {
+  const Accordion = ({ children, className, type, value, onValueChange }) => 
+    React.createElement('div', {
+      'data-testid': 'accordion',
+      'data-type': type,
+      'data-value': value?.join?.(','),
+      className
+    }, children);
+  Accordion.displayName = 'MockAccordion';
+  
+  const AccordionItem = ({ children, value, className }) => 
+    React.createElement('div', {
+      'data-testid': 'accordion-item',
+      'data-value': value,
+      className
+    }, children);
+  AccordionItem.displayName = 'MockAccordionItem';
+  
+  const AccordionTrigger = ({ children, className, onClick }) => 
+    React.createElement('button', {
+      'data-testid': 'accordion-trigger',
+      className,
+      onClick
+    }, children);
+  AccordionTrigger.displayName = 'MockAccordionTrigger';
+  
+  const AccordionContent = ({ children }) => 
+    React.createElement('div', {
+      'data-testid': 'accordion-content'
+    }, children);
+  AccordionContent.displayName = 'MockAccordionContent';
+  
+  return { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+});
+
+// Dialog components mock
+jest.mock('@/components/ui/dialog', () => {
+  const Dialog = ({ children, open, onOpenChange }) => 
+    React.createElement('div', {
+      'data-testid': 'dialog-mock',
+      className: open ? 'block' : 'hidden'
+    }, [
+      React.createElement('button', {
+        key: 'close',
+        onClick: () => onOpenChange?.(false),
+        'data-testid': 'dialog-close-button'
+      }, 'Close'),
+      children
+    ]);
+  Dialog.displayName = 'MockDialog';
+  
+  const DialogContent = ({ children, className }) => 
+    React.createElement('div', {
+      'data-testid': 'dialog-content',
+      className
+    }, children);
+  DialogContent.displayName = 'MockDialogContent';
+  
+  const DialogHeader = ({ children }) => 
+    React.createElement('div', {
+      'data-testid': 'dialog-header'
+    }, children);
+  DialogHeader.displayName = 'MockDialogHeader';
+  
+  const DialogTitle = ({ children }) => 
+    React.createElement('h2', {
+      'data-testid': 'dialog-title'
+    }, children);
+  DialogTitle.displayName = 'MockDialogTitle';
+  
+  const DialogDescription = ({ children }) => 
+    React.createElement('p', {
+      'data-testid': 'dialog-description'
+    }, children);
+  DialogDescription.displayName = 'MockDialogDescription';
+  
+  const DialogFooter = ({ children, className }) => 
+    React.createElement('div', {
+      'data-testid': 'dialog-footer',
+      className
+    }, children);
+  DialogFooter.displayName = 'MockDialogFooter';
+  
+  return { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter };
+});
+
+// Input component mock
+jest.mock('@/components/ui/input', () => {
+  const Input = (props) => React.createElement('input', {
+    'data-testid': 'ui-input',
+    ...props
+  });
+  Input.displayName = 'MockInput';
+  return { Input };
+});
+
+// Form components mock
+jest.mock('@/components/ui/form', () => {
+  const Form = ({ children }) => 
+    React.createElement('div', {
+      'data-testid': 'form-mock'
+    }, children);
+  Form.displayName = 'MockForm';
+  
+  const FormField = ({ render }) => {
+    const mockField = {
+      value: '',
+      onChange: jest.fn(),
+      onBlur: jest.fn(),
+      name: 'mock-field',
+    };
+    return React.createElement('div', {
+      'data-testid': 'form-field'
+    }, render({ field: mockField }));
+  };
+  FormField.displayName = 'MockFormField';
+  
+  const FormItem = ({ children }) => 
+    React.createElement('div', {
+      'data-testid': 'form-item'
+    }, children);
+  FormItem.displayName = 'MockFormItem';
+  
+  const FormControl = ({ children }) => 
+    React.createElement('div', {
+      'data-testid': 'form-control'
+    }, children);
+  FormControl.displayName = 'MockFormControl';
+  
+  const FormMessage = ({ className }) => 
+    React.createElement('div', {
+      'data-testid': 'form-message',
+      className
+    });
+  FormMessage.displayName = 'MockFormMessage';
+  
+  return { Form, FormField, FormItem, FormControl, FormMessage };
+});
+
+// Carousel components mock
+jest.mock('@/components/ui/carousel', () => {
+  const mockCarouselApi = {
+    canScrollPrev: jest.fn(() => false),
+    canScrollNext: jest.fn(() => true),
+    scrollPrev: jest.fn(),
+    scrollNext: jest.fn(),
+    selectedScrollSnap: jest.fn(() => 0),
+    on: jest.fn(),
+    off: jest.fn(),
+    scrollTo: jest.fn(),
+  };
+  
+  const Carousel = ({ children, setApi, opts, className }) => {
+    React.useEffect(() => {
+      if (setApi) {
+        setApi(mockCarouselApi);
+      }
+    }, [setApi]);
+    return React.createElement('div', {
+      'data-testid': 'carousel',
+      className
+    }, children);
+  };
+  Carousel.displayName = 'MockCarousel';
+  
+  const CarouselContent = ({ children, className }) => 
+    React.createElement('div', {
+      'data-testid': 'carousel-content',
+      className
+    }, children);
+  CarouselContent.displayName = 'MockCarouselContent';
+  
+  const CarouselItem = ({ children, className }) => 
+    React.createElement('div', {
+      'data-testid': 'carousel-item',
+      className
+    }, children);
+  CarouselItem.displayName = 'MockCarouselItem';
+  
+  return { Carousel, CarouselContent, CarouselItem };
 });
 
 // ---------------------------
@@ -204,6 +501,28 @@ jest.mock('@/lib/utils', () => ({
   },
 }));
 
+// Mock class-variance-authority
+jest.mock('class-variance-authority', () => ({
+  cva: (base, config) => {
+    return (variants) => {
+      let className = Array.isArray(base) ? base.join(' ') : base;
+      if (variants && config?.variants) {
+        Object.entries(variants).forEach(([key, value]) => {
+          if (config.variants[key] && config.variants[key][value]) {
+            const variantClass = config.variants[key][value];
+            if (Array.isArray(variantClass)) {
+              className += ' ' + variantClass.join(' ');
+            } else if (variantClass) {
+              className += ' ' + variantClass;
+            }
+          }
+        });
+      }
+      return className;
+    };
+  },
+}));
+
 jest.mock('@/utils/NoDataFallback', () => {
   const NoDataFallback = ({ componentName }) => React.createElement('div', {
     'data-testid': 'no-data-fallback'
@@ -212,11 +531,126 @@ jest.mock('@/utils/NoDataFallback', () => {
   return { NoDataFallback };
 });
 
+// Mock container utility functions
+jest.mock('@/components/container/container.util', () => ({
+  getContainerPlaceholderProps: (fragment, params) => ({
+    dynamicKey: `${fragment}-${params.DynamicPlaceholderId}`,
+    genericKey: `${fragment}-{*}`,
+    fragment: fragment,
+  }),
+  isContainerPlaceholderEmpty: (rendering, placeholderProps, children) => {
+    return !(
+      rendering?.placeholders?.[placeholderProps.dynamicKey] ||
+      rendering?.placeholders?.[placeholderProps.genericKey]
+    ) && !children;
+  },
+}));
+
 jest.mock('@/hooks/use-toast', () => ({
   useToast: () => ({
     toast: jest.fn(),
   }),
 }));
+
+// ---------------------------
+//  Mock Additional Hooks
+// ---------------------------
+jest.mock('@/hooks/use-media-query', () => ({
+  useMediaQuery: jest.fn(() => false), // Default to false, can be overridden in tests
+}));
+
+jest.mock('@/hooks/useIntersectionObserver', () => ({
+  useIntersectionObserver: jest.fn(() => ({
+    isIntersecting: false,
+    ref: { current: null },
+  })),
+}));
+
+// ---------------------------
+//  Mock External Libraries
+// ---------------------------
+// Mock framer-motion
+jest.mock('framer-motion', () => ({
+  motion: {
+    div: ({ children, initial, animate, exit, transition, custom, variants, className, ...props }) => 
+      React.createElement('div', { className, ...props }, children),
+    span: ({ children, className, ...props }) => 
+      React.createElement('span', { className, ...props }, children),
+    button: ({ children, className, ...props }) => 
+      React.createElement('button', { className, ...props }, children),
+  },
+  AnimatePresence: ({ children }) => React.createElement(React.Fragment, {}, children),
+}));
+
+// Mock react-hook-form
+jest.mock('react-hook-form', () => ({
+  useForm: () => ({
+    control: {},
+    handleSubmit: (fn) => (e) => {
+      e?.preventDefault?.();
+      fn({ email: 'test@example.com' });
+    },
+    reset: jest.fn(),
+    formState: { errors: {} },
+  }),
+}));
+
+// Mock Next.js Head
+jest.mock('next/head', () => {
+  const MockHead = ({ children }) => {
+    const processChildren = (child) => {
+      if (typeof child === 'string') return child;
+      if (typeof child === 'number') return child.toString();
+      if (!child) return '';
+
+      if (React.isValidElement(child)) {
+        const { type, props } = child;
+        const tagName = typeof type === 'string' ? type : 'div';
+
+        if (['meta', 'link'].includes(tagName)) {
+          const attrs = Object.entries(props)
+            .filter(([key]) => key !== 'children')
+            .map(([key, value]) => `${key}="${value}"`)
+            .join(' ');
+          return `<${tagName} ${attrs} />`;
+        }
+
+        const content = props.children ? processChildren(props.children) : '';
+        return `<${tagName}>${content}</${tagName}>`;
+      }
+
+      if (Array.isArray(child)) {
+        return child.map(processChildren).join('');
+      }
+
+      return '';
+    };
+
+    const htmlContent = Array.isArray(children)
+      ? children.map(processChildren).join('')
+      : processChildren(children);
+
+    return React.createElement('div', {
+      'data-testid': 'head-mock',
+      dangerouslySetInnerHTML: { __html: htmlContent },
+    });
+  };
+  MockHead.displayName = 'MockHead';
+  return MockHead;
+});
+
+// Mock Next.js Link
+jest.mock('next/link', () => {
+  const MockLink = ({ children, href, className, prefetch, ...props }) => 
+    React.createElement('a', {
+      href,
+      className,
+      'data-prefetch': prefetch?.toString(),
+      ...props
+    }, children);
+  MockLink.displayName = 'MockNextLink';
+  return MockLink;
+});
 
 // ---------------------------
 //  Suppress noisy React warnings globally
