@@ -61,3 +61,4 @@ describe('LogoItem', () => {
     expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
 });
+

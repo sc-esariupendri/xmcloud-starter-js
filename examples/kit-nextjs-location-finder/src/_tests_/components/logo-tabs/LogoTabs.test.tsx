@@ -82,3 +82,4 @@ describe('LogoTabs', () => {
     expect(getByTestId('no-data-fallback')).toHaveTextContent('No Data: LogoTabs');
   });
 });
+
