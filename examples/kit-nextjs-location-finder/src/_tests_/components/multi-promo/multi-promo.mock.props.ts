@@ -141,3 +141,4 @@ export const mockMultiPromoProps: MultiPromoProps = {
   name: 'MultiPromo',
   promos: [],
 };
+

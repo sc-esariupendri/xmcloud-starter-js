@@ -47,3 +47,4 @@ export const mockHeroProps: HeroProps = {
   },
   isPageEditing: false,
 };
+

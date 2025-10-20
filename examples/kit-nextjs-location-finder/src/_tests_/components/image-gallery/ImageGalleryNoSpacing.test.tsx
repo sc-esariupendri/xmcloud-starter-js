@@ -79,3 +79,4 @@ describe('ImageGalleryNoSpacing Component', () => {
     expect(screen.getByText(/Parallax effects have been disabled/)).toBeInTheDocument();
   });
 });
+

@@ -109,3 +109,4 @@ describe('HeroImageBackground Component', () => {
     expect(screen.getByTestId('button-base')).toBeInTheDocument();
   });
 });
+

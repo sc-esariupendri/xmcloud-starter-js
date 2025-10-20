@@ -87,3 +87,4 @@ describe('Hero Component', () => {
     expect(screen.getByTestId('hero-image-background')).toBeInTheDocument();
   });
 });
+

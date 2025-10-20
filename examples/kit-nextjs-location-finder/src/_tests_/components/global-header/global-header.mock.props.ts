@@ -82,3 +82,4 @@ export const mockGlobalHeaderProps: GlobalHeaderProps = {
     componentName: 'GlobalHeader',
   },
 };
+
