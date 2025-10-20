@@ -79,3 +79,4 @@ describe('ImageGalleryFiftyFifty Component', () => {
     expect(screen.getByText(/Parallax effects have been disabled/)).toBeInTheDocument();
   });
 });
+

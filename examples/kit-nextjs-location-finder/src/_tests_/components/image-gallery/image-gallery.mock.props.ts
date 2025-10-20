@@ -50,3 +50,4 @@ export const mockImageGalleryProps: ImageGalleryProps = {
   },
   isPageEditing: false,
 };
+

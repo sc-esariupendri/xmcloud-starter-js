@@ -167,3 +167,4 @@ export const mockEmptyGlobalFooterProps: GlobalFooterProps = {
   },
   isPageEditing: false,
 };
+
