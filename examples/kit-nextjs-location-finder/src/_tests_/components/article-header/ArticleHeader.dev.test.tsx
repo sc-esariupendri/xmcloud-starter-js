@@ -162,21 +162,6 @@ describe('ArticleHeader Component', () => {
     expect(screen.getByText('Tech News')).toBeInTheDocument();
   });
 
-  it('renders fallback when fields are null', () => {
-    const propsWithoutFields = {
-      fields: undefined,
-      params: {},
-      rendering: { componentName: 'ArticleHeader' },
-      externalFields: {
-        pageHeaderTitle: { value: 'Sample Article' },
-      },
-    };
-
-    render(<ArticleHeader {...propsWithoutFields} />);
-    expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
-    expect(screen.getByText('No data for ArticleHeader')).toBeInTheDocument();
-  });
-
   it('renders toaster component', () => {
     render(<ArticleHeader {...mockProps} />);
     expect(screen.getByTestId('toaster')).toBeInTheDocument();

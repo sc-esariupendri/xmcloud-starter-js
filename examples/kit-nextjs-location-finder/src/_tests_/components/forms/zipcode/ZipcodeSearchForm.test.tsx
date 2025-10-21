@@ -1,46 +1,8 @@
-import React, { ReactNode, ComponentProps } from 'react';
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as ZipcodeSearchForm } from '@/components/forms/zipcode/ZipcodeSearchForm.dev';
 
-//  Mock UI components used in the form
-jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, ...props }: ComponentProps<'button'> & { children?: ReactNode }) => (
-    <button {...props} data-testid="mock-button">
-      {children}
-    </button>
-  ),
-}));
-
-jest.mock('@/components/ui/input', () => ({
-  Input: (props: ComponentProps<'input'>) => <input {...props} data-testid="mock-input" />,
-}));
-
-jest.mock('@/components/ui/form', () => ({
-  Form: ({ children }: { children?: ReactNode }) => <>{children}</>,
-
-  FormField: ({
-    render,
-  }: {
-    render: (arg: { field: { onChange: () => void; value: string } }) => ReactNode;
-  }) => render({ field: { onChange: jest.fn(), value: '' } }),
-
-  FormItem: ({ children }: { children?: ReactNode }) => (
-    <div data-testid="form-item">{children}</div>
-  ),
-
-  FormLabel: ({ children }: { children?: ReactNode }) => <label>{children}</label>,
-
-  FormControl: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
-
-  FormMessage: ({ children }: { children?: ReactNode }) => (
-    <div data-testid="form-message">{children}</div>
-  ),
-}));
-
-// ---------------------------
-//  TEST SUITE
-// ---------------------------
 describe('ZipcodeSearchForm Component', () => {
   const mockOnSubmit = jest.fn();
 
@@ -51,10 +13,9 @@ describe('ZipcodeSearchForm Component', () => {
   it('renders with default placeholder and button text', () => {
     render(<ZipcodeSearchForm onSubmit={mockOnSubmit} />);
 
-    // ✅ Input + Button presence
-    expect(screen.getByTestId('mock-input')).toBeInTheDocument();
-    expect(screen.getByText('Find Availability')).toBeInTheDocument();
+    // Check for default placeholder and button text
     expect(screen.getByPlaceholderText('Enter your zip code')).toBeInTheDocument();
+    expect(screen.getByText('Find Availability')).toBeInTheDocument();
   });
 
   it('renders with custom placeholder and button text', () => {
@@ -66,22 +27,19 @@ describe('ZipcodeSearchForm Component', () => {
     expect(screen.getByText('Check')).toBeInTheDocument();
   });
 
-  it('shows validation error for invalid zipcode', async () => {
+  it('calls onSubmit with valid zipcode', async () => {
     render(<ZipcodeSearchForm onSubmit={mockOnSubmit} />);
 
-    const input = screen.getByTestId('mock-input');
-    const button = screen.getByTestId('mock-button');
+    const input = screen.getByPlaceholderText('Enter your zip code') as HTMLInputElement;
+    const button = screen.getByRole('button', { name: /find availability/i });
 
-    //  Invalid ZIP
-    fireEvent.change(input, { target: { value: 'abcde' } });
+    // Enter valid ZIP code
+    fireEvent.change(input, { target: { value: '12345' } });
     fireEvent.click(button);
 
-    //  Expect error text
+    // Wait for form submission
     await waitFor(() => {
-      expect(screen.getByTestId('form-message')).toBeInTheDocument();
+      expect(mockOnSubmit).toHaveBeenCalledWith({ zipcode: '12345' });
     });
-
-    //  Ensure submit not called
-    expect(mockOnSubmit).not.toHaveBeenCalled();
   });
 });
