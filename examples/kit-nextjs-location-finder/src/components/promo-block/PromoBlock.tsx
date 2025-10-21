@@ -130,4 +130,4 @@ const ButtonLink = (props: PromoBlockProps): JSX.Element => {
 
 const Default = ButtonLink;
 
-export { Default, ButtonLink, TextLink, PromoBlock };
+export { Default, ButtonLink, TextLink };
