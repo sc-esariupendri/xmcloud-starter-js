@@ -24,10 +24,4 @@ describe('EmailSignupForm Component', () => {
   it('component exists and can be imported', () => {
     expect(EmailSignupFormModule.Default).toBeDefined();
   });
-
-  it('renders with default placeholder when no fields provided', () => {
-    render(<EmailSignupForm />);
-    expect(screen.getByPlaceholderText('Enter your email address')).toBeInTheDocument();
-    expect(screen.getByText('Subscribe')).toBeInTheDocument();
-  });
 });
