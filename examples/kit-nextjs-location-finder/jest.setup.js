@@ -46,6 +46,22 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 }));
 
 // ---------------------------
+//  Mock @radix-ui/react-slot
+// ---------------------------
+jest.mock('@radix-ui/react-slot', () => ({
+  Slot: React.forwardRef(({ children, ...props }, ref) => {
+    if (React.isValidElement(children)) {
+      return React.cloneElement(children, {
+        ...props,
+        ...children.props,
+        ref,
+      });
+    }
+    return React.createElement('div', { ...props, ref }, children);
+  }),
+}));
+
+// ---------------------------
 //  Mock IntersectionObserver
 // ---------------------------
 global.IntersectionObserver = class {

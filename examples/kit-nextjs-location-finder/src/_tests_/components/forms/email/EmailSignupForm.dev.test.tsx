@@ -4,14 +4,16 @@ import '@testing-library/jest-dom';
 import { Default as EmailSignupForm } from '@/components/forms/email/EmailSignupForm.dev';
 import { ButtonVariants } from '@/enumerations/ButtonStyle.enum';
 
-// 🧪 Mock Sitecore SDK Text component
+// Mock Sitecore SDK Text component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field }: { field?: { value?: string } }) => <>{field?.value}</>,
 }));
 
-// 🧪 Mock SuccessCompact component
+// Mock SuccessCompact component
 jest.mock('@/components/forms/success/success-compact.dev', () => ({
-  SuccessCompact: ({ successMessage }: { successMessage: string }) => <div>{successMessage}</div>,
+  SuccessCompact: ({ successMessage }: { successMessage: string }) => (
+    <div data-testid="success-message">{successMessage}</div>
+  ),
 }));
 
 describe('EmailSignupForm Component', () => {
@@ -31,14 +33,21 @@ describe('EmailSignupForm Component', () => {
 
   it('shows success message on valid email submission', async () => {
     render(<EmailSignupForm fields={mockFields} />);
-    const input = screen.getByPlaceholderText('Your email here');
+    const input = screen.getByPlaceholderText('Your email here') as HTMLInputElement;
     const button = screen.getByRole('button');
 
     fireEvent.change(input, { target: { value: 'test@example.com' } });
     fireEvent.click(button);
 
     await waitFor(() => {
+      expect(screen.getByTestId('success-message')).toBeInTheDocument();
       expect(screen.getByText('Subscribed successfully!')).toBeInTheDocument();
     });
+  });
+
+  it('renders with default placeholder when no fields provided', () => {
+    render(<EmailSignupForm />);
+    expect(screen.getByPlaceholderText('Enter your email address')).toBeInTheDocument();
+    expect(screen.getByText('Subscribe')).toBeInTheDocument();
   });
 });
