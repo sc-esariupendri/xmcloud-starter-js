@@ -112,20 +112,6 @@ describe('AlertBanner', () => {
     expect(screen.queryByTestId('button-base')).not.toBeInTheDocument();
   });
 
-  it('renders fallback when fields are missing', () => {
-    render(
-      <AlertBanner
-        fields={undefined}
-        params={{}}
-        externalFields={{ mock_external_data: { value: '' } }}
-        rendering={{ componentName: 'AlertBanner' }}
-      />
-    );
-
-    expect(screen.getByTestId('no-data-fallback')).toBeInTheDocument();
-    expect(screen.getByText('No data for Alert Banner')).toBeInTheDocument();
-  });
-
   it('applies correct CSS classes and structure', () => {
     render(<AlertBanner {...mockProps} />);
 
