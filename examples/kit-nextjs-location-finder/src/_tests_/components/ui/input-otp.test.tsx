@@ -21,9 +21,8 @@ jest.mock('input-otp', () => {
       maxLength?: number;
       render?: (props: unknown) => React.ReactNode;
       containerClassName?: string;
-      className?: string;
     }>
-  >(({ children, render, maxLength = 6, containerClassName, className, ...props }, ref) => {
+  >(({ children, render, maxLength = 6, containerClassName, ...props }, ref) => {
     const slots = Array(maxLength)
       .fill(null)
       .map(() => ({ char: '', hasFakeCaret: false, isActive: false }));

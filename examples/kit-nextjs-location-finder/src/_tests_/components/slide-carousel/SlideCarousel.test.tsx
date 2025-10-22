@@ -27,20 +27,19 @@ jest.mock('@/components/ui/carousel', () => {
     opts?: Record<string, unknown>;
     className?: string;
   }) => {
-    // Mock carousel API
-    const mockApi = {
-      canScrollPrev: jest.fn(() => true),
-      canScrollNext: jest.fn(() => true),
-      selectedScrollSnap: jest.fn(() => 0),
-      scrollPrev: jest.fn(),
-      scrollNext: jest.fn(),
-      scrollTo: jest.fn(),
-      on: jest.fn(),
-      off: jest.fn(),
-    };
-
     React.useEffect(() => {
       if (setApi) {
+        // Mock carousel API
+        const mockApi = {
+          canScrollPrev: jest.fn(() => true),
+          canScrollNext: jest.fn(() => true),
+          selectedScrollSnap: jest.fn(() => 0),
+          scrollPrev: jest.fn(),
+          scrollNext: jest.fn(),
+          scrollTo: jest.fn(),
+          on: jest.fn(),
+          off: jest.fn(),
+        };
         setApi(mockApi);
       }
     }, [setApi]);

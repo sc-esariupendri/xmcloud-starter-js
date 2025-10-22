@@ -150,6 +150,7 @@ describe('Location Search Utils', () => {
       });
 
       const dealershipsWithoutCoords = mockDealerships.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ latitude, longitude, distance, ...rest }) => rest
       );
       const result = await enrichDealerships(dealershipsWithoutCoords, '30303', 'test-api-key');
@@ -174,6 +175,7 @@ describe('Location Search Utils', () => {
       });
 
       const dealershipsWithoutCoords = mockDealerships.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ latitude, longitude, distance, ...rest }) => rest
       );
       const result = await enrichDealerships(dealershipsWithoutCoords, '30303', 'test-api-key');
