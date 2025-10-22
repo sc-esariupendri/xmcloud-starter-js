@@ -88,7 +88,7 @@ interface SubscriptionBannerProps {
     emailErrorMessage?: { value: string };
     thankYouMessage?: { value: string };
   };
-  params: Record<string, any>;
+  params: Record<string, unknown>;
   rendering: { componentName: string };
 }
 
