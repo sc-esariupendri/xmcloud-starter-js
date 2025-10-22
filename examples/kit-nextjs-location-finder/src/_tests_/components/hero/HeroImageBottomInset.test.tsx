@@ -111,4 +111,3 @@ describe('HeroImageBottomInset Component', () => {
     expect(button).toHaveAttribute('data-variant', 'default');
   });
 });
-

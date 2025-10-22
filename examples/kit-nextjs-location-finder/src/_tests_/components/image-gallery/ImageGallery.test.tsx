@@ -83,4 +83,3 @@ describe('ImageGallery Component', () => {
     expect(screen.getByTestId('image-gallery-grid')).toBeInTheDocument();
   });
 });
-

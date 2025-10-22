@@ -60,23 +60,28 @@ describe('LocationSearchMapRightTitleZipCentered', () => {
   });
 
   it('renders component with title', () => {
-    const { getByText } = render(<LocationSearchMapRightTitleZipCentered {...mockLocationSearchProps} />);
+    const { getByText } = render(
+      <LocationSearchMapRightTitleZipCentered {...mockLocationSearchProps} />
+    );
 
     expect(getByText('Find a Dealership Near You')).toBeInTheDocument();
   });
 
   it('renders Google Map component', () => {
-    const { getByTestId } = render(<LocationSearchMapRightTitleZipCentered {...mockLocationSearchProps} />);
+    const { getByTestId } = render(
+      <LocationSearchMapRightTitleZipCentered {...mockLocationSearchProps} />
+    );
 
     expect(getByTestId('google-map')).toBeInTheDocument();
   });
 
   it('renders animated section wrapper', () => {
-    const { getAllByTestId } = render(<LocationSearchMapRightTitleZipCentered {...mockLocationSearchProps} />);
+    const { getAllByTestId } = render(
+      <LocationSearchMapRightTitleZipCentered {...mockLocationSearchProps} />
+    );
 
     const animatedSections = getAllByTestId('animated-section');
     expect(animatedSections.length).toBeGreaterThan(0);
     expect(animatedSections[0]).toBeInTheDocument();
   });
 });
-

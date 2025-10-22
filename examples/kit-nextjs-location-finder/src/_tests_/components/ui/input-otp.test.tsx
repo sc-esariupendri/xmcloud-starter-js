@@ -17,8 +17,13 @@ jest.mock('input-otp', () => {
 
   const OTPInput = React.forwardRef<
     HTMLInputElement,
-    React.PropsWithChildren<{ maxLength?: number; render?: (props: unknown) => React.ReactNode }>
-  >(({ children, render, maxLength = 6, ...props }, ref) => {
+    React.PropsWithChildren<{
+      maxLength?: number;
+      render?: (props: unknown) => React.ReactNode;
+      containerClassName?: string;
+      className?: string;
+    }>
+  >(({ children, render, maxLength = 6, containerClassName, className, ...props }, ref) => {
     const slots = Array(maxLength)
       .fill(null)
       .map(() => ({ char: '', hasFakeCaret: false, isActive: false }));
@@ -26,7 +31,12 @@ jest.mock('input-otp', () => {
     if (render) {
       return (
         <OTPInputContext.Provider value={{ slots }}>
-          <div ref={ref as React.Ref<HTMLDivElement>} data-testid="otp-input" {...props}>
+          <div
+            ref={ref as React.Ref<HTMLDivElement>}
+            data-testid="otp-input"
+            className={containerClassName}
+            {...props}
+          >
             {render({ slots })}
           </div>
         </OTPInputContext.Provider>
@@ -34,7 +44,12 @@ jest.mock('input-otp', () => {
     }
     return (
       <OTPInputContext.Provider value={{ slots }}>
-        <div ref={ref as React.Ref<HTMLDivElement>} data-testid="otp-input" {...props}>
+        <div
+          ref={ref as React.Ref<HTMLDivElement>}
+          data-testid="otp-input"
+          className={containerClassName}
+          {...props}
+        >
           {children}
         </div>
       </OTPInputContext.Provider>

@@ -70,4 +70,3 @@ describe('GlobalHeader Component', () => {
     expect(screen.getByTestId('global-header-centered')).toBeInTheDocument();
   });
 });
-

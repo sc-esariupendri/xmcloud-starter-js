@@ -18,20 +18,20 @@ describe('Location Search Utils', () => {
     it('calculates distance between two coordinates correctly', () => {
       // Atlanta to New York (approximate)
       const distance = calculateHaversineDistance(33.749, -84.388, 40.7128, -74.006);
-      
+
       expect(distance).toBeGreaterThan(700);
       expect(distance).toBeLessThan(900);
     });
 
     it('returns 0 for same coordinates', () => {
       const distance = calculateHaversineDistance(33.749, -84.388, 33.749, -84.388);
-      
+
       expect(distance).toBe(0);
     });
 
     it('returns a number with one decimal place', () => {
       const distance = calculateHaversineDistance(33.749, -84.388, 34.052, -84.362);
-      
+
       expect(typeof distance).toBe('number');
       const decimalPart = distance.toString().split('.')[1];
       if (decimalPart) {
@@ -149,7 +149,9 @@ describe('Location Search Utils', () => {
         }),
       });
 
-      const dealershipsWithoutCoords = mockDealerships.map(({ latitude, longitude, distance, ...rest }) => rest);
+      const dealershipsWithoutCoords = mockDealerships.map(
+        ({ latitude, longitude, distance, ...rest }) => rest
+      );
       const result = await enrichDealerships(dealershipsWithoutCoords, '30303', 'test-api-key');
 
       expect(result.length).toBe(mockDealerships.length);
@@ -171,7 +173,9 @@ describe('Location Search Utils', () => {
         }),
       });
 
-      const dealershipsWithoutCoords = mockDealerships.map(({ latitude, longitude, distance, ...rest }) => rest);
+      const dealershipsWithoutCoords = mockDealerships.map(
+        ({ latitude, longitude, distance, ...rest }) => rest
+      );
       const result = await enrichDealerships(dealershipsWithoutCoords, '30303', 'test-api-key');
 
       for (let i = 1; i < result.length; i++) {
@@ -182,4 +186,3 @@ describe('Location Search Utils', () => {
     });
   });
 });
-

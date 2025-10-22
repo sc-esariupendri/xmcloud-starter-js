@@ -40,11 +40,11 @@ describe('CardSpotlight Component', () => {
         <p>Spotlight Test</p>
       </CardSpotlight>
     );
-    
+
     // Check that component renders with correct data attribute
     const component = container.querySelector('[data-component="CardSpotlight"]');
     expect(component).toBeInTheDocument();
-    
+
     // Check that spotlight effect container exists
     const spotlightEffect = container.querySelector('.pointer-events-none');
     expect(spotlightEffect).toBeInTheDocument();
@@ -56,7 +56,7 @@ describe('CardSpotlight Component', () => {
         <p>Reduced Motion Test</p>
       </CardSpotlight>
     );
-    
+
     // Spotlight effect should not be rendered
     const spotlightEffect = container.querySelector('.pointer-events-none');
     expect(spotlightEffect).not.toBeInTheDocument();

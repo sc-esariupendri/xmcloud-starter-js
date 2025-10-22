@@ -79,4 +79,3 @@ describe('ImageGalleryGrid Component', () => {
     expect(screen.getByText(/Parallax effects have been disabled/)).toBeInTheDocument();
   });
 });
-
