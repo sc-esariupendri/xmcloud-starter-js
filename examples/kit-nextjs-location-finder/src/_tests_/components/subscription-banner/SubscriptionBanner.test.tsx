@@ -189,7 +189,7 @@ describe('SubscriptionBanner Component', () => {
   });
 
   it('disables input and button after submission', async () => {
-    const { rerender } = render(<SubscriptionBanner {...defaultProps} />);
+    render(<SubscriptionBanner {...defaultProps} />);
 
     const submitButton = screen.getByRole('button', { name: 'Subscribe Now' });
     const emailInput = screen.getByTestId('email-input');

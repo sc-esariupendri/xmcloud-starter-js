@@ -1,10 +1,18 @@
-import { kebabCase, capitalCase } from 'change-case';
+import { kebabCase } from 'change-case';
 
 import type { JSX } from 'react';
 
 interface ComponentName {
   componentName: string;
 }
+
+// Helper function to convert string to capital case (e.g., "componentName" -> "Component Name")
+const capitalCase = (str: string): string => {
+  return kebabCase(str)
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
 
 const NoDataFallback = (props: ComponentName): JSX.Element => {
   const { componentName } = props;
