@@ -79,4 +79,3 @@ describe('LocationSearchMapRight', () => {
     expect(animatedSections[0]).toBeInTheDocument();
   });
 });
-

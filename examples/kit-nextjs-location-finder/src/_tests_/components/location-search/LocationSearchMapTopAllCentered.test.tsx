@@ -66,17 +66,20 @@ describe('LocationSearchMapTopAllCentered', () => {
   });
 
   it('renders Google Map component', () => {
-    const { getByTestId } = render(<LocationSearchMapTopAllCentered {...mockLocationSearchProps} />);
+    const { getByTestId } = render(
+      <LocationSearchMapTopAllCentered {...mockLocationSearchProps} />
+    );
 
     expect(getByTestId('google-map')).toBeInTheDocument();
   });
 
   it('renders animated section wrapper', () => {
-    const { getAllByTestId } = render(<LocationSearchMapTopAllCentered {...mockLocationSearchProps} />);
+    const { getAllByTestId } = render(
+      <LocationSearchMapTopAllCentered {...mockLocationSearchProps} />
+    );
 
     const animatedSections = getAllByTestId('animated-section');
     expect(animatedSections.length).toBeGreaterThan(0);
     expect(animatedSections[0]).toBeInTheDocument();
   });
 });
-

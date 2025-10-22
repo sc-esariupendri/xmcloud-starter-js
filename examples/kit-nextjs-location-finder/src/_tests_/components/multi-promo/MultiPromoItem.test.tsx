@@ -69,4 +69,3 @@ describe('MultiPromoItem', () => {
     expect(getByTestId('link')).toHaveAttribute('href', '/services/featured');
   });
 });
-

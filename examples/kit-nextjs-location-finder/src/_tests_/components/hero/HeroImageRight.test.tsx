@@ -111,4 +111,3 @@ describe('HeroImageRight Component', () => {
     expect(button).toHaveAttribute('data-variant', 'default');
   });
 });
-

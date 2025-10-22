@@ -110,4 +110,3 @@ describe('HeroDefault Component', () => {
     expect(screen.getByText('Learn More')).toBeInTheDocument();
   });
 });
-

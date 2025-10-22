@@ -111,4 +111,3 @@ describe('HeroImageBottom Component', () => {
     expect(button).toHaveAttribute('data-variant', 'secondary');
   });
 });
-
