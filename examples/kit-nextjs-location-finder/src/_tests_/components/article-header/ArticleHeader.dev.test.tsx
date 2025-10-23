@@ -19,7 +19,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => {
 });
 
 jest.mock('@/components/floating-dock/floating-dock.dev', () => {
-  const FloatingDock = ({ items }: { items?: Array<{ title: string; onClick?: () => void }> }) => (
+  const FloatingDock = ({ items }: {  items?: Array<{ title: string; onClick?: () => void }> }) => (
     <div data-testid="floating-dock">
       {items?.map((item, index) => (
         <button key={index} data-testid={`share-${item.title}`} onClick={item.onClick}>
