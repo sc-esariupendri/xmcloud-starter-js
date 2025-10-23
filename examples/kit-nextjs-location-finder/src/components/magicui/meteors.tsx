@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import React, { useEffect, useState, useRef } from 'react';
 
-interface MeteorsProps {
+interface MeteorsProps  {
   number?: number;
   minDelay?: number;
   maxDelay?: number;
