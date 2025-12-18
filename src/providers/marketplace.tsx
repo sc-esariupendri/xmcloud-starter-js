@@ -1,13 +1,6 @@
-import React, {
-  useEffect,
-  useState,
-  createContext,
-  useContext,
-} from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import type { ReactNode } from "react";
-import {
-  ClientSDK,
-} from "@sitecore-marketplace-sdk/client";
+import { ClientSDK } from "@sitecore-marketplace-sdk/client";
 import type { ApplicationContext } from "@sitecore-marketplace-sdk/client";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { useMarketplaceClient as useMarketplaceClientHook } from "../utils/hooks/useMarketplaceClient";
@@ -20,7 +13,11 @@ const ClientSDKContext = createContext<ClientSDK | null>(null);
 const AppContextContext = createContext<ApplicationContext | null>(null);
 const UserContextContext = createContext<any | null>(null);
 const MarketplaceLoadingContext = createContext<boolean>(true);
-const MarketplaceErrorContext = createContext<{ title: string; message: string; details?: string } | null>(null);
+const MarketplaceErrorContext = createContext<{
+  title: string;
+  message: string;
+  details?: string;
+} | null>(null);
 
 export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
   children,
@@ -38,7 +35,8 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
     message: string;
     details?: string;
   } | null>(null);
-  const [isMarketplaceLoading, setIsMarketplaceLoading] = useState<boolean>(true);
+  const [isMarketplaceLoading, setIsMarketplaceLoading] =
+    useState<boolean>(true);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -58,12 +56,16 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
               return { data: null };
             }),
           ]);
-          
+
           const appContextData = appContextRes?.data;
           const hostState = hostStateRes?.data;
           const userData = hostUserRes?.data;
 
-          console.log("✅ SDK Context fetched:", { appContextData, hostState, userData });
+          console.log("✅ SDK Context fetched:", {
+            appContextData,
+            hostState,
+            userData,
+          });
 
           if (appContextData) {
             setAppContext(appContextData);
@@ -73,7 +75,10 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
             setUserInfo(userData);
           }
 
-          if (appContextData?.organizationId && hostState?.xmCloudTenantInfo?.name) {
+          if (
+            appContextData?.organizationId &&
+            hostState?.xmCloudTenantInfo?.name
+          ) {
             console.log("✅ Setting auth config from SDK:", {
               organization_id: appContextData.organizationId,
               tenant_name: hostState.xmCloudTenantInfo.name,
@@ -86,14 +91,19 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
             setIsMarketplaceLoading(false); // Marketplace ready
           } else {
             const missingFields = [];
-            if (!appContextData?.organizationId) missingFields.push("organizationId");
-            if (!hostState?.xmCloudTenantInfo?.name) missingFields.push("xmCloudTenantInfo.name");
-            
+            if (!appContextData?.organizationId)
+              missingFields.push("organizationId");
+            if (!hostState?.xmCloudTenantInfo?.name)
+              missingFields.push("xmCloudTenantInfo.name");
+
             console.error("⚠️ Missing required data from SDK:", missingFields);
             setError({
               title: "Configuration Error",
-              message: "Unable to retrieve required Sitecore Marketplace context.",
-              details: `Missing fields: ${missingFields.join(", ")}. Please ensure the app is properly configured in the Marketplace.`
+              message:
+                "Unable to retrieve required Sitecore Marketplace context.",
+              details: `Missing fields: ${missingFields.join(
+                ", "
+              )}. Please ensure the app is properly configured in the Marketplace.`,
             });
             setIsMarketplaceLoading(false); // Stop loading even on error
           }
@@ -102,7 +112,7 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
           setError({
             title: "SDK Error",
             message: "Failed to communicate with Sitecore Marketplace SDK.",
-            details: error instanceof Error ? error.message : String(error)
+            details: error instanceof Error ? error.message : String(error),
           });
           setIsMarketplaceLoading(false); // Stop loading even on error
         }
@@ -110,11 +120,14 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
 
       fetchContext();
     } else if (isInitialized && !client) {
-      console.warn("ℹ️ Standalone mode detected - app requires Marketplace context to function");
+      console.warn(
+        "ℹ️ Standalone mode detected - app requires Marketplace context to function"
+      );
       setError({
         title: "Marketplace Context Required",
         message: "This app must be run within the Sitecore Marketplace.",
-        details: "The app cannot operate in standalone mode. Please access it through your Sitecore XM Cloud instance."
+        details:
+          "The app cannot operate in standalone mode. Please access it through your Sitecore XM Cloud instance.",
       });
       setIsMarketplaceLoading(false); // Stop loading even on error
     }
@@ -125,15 +138,17 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
   if (redirectUri && authConfig) {
     return (
       <Auth0Provider
-        domain="https://auth-staging-1.sitecore-staging.cloud"
-        clientId="j8R7qCKxYJnIJYVlRpynUKxdhhkeUNNT"
+        domain="https://auth.sitecorecloud.io"
+        clientId="fNgQatuiFS87Luw7BhkfKIzNOqHFU6UN"
         authorizationParams={{
           redirect_uri: redirectUri,
           scope: "openid profile email offline_access",
-          audience: "https://api-staging.sitecore-staging.cloud",
-          system_id: "8db0ad22-445f-43fb-8d8e-f23c9396c974",
+          audience: "https://api-webapp.sitecorecloud.io",
+          system_id: "5907637C-CDDF-48E9-ACEF-BD06F1A6BAB8",
           organization_id: authConfig.organization_id,
           tenant_name: authConfig.tenant_name,
+          auth0Client:
+            "eyJuYW1lIjoiYXV0aDAtcmVhY3QiLCJ2ZXJzaW9uIjoiMi41LjAifQ==",
         }}
       >
         <MarketplaceLoadingContext.Provider value={isMarketplaceLoading}>
