@@ -172,7 +172,7 @@ describe('Promo Component Edge Cases should', () => {
   it('handle missing params gracefully', () => {
     const propsWithoutParams = {
       ...mockPromoPropsDefault,
-      params: {} as any,
+      params: {} as typeof mockPromoPropsDefault.params,
     };
     
     render(<Promo {...propsWithoutParams} />);
@@ -182,7 +182,7 @@ describe('Promo Component Edge Cases should', () => {
   it('handle null fields gracefully', () => {
     const propsWithNullFields = {
       ...mockPromoPropsDefault,
-      fields: null as any,
+      fields: null as unknown as typeof mockPromoPropsDefault.fields,
     };
     
     render(<Promo {...propsWithNullFields} />);
@@ -192,7 +192,7 @@ describe('Promo Component Edge Cases should', () => {
   it('handle undefined fields gracefully', () => {
     const propsWithUndefinedFields = {
       ...mockPromoPropsDefault,
-      fields: undefined as any,
+      fields: undefined as unknown as typeof mockPromoPropsDefault.fields,
     };
     
     render(<Promo {...propsWithUndefinedFields} />);
@@ -206,7 +206,7 @@ describe('Promo Component Edge Cases should', () => {
         PromoIcon: mockPromoPropsDefault.fields.PromoIcon,
         PromoText: mockPromoPropsDefault.fields.PromoText,
         PromoText2: mockPromoPropsDefault.fields.PromoText2,
-      } as any,
+      } as unknown as typeof mockPromoPropsDefault.fields,
     };
     
     render(<Promo {...propsWithoutLink} />);

@@ -85,6 +85,9 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   withDatasourceCheck: () => (Component) => Component,
 }));
 
+// Mock component-map to avoid circular dependencies in tests
+jest.mock('.sitecore/component-map', () => ({}), { virtual: true });
+
 // Suppress console warnings during tests
 const originalError = console.error;
 beforeAll(() => {

@@ -1,5 +1,7 @@
 // Mock data for RowSplitter component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with 3 rows
 export const mockRowSplitterProps = {
   rendering: {
@@ -15,6 +17,7 @@ export const mockRowSplitterProps = {
     Styles2: 'second-row-style',
     Styles3: 'third-row-style',
   },
+  page: mockPage,
 };
 
 // Mock props with 2 rows
@@ -31,6 +34,7 @@ export const mockRowSplitterPropsTwo = {
     Styles1: 'hero-section',
     Styles2: 'content-section',
   },
+  page: mockPage,
 };
 
 // Mock props with single row
@@ -46,6 +50,7 @@ export const mockRowSplitterPropsSingle = {
     EnabledPlaceholders: '1',
     Styles1: 'full-page-style',
   },
+  page: mockPage,
 };
 
 // Mock props with no row styles
@@ -60,6 +65,7 @@ export const mockRowSplitterPropsNoStyles = {
     RenderingIdentifier: 'rowsplitter-nostyles-id',
     EnabledPlaceholders: '1,2,3',
   },
+  page: mockPage,
 };
 
 // Mock props with maximum rows (8)
@@ -82,6 +88,7 @@ export const mockRowSplitterPropsMax = {
     Styles7: 'cta',
     Styles8: 'footer',
   },
+  page: mockPage,
 };
 
 // Mock props with empty enabled placeholders
@@ -96,5 +103,6 @@ export const mockRowSplitterPropsEmpty = {
     RenderingIdentifier: 'rowsplitter-empty-id',
     EnabledPlaceholders: '',
   },
+  page: mockPage,
 };
 

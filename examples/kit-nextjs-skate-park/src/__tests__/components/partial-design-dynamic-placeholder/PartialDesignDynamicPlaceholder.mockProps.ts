@@ -1,5 +1,7 @@
 // Mock data for PartialDesignDynamicPlaceholder component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with signature
 export const mockPartialDesignProps = {
   rendering: {
@@ -14,6 +16,7 @@ export const mockPartialDesignProps = {
     styles: 'partialdesign-styles',
     RenderingIdentifier: 'partialdesign-test-id',
   },
+  page: mockPage,
 };
 
 // Mock props with different signature
@@ -30,6 +33,7 @@ export const mockPartialDesignPropsFooter = {
     styles: 'footer-styles',
     RenderingIdentifier: 'partialdesign-footer-id',
   },
+  page: mockPage,
 };
 
 // Mock props with complex signature
@@ -46,6 +50,7 @@ export const mockPartialDesignPropsComplex = {
     styles: 'complex-styles',
     RenderingIdentifier: 'partialdesign-complex-id',
   },
+  page: mockPage,
 };
 
 // Mock props with no signature
@@ -60,6 +65,7 @@ export const mockPartialDesignPropsNoSig = {
     styles: 'nosig-styles',
     RenderingIdentifier: 'partialdesign-nosig-id',
   },
+  page: mockPage,
 };
 
 // Mock props with empty signature
@@ -76,5 +82,6 @@ export const mockPartialDesignPropsEmpty = {
     styles: 'empty-styles',
     RenderingIdentifier: 'partialdesign-empty-id',
   },
+  page: mockPage,
 };
 

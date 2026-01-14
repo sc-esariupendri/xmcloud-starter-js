@@ -80,7 +80,7 @@ describe('Container Component should', () => {
 
 describe('Container Component Error Handling should', () => {
   it('handle missing BackgroundImage parameter', () => {
-    render(<Container {...{ ...mockContainerPropsNoBackground, params: { ...mockContainerPropsNoBackground.params, BackgroundImage: undefined } }} />);
+    render(<Container {...mockContainerPropsNoBackground} />);
     expect(getContentDiv()).toBeInTheDocument();
   });
 
@@ -95,7 +95,9 @@ describe('Container Component Error Handling should', () => {
   });
 
   it('render without styles parameter', () => {
-    render(<Container {...{ ...mockContainerPropsWithBackground, params: { ...mockContainerPropsWithBackground.params, styles: undefined as any } }} />);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { styles, ...paramsWithoutStyles } = mockContainerPropsWithBackground.params;
+    render(<Container {...{ ...mockContainerPropsWithBackground, params: paramsWithoutStyles }} />);
     expect(getContainerDiv()).toBeInTheDocument();
   });
 });

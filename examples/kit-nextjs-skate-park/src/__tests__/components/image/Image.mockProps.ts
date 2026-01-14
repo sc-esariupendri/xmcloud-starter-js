@@ -1,5 +1,7 @@
 // Mock data for Image component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with all fields (image, caption, and link)
 export const mockImagePropsComplete = {
   rendering: {
@@ -30,19 +32,7 @@ export const mockImagePropsComplete = {
       },
     },
   },
-  page: {
-    layout: {
-      sitecore: {
-        route: {
-          fields: {},
-        },
-      },
-    },
-    mode: {
-      isEditing: false,
-      isPreview: false,
-    },
-  },
+  page: mockPage,
 };
 
 // Mock props with image but no link (should not wrap in link)
@@ -72,19 +62,7 @@ export const mockImagePropsNoLink = {
       value: {},
     },
   },
-  page: {
-    layout: {
-      sitecore: {
-        route: {
-          fields: {},
-        },
-      },
-    },
-    mode: {
-      isEditing: false,
-      isPreview: false,
-    },
-  },
+  page: mockPage,
 };
 
 // Mock props with no fields (should show empty hint)
@@ -98,20 +76,9 @@ export const mockImagePropsNoFields = {
     styles: 'image-empty-styles',
     RenderingIdentifier: 'image-empty-id',
   },
-  page: {
-    layout: {
-      sitecore: {
-        route: {
-          fields: {},
-        },
-      },
-    },
-    mode: {
-      isEditing: false,
-      isPreview: false,
-    },
-  },
-} as any;
+  fields: null as unknown as typeof mockImagePropsComplete.fields,
+  page: mockPage,
+};
 
 // Mock props for Banner variant
 export const mockBannerProps = {
@@ -140,18 +107,6 @@ export const mockBannerProps = {
       value: {},
     },
   },
-  page: {
-    layout: {
-      sitecore: {
-        route: {
-          fields: {},
-        },
-      },
-    },
-    mode: {
-      isEditing: false,
-      isPreview: false,
-    },
-  },
+  page: mockPage,
 };
 

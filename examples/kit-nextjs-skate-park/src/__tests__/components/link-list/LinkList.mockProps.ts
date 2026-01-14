@@ -1,5 +1,7 @@
 // Mock data for LinkList component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with multiple links
 export const mockLinkListProps = {
   rendering: {
@@ -56,6 +58,7 @@ export const mockLinkListProps = {
       },
     },
   },
+  page: mockPage,
 };
 
 // Mock props with single link
@@ -94,6 +97,7 @@ export const mockLinkListPropsSingle = {
       },
     },
   },
+  page: mockPage,
 };
 
 // Mock props with even number of links (for odd/even testing)
@@ -162,6 +166,7 @@ export const mockLinkListPropsEven = {
       },
     },
   },
+  page: mockPage,
 };
 
 // Mock props with no datasource (should show empty state)
@@ -177,6 +182,7 @@ export const mockLinkListPropsNoData = {
   },
   fields: {
     data: {},
-  },
-} as any;
+  } as unknown as typeof mockLinkListProps.fields,
+  page: mockPage,
+};
 

@@ -1,19 +1,6 @@
 // Mock data for PageContent component testing
 
-// Mock page object that can be reused
-const mockPage = {
-  layout: {
-    sitecore: {
-      route: {
-        fields: {},
-      },
-    },
-  },
-  mode: {
-    isEditing: false,
-    isPreview: false,
-  },
-};
+import { mockPage } from '../../mocks/mockPage';
 
 // Mock props with content field
 export const mockPageContentProps = {
@@ -84,7 +71,7 @@ export const mockPageContentPropsNoContent = {
     RenderingIdentifier: 'pagecontent-nocontent-id',
   },
   fields: {
-    Content: null as any,
+    Content: null as unknown as typeof mockPageContentProps.fields.Content,
   },
   page: mockPage,
 };

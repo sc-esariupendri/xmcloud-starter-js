@@ -178,7 +178,7 @@ describe('LinkList Component Edge Cases should', () => {
   it('handle missing params gracefully', () => {
     const propsWithoutParams = {
       ...mockLinkListProps,
-      params: {} as any,
+      params: {} as typeof mockLinkListProps.params,
     };
     
     render(<LinkList {...propsWithoutParams} />);
@@ -188,7 +188,7 @@ describe('LinkList Component Edge Cases should', () => {
   it('handle null fields gracefully', () => {
     const propsWithNullFields = {
       ...mockLinkListProps,
-      fields: null as any,
+      fields: null as unknown as typeof mockLinkListProps.fields,
     };
     
     render(<LinkList {...propsWithNullFields} />);
@@ -198,7 +198,7 @@ describe('LinkList Component Edge Cases should', () => {
   it('handle undefined fields gracefully', () => {
     const propsWithUndefinedFields = {
       ...mockLinkListProps,
-      fields: undefined as any,
+      fields: undefined as unknown as typeof mockLinkListProps.fields,
     };
     
     render(<LinkList {...propsWithUndefinedFields} />);

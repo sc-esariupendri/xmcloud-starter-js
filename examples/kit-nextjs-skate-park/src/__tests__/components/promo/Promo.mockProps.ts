@@ -1,5 +1,7 @@
 // Mock data for Promo component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with all fields for Default variant
 export const mockPromoPropsDefault = {
   rendering: {
@@ -33,6 +35,7 @@ export const mockPromoPropsDefault = {
       value: '<p>Secondary promo text.</p>',
     },
   },
+  page: mockPage,
 };
 
 // Mock props with all fields for WithText variant
@@ -68,6 +71,7 @@ export const mockPromoPropsWithText = {
       value: '<p>Second promotional text for WithText variant.</p>',
     },
   },
+  page: mockPage,
 };
 
 // Mock props with minimal fields
@@ -100,6 +104,7 @@ export const mockPromoPropsMinimal = {
       value: '',
     },
   },
+  page: mockPage,
 };
 
 // Mock props with no fields (should show empty hint)
@@ -113,5 +118,7 @@ export const mockPromoPropsNoFields = {
     styles: 'no-fields-styles',
     RenderingIdentifier: 'promo-no-fields-id',
   },
-} as any;
+  fields: null as unknown as typeof mockPromoPropsDefault.fields,
+  page: mockPage,
+};
 

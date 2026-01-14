@@ -9,6 +9,7 @@ import {
   mockColumnSplitterPropsMax,
   mockColumnSplitterPropsEmpty,
 } from './ColumnSplitter.mockProps';
+import { mockPage } from '../../mocks/mockPage';
 
 const getColumnSplitterDiv = () => document.querySelector('.column-splitter');
 const getRowDivs = () => document.querySelectorAll('.row .row');
@@ -97,7 +98,9 @@ describe('ColumnSplitter Component should', () => {
 
 describe('ColumnSplitter Component Error Handling should', () => {
   it('handle undefined EnabledPlaceholders', () => {
-    render(<ColumnSplitter {...{ ...mockColumnSplitterProps, params: { ...mockColumnSplitterProps.params, EnabledPlaceholders: undefined as any } }} />);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { EnabledPlaceholders, ...paramsWithoutEnabled } = mockColumnSplitterProps.params;
+    render(<ColumnSplitter {...{ ...mockColumnSplitterProps, params: paramsWithoutEnabled, page: mockPage }} />);
     expect(getColumnSplitterDiv()).toBeInTheDocument();
   });
 
@@ -107,12 +110,14 @@ describe('ColumnSplitter Component Error Handling should', () => {
   });
 
   it('handle missing Styles parameters', () => {
-    render(<ColumnSplitter {...{ ...mockColumnSplitterProps, params: { ...mockColumnSplitterProps.params, Styles1: undefined, Styles2: undefined, Styles3: undefined } }} />);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { Styles1, Styles2, Styles3, ...paramsWithoutStyles } = mockColumnSplitterProps.params;
+    render(<ColumnSplitter {...{ ...mockColumnSplitterProps, params: paramsWithoutStyles, page: mockPage }} />);
     expect(getRowDivs()).toHaveLength(3);
   });
 
   it('handle non-numeric placeholder values', () => {
-    render(<ColumnSplitter {...{ ...mockColumnSplitterProps, params: { ...mockColumnSplitterProps.params, EnabledPlaceholders: 'abc,def' } }} />);
+    render(<ColumnSplitter {...{ ...mockColumnSplitterProps, params: { ...mockColumnSplitterProps.params, EnabledPlaceholders: 'abc,def' }, page: mockPage }} />);
     expect(getColumnSplitterDiv()).toBeInTheDocument();
   });
 });

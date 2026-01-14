@@ -221,7 +221,7 @@ describe('Navigation Component Error Handling should', () => {
   });
 
   it('render without params', () => {
-    render(<Navigation {...{ ...mockNavigationProps, params: {} as any }} />);
+    render(<Navigation {...{ ...mockNavigationProps, params: {} as typeof mockNavigationProps.params }} />);
     expect(screen.getByRole('link', { name: /Home/i })).toBeInTheDocument();
   });
 });
@@ -246,7 +246,7 @@ describe('Navigation Component Edge Cases should', () => {
   it('handle missing params gracefully', () => {
     const propsWithoutParams = {
       ...mockNavigationProps,
-      params: {} as any,
+      params: {} as typeof mockNavigationProps.params,
     };
     
     render(<Navigation {...propsWithoutParams} />);
@@ -256,7 +256,7 @@ describe('Navigation Component Edge Cases should', () => {
   it('handle empty fields object', () => {
     const propsWithEmptyFields = {
       ...mockNavigationProps,
-      fields: {} as any,
+      fields: {} as unknown as typeof mockNavigationProps.fields,
     };
     
     render(<Navigation {...propsWithEmptyFields} />);
@@ -275,7 +275,7 @@ describe('Navigation Component Edge Cases should', () => {
           Children: [],
           Styles: ['home-style'],
         },
-      },
+      } as unknown as typeof mockNavigationProps.fields,
     };
     
     render(<Navigation {...propsWithSingleItem} />);

@@ -86,17 +86,17 @@ describe('PageContent Component should', () => {
 
 describe('PageContent Component Error Handling should', () => {
   it('handle null Content field', () => {
-    render(<PageContent {...{ ...mockPageContentProps, fields: { Content: null as any } }} />);
+    render(<PageContent {...{ ...mockPageContentProps, fields: { Content: null as unknown as typeof mockPageContentProps.fields.Content } }} />);
     expect(screen.getByText('[Content]')).toBeInTheDocument();
   });
 
   it('handle undefined fields object', () => {
-    render(<PageContent {...{ ...mockPageContentProps, fields: undefined as any }} />);
+    render(<PageContent {...{ ...mockPageContentProps, fields: undefined as unknown as typeof mockPageContentProps.fields }} />);
     expect(screen.getByText('[Content]')).toBeInTheDocument();
   });
 
   it('render without params', () => {
-    render(<PageContent {...{ ...mockPageContentProps, params: {} as any }} />);
+    render(<PageContent {...{ ...mockPageContentProps, params: {} as typeof mockPageContentProps.params }} />);
     expect(screen.getByText('formatting')).toBeInTheDocument();
   });
 });

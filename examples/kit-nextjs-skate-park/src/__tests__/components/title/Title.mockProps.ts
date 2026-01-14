@@ -1,4 +1,7 @@
 // Mock data for Title component testing
+
+import { mockPage } from '../../mocks/mockPage';
+
 export const mockTitleProps = {
   rendering: {
     componentName: 'Title',
@@ -24,19 +27,7 @@ export const mockTitleProps = {
       },
     },
   },
-  page: {
-    layout: {
-      sitecore: {
-        route: {
-          fields: {},
-        },
-      },
-    },
-    mode: {
-      isEditing: false,
-      isPreview: false,
-    },
-  },
+  page: mockPage,
 };
 
 // Mock props for editing mode
@@ -66,16 +57,10 @@ export const mockTitlePropsEditing = {
     },
   },
   page: {
-    layout: {
-      sitecore: {
-        route: {
-          fields: {},
-        },
-      },
-    },
+    ...mockPage,
     mode: {
+      ...mockPage.mode,
       isEditing: true,
-      isPreview: false,
     },
   },
 };
@@ -96,18 +81,6 @@ export const mockTitlePropsNoFields = {
       // No datasource or contextItem
     },
   },
-  page: {
-    layout: {
-      sitecore: {
-        route: {
-          fields: {},
-        },
-      },
-    },
-    mode: {
-      isEditing: false,
-      isPreview: false,
-    },
-  },
+  page: mockPage,
 };
 

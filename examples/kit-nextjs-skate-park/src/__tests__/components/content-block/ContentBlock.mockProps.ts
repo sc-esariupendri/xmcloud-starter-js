@@ -1,5 +1,7 @@
 // Mock data for ContentBlock component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with heading and content
 export const mockContentBlockProps = {
   rendering: {
@@ -19,6 +21,7 @@ export const mockContentBlockProps = {
       value: '<p>This is the <strong>content</strong> with some <em>formatting</em>.</p>',
     },
   },
+  page: mockPage,
 };
 
 // Mock props with simple content
@@ -40,6 +43,7 @@ export const mockContentBlockPropsSimple = {
       value: '<p>Simple content text.</p>',
     },
   },
+  page: mockPage,
 };
 
 // Mock props with long content
@@ -61,6 +65,7 @@ export const mockContentBlockPropsLong = {
       value: '<p>This is a longer content block with multiple sentences. It demonstrates how the component handles larger amounts of text.</p><p>It can even have multiple paragraphs.</p>',
     },
   },
+  page: mockPage,
 };
 
 // Mock props with empty content
@@ -82,5 +87,6 @@ export const mockContentBlockPropsEmpty = {
       value: '',
     },
   },
+  page: mockPage,
 };
 

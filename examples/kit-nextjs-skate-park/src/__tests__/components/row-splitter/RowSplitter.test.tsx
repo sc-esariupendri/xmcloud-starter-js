@@ -93,7 +93,9 @@ describe('RowSplitter Component should', () => {
 
 describe('RowSplitter Component Error Handling should', () => {
   it('handle undefined EnabledPlaceholders', () => {
-    render(<RowSplitter {...{ ...mockRowSplitterProps, params: { ...mockRowSplitterProps.params, EnabledPlaceholders: undefined as any } }} />);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { EnabledPlaceholders, ...paramsWithoutEnabled } = mockRowSplitterProps.params;
+    render(<RowSplitter {...{ ...mockRowSplitterProps, params: paramsWithoutEnabled }} />);
     expect(getRowSplitterDiv()).toBeInTheDocument();
   });
 
@@ -108,7 +110,7 @@ describe('RowSplitter Component Error Handling should', () => {
   });
 
   it('handle empty params object', () => {
-    render(<RowSplitter {...{ ...mockRowSplitterProps, params: {} as any }} />);
+    render(<RowSplitter {...{ ...mockRowSplitterProps, params: {} as typeof mockRowSplitterProps.params }} />);
     expect(getRowSplitterDiv()).toBeInTheDocument();
   });
 });

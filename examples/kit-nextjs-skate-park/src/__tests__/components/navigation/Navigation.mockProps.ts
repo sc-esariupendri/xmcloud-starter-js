@@ -1,5 +1,7 @@
 // Mock data for Navigation component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with nested navigation structure
 export const mockNavigationProps = {
   rendering: {
@@ -75,14 +77,24 @@ export const mockNavigationProps = {
       Title: {
         value: 'Contact Us',
       },
-      NavigationTitle: null as any,
+      NavigationTitle: null as unknown as { value: string },
       Href: '/contact',
       Querystring: '?from=nav',
       Children: [],
       Styles: ['contact-style'],
     },
-  } as any,
-};
+  } as unknown as Record<string, {
+    Id: string;
+    DisplayName: string;
+    Title: { value: string } | null;
+    NavigationTitle: { value: string } | null;
+    Href: string;
+    Querystring: string;
+    Children: unknown[];
+    Styles: string[];
+  }>,
+  page: mockPage,
+} as unknown as Parameters<typeof import('../../../components/navigation/Navigation').Default>[0];
 
 // Mock props with simple flat navigation (no children)
 export const mockNavigationPropsFlat = {
@@ -124,8 +136,18 @@ export const mockNavigationPropsFlat = {
       Children: [],
       Styles: [],
     },
-  } as any,
-};
+  } as unknown as Record<string, {
+    Id: string;
+    DisplayName: string;
+    Title: { value: string } | null;
+    NavigationTitle: { value: string } | null;
+    Href: string;
+    Querystring: string;
+    Children: unknown[];
+    Styles: string[];
+  }>,
+  page: mockPage,
+} as unknown as Parameters<typeof import('../../../components/navigation/Navigation').Default>[0];
 
 // Mock props with DisplayName only (no Title or NavigationTitle)
 export const mockNavigationPropsDisplayName = {
@@ -142,15 +164,25 @@ export const mockNavigationPropsDisplayName = {
     SimpleLink: {
       Id: 'simple-id',
       DisplayName: 'Simple Link',
-      Title: null as any,
-      NavigationTitle: null as any,
+      Title: null as unknown as { value: string },
+      NavigationTitle: null as unknown as { value: string },
       Href: '/simple',
       Querystring: '',
       Children: [],
       Styles: [],
     },
-  } as any,
-};
+  } as unknown as Record<string, {
+    Id: string;
+    DisplayName: string;
+    Title: { value: string } | null;
+    NavigationTitle: { value: string } | null;
+    Href: string;
+    Querystring: string;
+    Children: unknown[];
+    Styles: string[];
+  }>,
+  page: mockPage,
+} as unknown as Parameters<typeof import('../../../components/navigation/Navigation').Default>[0];
 
 // Mock props with no fields (empty state)
 export const mockNavigationPropsEmpty = {
@@ -163,6 +195,16 @@ export const mockNavigationPropsEmpty = {
     styles: 'empty-styles',
     RenderingIdentifier: 'navigation-empty-id',
   },
-  fields: {} as any,
-};
+  fields: {} as unknown as Record<string, {
+    Id: string;
+    DisplayName: string;
+    Title: { value: string } | null;
+    NavigationTitle: { value: string } | null;
+    Href: string;
+    Querystring: string;
+    Children: unknown[];
+    Styles: string[];
+  }>,
+  page: mockPage,
+} as unknown as Parameters<typeof import('../../../components/navigation/Navigation').Default>[0];
 

@@ -69,17 +69,17 @@ describe('RichText Component should', () => {
 
 describe('RichText Component Error Handling should', () => {
   it('handle null fields gracefully', () => {
-    render(<RichText {...{ ...mockRichTextPropsNoFields, fields: null as any }} />);
+    render(<RichText {...{ ...mockRichTextPropsNoFields, fields: null as unknown as typeof mockRichTextPropsNoFields.fields }} />);
     expect(screen.getByText('Rich text')).toBeInTheDocument();
   });
 
   it('handle undefined params gracefully', () => {
-    render(<RichText {...{ ...mockRichTextProps, params: {} as any }} />);
+    render(<RichText {...{ ...mockRichTextProps, params: {} as typeof mockRichTextProps.params }} />);
     expect(screen.getByText('bold')).toBeInTheDocument();
   });
 
   it('render without styles parameter', () => {
-    render(<RichText {...{ ...mockRichTextProps, params: { RenderingIdentifier: 'test-id' } as any }} />);
+    render(<RichText {...{ ...mockRichTextProps, params: { RenderingIdentifier: 'test-id' } as typeof mockRichTextProps.params }} />);
     expect(screen.getByText('bold')).toBeInTheDocument();
   });
 });

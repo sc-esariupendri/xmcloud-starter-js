@@ -1,5 +1,7 @@
 // Mock data for ColumnSplitter component testing
 
+import { mockPage } from '../../mocks/mockPage';
+
 // Mock props with 3 columns
 export const mockColumnSplitterProps = {
   rendering: {
@@ -18,6 +20,7 @@ export const mockColumnSplitterProps = {
     Styles2: 'second-column-style',
     Styles3: 'third-column-style',
   },
+  page: mockPage,
 };
 
 // Mock props with 2 columns (different widths)
@@ -36,6 +39,7 @@ export const mockColumnSplitterPropsTwo = {
     Styles1: '',
     Styles2: '',
   },
+  page: mockPage,
 };
 
 // Mock props with single column
@@ -52,6 +56,7 @@ export const mockColumnSplitterPropsSingle = {
     ColumnWidth1: 'col-12',
     Styles1: 'full-width-style',
   },
+  page: mockPage,
 };
 
 // Mock props with no column widths specified
@@ -68,6 +73,7 @@ export const mockColumnSplitterPropsNoWidths = {
     Styles1: 'first-style',
     Styles2: 'second-style',
   },
+  page: mockPage,
 };
 
 // Mock props with maximum columns (8)
@@ -98,6 +104,7 @@ export const mockColumnSplitterPropsMax = {
     Styles7: '',
     Styles8: '',
   },
+  page: mockPage,
 };
 
 // Mock props with no enabled placeholders
@@ -112,5 +119,6 @@ export const mockColumnSplitterPropsEmpty = {
     RenderingIdentifier: 'columnsplitter-empty-id',
     EnabledPlaceholders: '',
   },
+  page: mockPage,
 };
 
