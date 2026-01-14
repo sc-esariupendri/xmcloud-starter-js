@@ -3,6 +3,7 @@
  */
 
 import type { ComponentProps } from 'lib/component-props';
+import { mockPage } from '../../test-utils/mockPage';
 
 type ContentBlockProps = ComponentProps & {
   fields: {
@@ -58,6 +59,7 @@ export const defaultContentBlockProps: ContentBlockProps = {
   rendering: {
     componentName: 'ContentBlock',
   },
+  page: mockPage,
   fields: {
     heading: mockContentBlockData.basicHeading,
     content: mockContentBlockData.basicContent,
@@ -72,6 +74,7 @@ export const contentBlockPropsComplex: ContentBlockProps = {
   rendering: {
     componentName: 'ContentBlock',
   },
+  page: mockPage,
   fields: {
     heading: mockContentBlockData.longHeading,
     content: mockContentBlockData.complexContent,
@@ -86,6 +89,7 @@ export const contentBlockPropsEmptyHeading: ContentBlockProps = {
   rendering: {
     componentName: 'ContentBlock',
   },
+  page: mockPage,
   fields: {
     heading: mockContentBlockData.emptyHeading,
     content: mockContentBlockData.basicContent,
@@ -100,6 +104,7 @@ export const contentBlockPropsEmptyContent: ContentBlockProps = {
   rendering: {
     componentName: 'ContentBlock',
   },
+  page: mockPage,
   fields: {
     heading: mockContentBlockData.basicHeading,
     content: mockContentBlockData.emptyContent,
@@ -114,6 +119,7 @@ export const contentBlockPropsEmpty: ContentBlockProps = {
   rendering: {
     componentName: 'ContentBlock',
   },
+  page: mockPage,
   fields: {
     heading: mockContentBlockData.emptyHeading,
     content: mockContentBlockData.emptyContent,
@@ -128,6 +134,7 @@ export const contentBlockPropsSpecialChars: ContentBlockProps = {
   rendering: {
     componentName: 'ContentBlock',
   },
+  page: mockPage,
   fields: {
     heading: mockContentBlockData.specialCharsHeading,
     content: mockContentBlockData.specialCharsContent,
@@ -142,5 +149,6 @@ export const contentBlockPropsNullFields: ContentBlockProps = {
   rendering: {
     componentName: 'ContentBlock',
   },
+  page: mockPage,
   fields: null as unknown as ContentBlockProps['fields'],
 };

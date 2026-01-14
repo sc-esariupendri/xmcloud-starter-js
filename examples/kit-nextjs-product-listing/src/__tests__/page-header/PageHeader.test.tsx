@@ -19,6 +19,7 @@ import {
   mockUseSitecoreNormal,
   mockUseSitecoreEditing,
 } from './PageHeader.mockProps';
+import { mockPageEditing } from '../test-utils/mockPage';
 
 // Mock Sitecore Content SDK
 const mockUseSitecore = jest.fn();
@@ -184,13 +185,7 @@ describe('PageHeader Component', () => {
     it('shows links in editing mode even when empty', () => {
       const propsWithEditing = {
         ...pageHeaderPropsNoLinks,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
+        page: mockPageEditing,
       };
       render(<PageHeaderDefault {...propsWithEditing} />);
 
@@ -303,13 +298,7 @@ describe('PageHeader Component', () => {
     it('shows buttons in editing mode regardless of href', () => {
       const propsWithEmptyLinks = {
         ...defaultPageHeaderProps,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
+        page: mockPageEditing,
         fields: {
           data: {
             ...defaultPageHeaderProps.fields.data,

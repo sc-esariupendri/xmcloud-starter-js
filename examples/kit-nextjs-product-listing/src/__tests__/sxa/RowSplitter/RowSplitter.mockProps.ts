@@ -4,25 +4,12 @@
 
 import { ComponentProps } from 'lib/component-props';
 import { ComponentRendering, Page } from '@sitecore-content-sdk/nextjs';
+import { mockPage as sharedMockPage } from '../../test-utils/mockPage';
 
 /**
  * Mock page object
  */
-export const mockPage: Page = {
-  layout: {
-    sitecore: {
-      route: {
-        fields: {},
-      },
-    },
-  },
-  mode: {
-    isEditing: false,
-    isNormal: true,
-    isPreview: false,
-  },
-  locale: 'en',
-};
+export const mockPage: Page = sharedMockPage;
 
 type RowNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 

@@ -42,9 +42,11 @@ jest.mock('embla-carousel-react', () => ({
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, ...props }: any) => <span {...props}>{field?.value || ''}</span>,
   NextImage: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
   Image: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
 }));

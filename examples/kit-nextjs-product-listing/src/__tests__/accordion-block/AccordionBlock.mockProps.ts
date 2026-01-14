@@ -2,11 +2,53 @@
  * Test fixtures and mock data for AccordionBlock component
  */
 
-import type { Field, LinkField } from '@sitecore-content-sdk/nextjs';
+import type { Field, LinkField, Page } from '@sitecore-content-sdk/nextjs';
 import type {
   AccordionProps,
   AccordionItemProps,
 } from '../../components/accordion-block/accordion-block.props';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 /**
  * Base mock data for AccordionBlock component
@@ -126,13 +168,7 @@ export const defaultAccordionProps: AccordionProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   isPageEditing: false,
 };
 
@@ -160,13 +196,7 @@ export const accordionPropsEditMode: AccordionProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
   isPageEditing: true,
 };
 
@@ -193,13 +223,7 @@ export const accordionPropsMinimal: AccordionProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   isPageEditing: false,
 };
 
@@ -227,13 +251,7 @@ export const accordionPropsEmptyItems: AccordionProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   isPageEditing: false,
 };
 
@@ -261,13 +279,7 @@ export const accordionPropsSingleItem: AccordionProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   isPageEditing: false,
 };
 
@@ -286,13 +298,7 @@ export const accordionPropsNoFields: AccordionProps = {
   fields: {
     data: {},
   } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   isPageEditing: false,
 };
 
@@ -313,13 +319,7 @@ export const accordionPropsNullDatasource: AccordionProps = {
       datasource: undefined,
     },
   } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   isPageEditing: false,
 };
 
@@ -327,24 +327,12 @@ export const accordionPropsNullDatasource: AccordionProps = {
  * Mock useSitecore context for normal mode
  */
 export const mockUseSitecoreNormal = {
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 /**
  * Mock useSitecore context for editing mode
  */
 export const mockUseSitecoreEditing = {
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
 };

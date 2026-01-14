@@ -25,6 +25,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       {children}
     </a>
   ),
+  // eslint-disable-next-line @next/next/no-img-element
   NextImage: ({ field }: any) => <img src={field?.value?.src} data-testid="header-image" alt="" />,
 }));
 

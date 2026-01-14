@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockLinkField = (href: string, text: string): LinkField =>
@@ -21,6 +22,7 @@ export const defaultHeaderSTProps = {
     showMiniCart: 'true',
     DynamicPlaceholderId: 'main-nav',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField('/images/sync-logo.svg', 'SYNC Audio Logo'),
     SupportLink: createMockLinkField('/support', 'Support'),
@@ -35,6 +37,7 @@ export const headerSTPropsBasic = {
   params: {
     DynamicPlaceholderId: 'main-nav',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField('/images/sync-logo-alt.svg', 'SYNC Logo'),
     SupportLink: createMockLinkField('/help', 'Help & Support'),
@@ -52,6 +55,7 @@ export const headerSTPropsCustomStyles = {
     showMiniCart: 'false',
     DynamicPlaceholderId: 'header-nav',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField('/images/sync-logo-white.svg', 'SYNC Audio White Logo'),
     SupportLink: createMockLinkField('/support-center', 'Support Center'),
@@ -66,6 +70,7 @@ export const headerSTPropsEmpty = {
   params: {
     DynamicPlaceholderId: 'nav',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField('', ''),
     SupportLink: createMockLinkField('', ''),
@@ -80,6 +85,7 @@ export const headerSTPropsNoFields = {
   params: {
     DynamicPlaceholderId: 'nav',
   },
+  page: mockPage,
   fields: null as any,
 };
 
@@ -92,6 +98,7 @@ export const headerSTPropsLongText = {
     showMiniCart: 'true',
     DynamicPlaceholderId: 'main-navigation-placeholder',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField(
       '/images/sync-audio-professional-equipment-logo-v2.svg',
@@ -120,6 +127,7 @@ export const headerSTPropsSearchBoxOnly = {
     showMiniCart: 'false',
     DynamicPlaceholderId: 'nav',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField('/images/logo.svg', 'Logo'),
     SupportLink: createMockLinkField('/support', 'Support'),
@@ -135,6 +143,7 @@ export const headerSTPropsMiniCartOnly = {
     showMiniCart: 'true',
     DynamicPlaceholderId: 'nav',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField('/images/logo.svg', 'Logo'),
     SupportLink: createMockLinkField('/support', 'Support'),
@@ -150,6 +159,7 @@ export const headerSTPropsSpecialChars = {
     styles: 'class-with-"quotes" & special/chars',
     DynamicPlaceholderId: 'nav-with-åccénts',
   },
+  page: mockPage,
   fields: {
     Logo: createMockImageField('/images/logo-ñ.svg', 'Logó with Àccents'),
     SupportLink: createMockLinkField('/suppört', 'Suppört & Hëlp'),

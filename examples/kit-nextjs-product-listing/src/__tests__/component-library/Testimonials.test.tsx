@@ -13,6 +13,28 @@ import {
   Testimonials8,
   Testimonials9,
 } from '@/components/component-library/Testimonials';
+import type { Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Mock dependencies
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -27,6 +49,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     </a>
   ),
   NextImage: ({ field }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.jsonValue?.value?.src} data-testid="testimonials-image" alt="" />
   ),
   useSitecore: () => ({
@@ -151,13 +174,7 @@ const defaultProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 describe('TestimonialsDefault', () => {

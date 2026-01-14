@@ -2,6 +2,28 @@ import type {
   BreadcrumbsProps,
   BreadcrumbsPage,
 } from '../../components/breadcrumbs/breadcrumbs.props';
+import type { Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Mock breadcrumbs with ancestors
 export const breadcrumbsPropsWithAncestors: BreadcrumbsProps = {
@@ -36,6 +58,7 @@ export const breadcrumbsPropsWithAncestors: BreadcrumbsProps = {
       },
     },
   },
+  page: mockPageNormal,
 };
 
 // Mock breadcrumbs with long name to test truncation
@@ -61,6 +84,7 @@ export const breadcrumbsPropsWithLongName: BreadcrumbsProps = {
       },
     },
   },
+  page: mockPageNormal,
 };
 
 // Mock breadcrumbs without ancestors (home page)
@@ -75,6 +99,7 @@ export const breadcrumbsPropsNoAncestors: BreadcrumbsProps = {
       },
     },
   },
+  page: mockPageNormal,
 };
 
 // Mock breadcrumbs with no fields
@@ -82,4 +107,5 @@ export const breadcrumbsPropsNoFields: BreadcrumbsProps = {
   rendering: { componentName: 'Breadcrumbs', params: {} },
   params: {},
   fields: undefined as unknown as BreadcrumbsProps['fields'],
+  page: mockPageNormal,
 };

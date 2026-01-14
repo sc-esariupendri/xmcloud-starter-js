@@ -24,6 +24,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     field: { value: { src: string; alt: string } };
     className?: string;
   }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="carousel-image"
       src={field?.value?.src}

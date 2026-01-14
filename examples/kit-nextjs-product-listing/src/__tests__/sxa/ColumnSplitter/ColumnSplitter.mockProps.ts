@@ -2,7 +2,9 @@
  * Test fixtures and mock data for ColumnSplitter component
  */
 
-import { ComponentProps, Page } from 'lib/component-props';
+import { ComponentProps } from 'lib/component-props';
+import { Page } from '@sitecore-content-sdk/nextjs';
+import { mockPage as sharedMockPage } from '../../test-utils/mockPage';
 
 type ColumnNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -21,21 +23,7 @@ interface ColumnSplitterProps extends ComponentProps {
 /**
  * Mock page object
  */
-export const mockPage: Page = {
-  mode: {
-    isEditing: false,
-    isNormal: true,
-    isPreview: false,
-  },
-  layout: {
-    sitecore: {
-      route: {
-        fields: {},
-      },
-    },
-  },
-  locale: 'en',
-};
+export const mockPage: Page = sharedMockPage;
 
 /**
  * Mock rendering object

@@ -2,7 +2,9 @@
  * Test fixtures and mock data for PageContent component
  */
 
-import type { RichTextField, LinkField, TextField, Page } from '@sitecore-content-sdk/nextjs';
+import type { RichTextField, LinkField, TextField, Page, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import type { ComponentProps } from 'lib/component-props';
+import { mockPage as sharedMockPage } from '../../test-utils/mockPage';
 
 interface PageContentFields {
   Title: TextField;
@@ -10,10 +12,8 @@ interface PageContentFields {
   MainLink: LinkField;
 }
 
-type PageContentProps = {
-  params: { [key: string]: string };
+type PageContentProps = ComponentProps & {
   fields: PageContentFields;
-  page: Page;
 };
 
 /**
@@ -79,29 +79,23 @@ export const mockLinkField: LinkField = {
 /**
  * Mock page object
  */
-export const mockPage: Page = {
-  layout: {
-    sitecore: {
-      route: {
-        fields: {
-          Title: mockTitleField,
-          Content: mockContentField,
-        },
-      },
-    },
-  },
-  mode: {
-    isNormal: true,
-    isEditing: false,
-    isPreview: false,
-  },
-  locale: 'en',
+export const mockPage: Page = sharedMockPage;
+
+/**
+ * Mock rendering object
+ */
+const mockRendering: ComponentRendering = {
+  componentName: 'PageContent',
+  dataSource: '',
+  uid: 'pagecontent-uid',
+  placeholders: {},
 };
 
 /**
  * Default props for PageContent component testing
  */
 export const defaultPageContentProps: PageContentProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'pagecontent-1',
     styles: 'pagecontent-styles',
@@ -118,6 +112,7 @@ export const defaultPageContentProps: PageContentProps = {
  * Props with empty content
  */
 export const pageContentPropsEmptyContent: PageContentProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'pagecontent-2',
     styles: 'pagecontent-styles',
@@ -134,6 +129,7 @@ export const pageContentPropsEmptyContent: PageContentProps = {
  * Props with simple content (no HTML)
  */
 export const pageContentPropsSimpleContent: PageContentProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'pagecontent-3',
     styles: 'pagecontent-styles',
@@ -150,6 +146,7 @@ export const pageContentPropsSimpleContent: PageContentProps = {
  * Props with minimal parameters
  */
 export const pageContentPropsMinimal: PageContentProps = {
+  rendering: mockRendering,
   params: {},
   fields: {
     Title: mockTitleField,
@@ -163,6 +160,7 @@ export const pageContentPropsMinimal: PageContentProps = {
  * Props with null fields (edge case)
  */
 export const pageContentPropsNullFields: PageContentProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'pagecontent-4',
     styles: 'pagecontent-styles',
@@ -195,21 +193,24 @@ export const mockSitecoreContextEditing = {
 /**
  * Mock Sitecore context with empty content
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const mockSitecoreContextEmptyContent = {
   page: {
     ...mockPage,
     layout: {
       sitecore: {
+        ...mockPage.layout.sitecore,
         route: {
           fields: {
             Title: mockTitleField,
             Content: mockEmptyContentField,
           },
-        },
+        } as any,
       },
     },
   },
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
  * Alias for normal context (used in tests)

@@ -22,6 +22,7 @@ jest.mock('@/hooks/useContainerOffsets', () => ({
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, ...props }: any) => <span {...props}>{field?.value || ''}</span>,
   NextImage: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
   Link: ({ field, children, className }: any) => (

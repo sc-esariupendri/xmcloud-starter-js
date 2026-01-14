@@ -5,6 +5,7 @@ import {
 } from '../../components/secondary-navigation/secondary-navigation.props';
 import { GqlFieldString } from '../../utils/graphQlClient';
 import { LinkFieldValue } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 // Helper function to create mock GraphQL field
 const createMockGqlField = (value: string): GqlFieldString => ({
@@ -83,6 +84,7 @@ export const mockPageNoUrl: SecondaryNavigationPage = {
 // Default props with full navigation hierarchy
 export const defaultSecondaryNavigationProps: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -108,6 +110,7 @@ export const defaultSecondaryNavigationProps: SecondaryNavigationProps = {
 // Props for different current page (Services)
 export const secondaryNavigationPropsServices: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -133,6 +136,7 @@ export const secondaryNavigationPropsServices: SecondaryNavigationProps = {
 // Props with no children
 export const secondaryNavigationPropsNoChildren: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -158,6 +162,7 @@ export const secondaryNavigationPropsNoChildren: SecondaryNavigationProps = {
 // Props with single child
 export const secondaryNavigationPropsSingleChild: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -183,6 +188,7 @@ export const secondaryNavigationPropsSingleChild: SecondaryNavigationProps = {
 // Props with children missing navigation titles
 export const secondaryNavigationPropsNoNavTitles: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -208,6 +214,7 @@ export const secondaryNavigationPropsNoNavTitles: SecondaryNavigationProps = {
 // Props with pages missing URLs
 export const secondaryNavigationPropsNoUrls: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -233,6 +240,7 @@ export const secondaryNavigationPropsNoUrls: SecondaryNavigationProps = {
 // Props without parent structure
 export const secondaryNavigationPropsNoParent: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -256,6 +264,7 @@ export const secondaryNavigationPropsNoParent: SecondaryNavigationProps = {
 // Props with empty parent children
 export const secondaryNavigationPropsEmptyParent: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -281,6 +290,7 @@ export const secondaryNavigationPropsEmptyParent: SecondaryNavigationProps = {
 // Props without datasource
 export const secondaryNavigationPropsNoDatasource: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -297,6 +307,7 @@ export const secondaryNavigationPropsNoDatasource: SecondaryNavigationProps = {
 // Props without data
 export const secondaryNavigationPropsNoData: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: undefined as any,
@@ -311,6 +322,7 @@ export const secondaryNavigationPropsNoData: SecondaryNavigationProps = {
 // Props without fields
 export const secondaryNavigationPropsNoFields: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: undefined as any,
   rendering: {
@@ -323,6 +335,7 @@ export const secondaryNavigationPropsNoFields: SecondaryNavigationProps = {
 // Props with mixed content (some pages have nav titles, some don't)
 export const secondaryNavigationPropsMixed: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -348,6 +361,7 @@ export const secondaryNavigationPropsMixed: SecondaryNavigationProps = {
 // Props for testing deep hierarchy
 export const secondaryNavigationPropsDeepHierarchy: SecondaryNavigationProps = {
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {

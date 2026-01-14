@@ -82,6 +82,7 @@ jest.mock('../../components/image/ImageWrapper.dev', () => ({
   Default: ({ image, className }: { image?: ImageField; className?: string }) => {
     const img = image as ImageField | undefined;
     return img?.value?.src ? (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         data-testid="image"
         src={img.value.src}

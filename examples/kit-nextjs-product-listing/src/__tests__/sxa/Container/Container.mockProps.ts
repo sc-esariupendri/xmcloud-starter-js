@@ -1,23 +1,10 @@
 import { ComponentRendering, ComponentParams, Page } from '@sitecore-content-sdk/nextjs';
+import { mockPage as sharedMockPage } from '../../test-utils/mockPage';
 
 /**
  * Mock page object
  */
-export const mockPage: Page = {
-  mode: {
-    isEditing: false,
-    isNormal: true,
-    isPreview: false,
-  },
-  layout: {
-    sitecore: {
-      route: {
-        fields: {},
-      },
-    },
-  },
-  locale: 'en',
-};
+export const mockPage: Page = sharedMockPage;
 
 // Mock params data
 export const mockParams: ComponentParams = {

@@ -5,11 +5,13 @@ import {
   Default as VideoDefault,
   TextCenter as VideoTextCenter,
 } from '@/components/site-three/Video';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, ...props }: any) => <span {...props}>{field?.value || ''}</span>,
   Image: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
 }));
@@ -41,6 +43,7 @@ describe('Video Component', () => {
       useModal: 'true',
       displayIcon: 'true',
     },
+    page: mockPage,
     fields: {
       video: {
         value: {
@@ -94,6 +97,7 @@ describe('Video Component', () => {
         <VideoDefault
           fields={undefined}
           params={{}}
+          page={mockPage}
           rendering={{ uid: 'test', componentName: 'Video' }}
         />
       );
@@ -157,6 +161,7 @@ describe('Video Component', () => {
         <VideoTextCenter
           fields={undefined}
           params={{}}
+          page={mockPage}
           rendering={{ uid: 'test', componentName: 'Video' }}
         />
       );

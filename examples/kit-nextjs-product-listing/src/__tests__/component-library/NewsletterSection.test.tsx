@@ -16,6 +16,7 @@ import {
 // Mock Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   NextImage: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="newsletter-image"
       src={field?.value?.src}

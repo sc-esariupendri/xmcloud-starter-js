@@ -1,6 +1,27 @@
 import type { AlertBannerProps } from '../../components/alert-banner/alert-banner.props';
 
-import type { Field, LinkField } from '@sitecore-content-sdk/nextjs';
+import type { Field, LinkField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 const mockTitleField: Field<string> = { value: 'Site notice' } as unknown as Field<string>;
 const mockDescriptionField: Field<string> = {
@@ -24,6 +45,7 @@ export const defaultAlertBannerProps: AlertBannerProps = {
     link: mockLinkField,
   },
   externalFields: mockExternalFields,
+  page: mockPageNormal,
 };
 
 export const alertBannerPropsNoFields: AlertBannerProps = {
@@ -31,6 +53,7 @@ export const alertBannerPropsNoFields: AlertBannerProps = {
   params: { mock_param: '' },
   fields: {} as AlertBannerProps['fields'],
   externalFields: mockExternalFields,
+  page: mockPageNormal,
 };
 
 export const alertBannerPropsMinimal: AlertBannerProps = {
@@ -41,6 +64,7 @@ export const alertBannerPropsMinimal: AlertBannerProps = {
     description: { value: '' } as unknown as Field<string>,
   },
   externalFields: mockExternalFields,
+  page: mockPageNormal,
 };
 
 export const alertBannerPropsWithLink: AlertBannerProps = {
@@ -48,4 +72,6 @@ export const alertBannerPropsWithLink: AlertBannerProps = {
 };
 
 // Mock useSitecore context (only normal needed for these tests)
-export const mockUseSitecoreNormal = { page: { mode: { isEditing: false } } } as unknown;
+export const mockUseSitecoreNormal = {
+  page: mockPageNormal,
+};

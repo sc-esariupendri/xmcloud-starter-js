@@ -2,6 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { ImageCarouselDefault } from '@/components/image-carousel/ImageCarouselDefault.dev';
 import { ImageCarouselProps } from '@/components/image-carousel/image-carousel.props';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock lucide-react icons
 jest.mock('lucide-react', () => ({
@@ -137,6 +138,7 @@ describe('ImageCarouselDefault Component', () => {
         },
       },
     },
+    page: mockPage,
     isPageEditing: false,
   };
 

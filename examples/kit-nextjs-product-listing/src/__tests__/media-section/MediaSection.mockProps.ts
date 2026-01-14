@@ -1,4 +1,46 @@
-import { ImageField } from '@sitecore-content-sdk/nextjs';
+import { ImageField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Mock image field
 export const mockImageField: ImageField = {
@@ -53,13 +95,7 @@ export const defaultProps = {
   className: 'custom-media-class',
   pause: false,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with only video
@@ -71,13 +107,7 @@ export const propsWithOnlyVideo = {
   className: '',
   pause: false,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with only image
@@ -89,13 +119,7 @@ export const propsWithOnlyImage = {
   className: 'image-only',
   pause: false,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with reduced motion enabled
@@ -107,13 +131,7 @@ export const propsWithReducedMotion = {
   className: '',
   pause: false,
   reducedMotion: true,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with video paused
@@ -125,13 +143,7 @@ export const propsWithPausedVideo = {
   className: '',
   pause: true,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with large image
@@ -143,13 +155,7 @@ export const propsWithLargeImage = {
   className: 'aspect-16/9',
   pause: false,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with image without size
@@ -161,13 +167,7 @@ export const propsWithImageNoSize = {
   className: '',
   pause: false,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with no media (should not render)
@@ -179,13 +179,7 @@ export const propsWithNoMedia = {
   className: '',
   pause: false,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with both video and reduced motion
@@ -197,13 +191,7 @@ export const propsWithVideoAndReducedMotion = {
   className: 'reduced-motion-test',
   pause: false,
   reducedMotion: true,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 // Props with custom dimensions
@@ -215,11 +203,5 @@ export const propsWithCustomClass = {
   className: 'aspect-280/356 custom-class',
   pause: false,
   reducedMotion: false,
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };

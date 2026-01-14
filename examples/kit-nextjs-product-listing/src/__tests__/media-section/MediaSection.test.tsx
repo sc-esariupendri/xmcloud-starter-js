@@ -12,9 +12,9 @@ import {
   propsWithNoMedia,
   propsWithVideoAndReducedMotion,
   propsWithCustomClass,
-  mockSitecoreContext,
-  mockSitecoreContextEditing,
+  mockSitecoreContext
 } from './MediaSection.mockProps';
+import { mockPageEditing } from '../test-utils/mockPage';
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: jest.fn(),
@@ -31,6 +31,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => ({
     className?: string;
     alt?: string;
   }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={image?.value?.src}
       alt={alt || image?.value?.alt}
@@ -276,13 +277,7 @@ describe('MediaSection Component', () => {
     it('should handle editing mode with relative URLs', () => {
       const editingProps = {
         ...defaultProps,
-        page: {
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        },
+        page: mockPageEditing,
       };
 
       const { container } = render(<MediaSection {...editingProps} />);

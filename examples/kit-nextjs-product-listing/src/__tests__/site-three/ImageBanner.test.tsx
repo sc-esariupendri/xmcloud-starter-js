@@ -14,6 +14,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Text: ({ field, ...props }: any) => <span {...props}>{field?.value || ''}</span>,
   RichText: ({ field, ...props }: any) => <div {...props}>{field?.value || ''}</div>,
   Image: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
 }));

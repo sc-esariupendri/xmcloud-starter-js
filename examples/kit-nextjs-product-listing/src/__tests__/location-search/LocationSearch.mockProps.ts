@@ -2,7 +2,49 @@ import type {
   LocationSearchProps,
   DealershipFields,
 } from '../../components/location-search/location-search.props';
-import type { Field } from '@sitecore-content-sdk/nextjs';
+import type { Field, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -28,13 +70,7 @@ const mockDealership2: DealershipFields = {
 export const defaultLocationSearchProps: LocationSearchProps = {
   rendering: { componentName: 'LocationSearch', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -55,13 +91,7 @@ export const defaultLocationSearchProps: LocationSearchProps = {
 export const locationSearchPropsNoResults: LocationSearchProps = {
   rendering: { componentName: 'LocationSearch', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -82,13 +112,7 @@ export const locationSearchPropsNoResults: LocationSearchProps = {
 export const locationSearchPropsMinimal: LocationSearchProps = {
   rendering: { componentName: 'LocationSearch', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -108,13 +132,7 @@ export const locationSearchPropsMinimal: LocationSearchProps = {
 
 export const locationSearchPropsEditing: LocationSearchProps = {
   ...defaultLocationSearchProps,
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
   isPageEditing: true,
 };
 

@@ -5,6 +5,8 @@ import {
   defaultBackgroundThumbnailProps,
   mockUseSitecoreEditing,
   mockUseSitecoreNormal,
+  mockPageEditing,
+  mockPageNormal,
 } from './BackgroundThumbnail.mockProps';
 
 // Mock the Sitecore Content SDK
@@ -39,13 +41,7 @@ describe('BackgroundThumbnail', () => {
     render(
       <BackgroundThumbnailDefault
         {...defaultBackgroundThumbnailProps}
-        page={{
-          mode: {
-            isEditing: true,
-            isNormal: false,
-            isPreview: false,
-          },
-        }}
+        page={mockPageEditing}
       />
     );
 
@@ -61,13 +57,7 @@ describe('BackgroundThumbnail', () => {
     const { container } = render(
       <BackgroundThumbnailDefault
         {...defaultBackgroundThumbnailProps}
-        page={{
-          mode: {
-            isEditing: false,
-            isNormal: true,
-            isPreview: false,
-          },
-        }}
+        page={mockPageNormal}
       />
     );
 

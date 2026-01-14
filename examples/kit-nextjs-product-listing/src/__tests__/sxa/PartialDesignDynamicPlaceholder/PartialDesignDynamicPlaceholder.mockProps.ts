@@ -4,6 +4,7 @@
 
 import type { ComponentProps } from 'lib/component-props';
 import type { Page } from '@sitecore-content-sdk/nextjs';
+import { mockPage as sharedMockPage } from '../../test-utils/mockPage';
 
 /**
  * Base mock data for PartialDesignDynamicPlaceholder component
@@ -16,21 +17,7 @@ export const mockPartialDesignData = {
 /**
  * Mock page object
  */
-export const mockPage: Page = {
-  layout: {
-    sitecore: {
-      route: {
-        fields: {},
-      },
-    },
-  },
-  mode: {
-    isEditing: false,
-    isNormal: true,
-    isPreview: false,
-  },
-  locale: 'en',
-};
+export const mockPage: Page = sharedMockPage;
 
 /**
  * Mock rendering object

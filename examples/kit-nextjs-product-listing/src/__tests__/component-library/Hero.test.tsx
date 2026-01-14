@@ -9,11 +9,34 @@ import {
   Hero5,
   Hero6,
 } from '../../components/component-library/CLHero';
+import type { Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Mock Sitecore Content SDK
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   NextImage: ({ field, className, width, height }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="hero-image"
       src={field?.value?.src}
@@ -64,13 +87,7 @@ const defaultProps = {
     HeroImage1: { value: { src: '/images/hero1.jpg', alt: 'Hero Image 1' } },
     HeroImage2: { value: { src: '/images/hero2.jpg', alt: 'Hero Image 2' } },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 describe('HeroDefault', () => {
@@ -137,13 +154,7 @@ describe('Hero Variants', () => {
           HeroImage1: { value: { src: '', alt: '' } },
           HeroImage2: { value: { src: '', alt: '' } },
         },
-        page: {
-          mode: {
-            isEditing: false,
-            isNormal: true,
-            isPreview: false,
-          },
-        },
+        page: mockPageNormal,
       };
 
       render(<Hero1 {...minimalProps} />);

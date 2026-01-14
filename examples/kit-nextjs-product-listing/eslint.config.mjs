@@ -24,20 +24,6 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
-  {
-    // Rules for test files only
-    files: ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**/*", "**/*.mockProps.ts", "**/__mocks__/**/*"],
-    rules: {
-      // Allow any types in test files (needed for test mocks)
-      "@typescript-eslint/no-explicit-any": "off",
-      // Allow require() style imports in test files (needed for dynamic component loading)
-      "@typescript-eslint/no-require-imports": "off",
-      // Allow missing display names in test files (common in test mocks)
-      "react/display-name": "off",
-      // Allow <img> tags in test files (test mocks don't need Next.js Image optimization)
-      "@next/next/no-img-element": "off",
-    },
-  },
 ];
 
 export default eslintConfig;

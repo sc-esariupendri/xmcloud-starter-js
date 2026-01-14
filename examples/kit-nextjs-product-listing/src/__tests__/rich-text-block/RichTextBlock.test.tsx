@@ -18,6 +18,7 @@ import {
   richTextBlockPropsWithImages,
   richTextBlockPropsWithClasses,
 } from './RichTextBlock.mockProps';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock dependencies
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -227,6 +228,7 @@ describe('RichTextBlock Component', () => {
 
       const propsWithFields = {
         params: {},
+        page: mockPage,
         fields: {
           text: { value: '' }, // Empty text content
         },

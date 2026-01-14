@@ -1,5 +1,6 @@
 import { VideoComponentProps } from '../../components/video/video-props';
 import { ImageField, LinkField, TextField } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 const createMockImageField = (src: string, alt: string): ImageField =>
   ({
@@ -24,6 +25,7 @@ export const defaultVideoProps: VideoComponentProps = {
     displayIcon: '1',
     styles: 'video-custom-styles',
   },
+  page: mockPage,
   fields: {
     video: createMockLinkField('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'SYNC Audio Demo'),
     image: createMockImageField(
@@ -171,6 +173,7 @@ export const videoPropsNoFields: VideoComponentProps = {
     darkPlayIcon: '0',
     useModal: '1',
   },
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: null as any,
 };

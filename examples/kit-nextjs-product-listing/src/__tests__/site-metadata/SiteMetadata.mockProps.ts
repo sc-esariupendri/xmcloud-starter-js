@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Field } from '@sitecore-content-sdk/nextjs';
 import { SiteMetadataProps } from '../../components/site-metadata/site-metadata.props';
+import { mockPage } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -9,6 +10,7 @@ const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Fie
 export const defaultSiteMetadataProps: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: createMockField('SYNC - Premium Audio Equipment'),
     metadataTitle: createMockField(
@@ -27,6 +29,7 @@ export const defaultSiteMetadataProps: SiteMetadataProps = {
 export const siteMetadataPropsTitleOnly: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: createMockField('SYNC - Audio Store'),
     metadataTitle: createMockField(''),
@@ -39,6 +42,7 @@ export const siteMetadataPropsTitleOnly: SiteMetadataProps = {
 export const siteMetadataPropsMetadataOnly: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: createMockField(''),
     metadataTitle: createMockField('Professional Audio Equipment - SYNC'),
@@ -53,6 +57,7 @@ export const siteMetadataPropsMetadataOnly: SiteMetadataProps = {
 export const siteMetadataPropsEmpty: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: createMockField(''),
     metadataTitle: createMockField(''),
@@ -65,6 +70,7 @@ export const siteMetadataPropsEmpty: SiteMetadataProps = {
 export const siteMetadataPropsMinimal: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: createMockField('SYNC Audio'),
   },
@@ -74,6 +80,7 @@ export const siteMetadataPropsMinimal: SiteMetadataProps = {
 export const siteMetadataPropsNoFields: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: null as any,
 };
 
@@ -81,6 +88,7 @@ export const siteMetadataPropsNoFields: SiteMetadataProps = {
 export const siteMetadataPropsSpecialChars: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: createMockField('SYNC™ - Ãudio Prõfessional & Spëcialty Equipment'),
     metadataTitle: createMockField(
@@ -99,6 +107,7 @@ export const siteMetadataPropsSpecialChars: SiteMetadataProps = {
 export const siteMetadataPropsLongContent: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: createMockField(
       'SYNC Audio Equipment Store - Premium Professional Headphones Speakers and Audio Gear for Musicians'
@@ -119,6 +128,7 @@ export const siteMetadataPropsLongContent: SiteMetadataProps = {
 export const siteMetadataPropsUndefinedFields: SiteMetadataProps = {
   rendering: { componentName: 'SiteMetadata' },
   params: {},
+  page: mockPage,
   fields: {
     title: undefined as any,
     metadataTitle: undefined as any,

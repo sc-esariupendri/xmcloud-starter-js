@@ -4,6 +4,7 @@ import {
 } from '../../components/topic-listing/topic-listing.props';
 import { Field, LinkField } from '@sitecore-content-sdk/nextjs';
 import { IconName } from '@/enumerations/Icon.enum';
+import { mockPage } from '../test-utils/mockPage';
 
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
 
@@ -33,6 +34,7 @@ export const defaultTopicListingProps: TopicListingProps = {
     backgroundTheme: 'default',
     styles: 'topic-listing-custom-styles',
   },
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -211,6 +213,7 @@ export const topicListingPropsNoFields: TopicListingProps = {
   params: {
     backgroundTheme: 'default',
   },
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: null as any,
 };

@@ -1,5 +1,47 @@
 import type { GlobalFooterProps } from '../../components/global-footer/global-footer.props';
-import type { Field, LinkField, ImageField } from '@sitecore-content-sdk/nextjs';
+import type { Field, LinkField, ImageField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -48,13 +90,7 @@ const mockDictionary = {
 export const defaultGlobalFooterProps: GlobalFooterProps = {
   rendering: { componentName: 'GlobalFooter', params: {} },
   params: { mock_param: '' },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -77,13 +113,7 @@ export const defaultGlobalFooterProps: GlobalFooterProps = {
 export const globalFooterPropsNoFields: GlobalFooterProps = {
   rendering: { componentName: 'GlobalFooter', params: {} },
   params: { mock_param: '' },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -99,13 +129,7 @@ export const globalFooterPropsNoFields: GlobalFooterProps = {
 export const globalFooterPropsMinimal: GlobalFooterProps = {
   rendering: { componentName: 'GlobalFooter', params: {} },
   params: { mock_param: '' },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -121,13 +145,7 @@ export const globalFooterPropsMinimal: GlobalFooterProps = {
 
 export const globalFooterPropsEditing: GlobalFooterProps = {
   ...defaultGlobalFooterProps,
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
   isPageEditing: true,
 };
 

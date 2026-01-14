@@ -574,7 +574,6 @@ describe('VerticalImageAccordion Component', () => {
                   {
                     title: { jsonValue: { value: 'Test Item' } },
                     description: { jsonValue: { value: 'Test description' } },
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     image: null as any,
                   },
                 ],

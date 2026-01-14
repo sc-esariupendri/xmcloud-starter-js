@@ -1,6 +1,7 @@
 // Mock props for RichTextBlock component tests
 import { Field } from '@sitecore-content-sdk/nextjs';
 import { RichTextBlockProps } from '../../components/rich-text-block/rich-text-block.props';
+import { mockPage } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -11,6 +12,7 @@ export const defaultRichTextBlockProps: RichTextBlockProps = {
     styles: 'custom-rich-text-styles',
     RenderingIdentifier: 'rich-text-block-1',
   },
+  page: mockPage,
   fields: {
     text: createMockField(
       '<h2>Welcome to Our Platform</h2><p>This is a <strong>rich text</strong> block that supports HTML formatting including <em>emphasis</em>, <a href="/link">links</a>, and lists:</p><ul><li>First item</li><li>Second item</li><li>Third item with <code>code</code></li></ul><p>You can also include images and other media content.</p>'
@@ -26,6 +28,7 @@ export const defaultRichTextBlockProps: RichTextBlockProps = {
 // Props with simple text content
 export const richTextBlockPropsSimple: RichTextBlockProps = {
   params: {},
+  page: mockPage,
   fields: {
     text: createMockField('<p>This is a simple paragraph of text without complex formatting.</p>'),
   },
@@ -41,6 +44,7 @@ export const richTextBlockPropsMinimal: RichTextBlockProps = {
   params: {
     styles: 'minimal-styles',
   },
+  page: mockPage,
   fields: {
     text: createMockField('Plain text without HTML tags'),
   },
@@ -57,6 +61,7 @@ export const richTextBlockPropsComplex: RichTextBlockProps = {
     styles: 'complex-formatting',
     RenderingIdentifier: 'complex-rich-text',
   },
+  page: mockPage,
   fields: {
     text: createMockField(`
       <h1>Main Heading</h1>
@@ -99,6 +104,7 @@ export const richTextBlockPropsEmpty: RichTextBlockProps = {
   params: {
     styles: 'empty-content',
   },
+  page: mockPage,
   fields: {
     text: createMockField(''),
   },
@@ -112,6 +118,7 @@ export const richTextBlockPropsEmpty: RichTextBlockProps = {
 // Props with whitespace only
 export const richTextBlockPropsWhitespace: RichTextBlockProps = {
   params: {},
+  page: mockPage,
   fields: {
     text: createMockField('   \n\t  \n  '),
   },
@@ -127,6 +134,7 @@ export const richTextBlockPropsNoFields: RichTextBlockProps = {
   params: {
     styles: 'no-fields',
   },
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: undefined as any,
   rendering: {
@@ -141,6 +149,7 @@ export const richTextBlockPropsNoId: RichTextBlockProps = {
   params: {
     styles: 'styled-without-id',
   },
+  page: mockPage,
   fields: {
     text: createMockField('<p>Content without rendering identifier.</p>'),
   },
@@ -156,6 +165,7 @@ export const richTextBlockPropsIdOnly: RichTextBlockProps = {
   params: {
     RenderingIdentifier: 'id-only-block',
   },
+  page: mockPage,
   fields: {
     text: createMockField('<p>Content with ID but no custom styles.</p>'),
   },
@@ -172,6 +182,7 @@ export const richTextBlockPropsStylesWithSpaces: RichTextBlockProps = {
     styles: 'styles-with-trailing-spaces   ',
     RenderingIdentifier: 'trimmed-styles',
   },
+  page: mockPage,
   fields: {
     text: createMockField('<p>Content with styles that have trailing spaces.</p>'),
   },
@@ -185,6 +196,7 @@ export const richTextBlockPropsStylesWithSpaces: RichTextBlockProps = {
 // Props for testing HTML entities
 export const richTextBlockPropsHtmlEntities: RichTextBlockProps = {
   params: {},
+  page: mockPage,
   fields: {
     text: createMockField(
       '<p>Content with HTML entities: &lt;script&gt;alert("test");&lt;/script&gt; and &amp; &copy; 2023</p>'
@@ -202,6 +214,7 @@ export const richTextBlockPropsTable: RichTextBlockProps = {
   params: {
     styles: 'table-content',
   },
+  page: mockPage,
   fields: {
     text: createMockField(`
       <table>
@@ -239,6 +252,7 @@ export const richTextBlockPropsWithImages: RichTextBlockProps = {
   params: {
     styles: 'image-content',
   },
+  page: mockPage,
   fields: {
     text: createMockField(`
       <p>Here's an image:</p>
@@ -256,6 +270,7 @@ export const richTextBlockPropsWithImages: RichTextBlockProps = {
 // Props with custom CSS classes in content
 export const richTextBlockPropsWithClasses: RichTextBlockProps = {
   params: {},
+  page: mockPage,
   fields: {
     text: createMockField(`
       <p class="highlight">This paragraph has a custom CSS class.</p>

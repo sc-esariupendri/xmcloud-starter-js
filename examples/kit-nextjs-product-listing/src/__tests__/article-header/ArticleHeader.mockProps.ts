@@ -1,5 +1,26 @@
 import type { ArticleHeaderProps } from '../../components/article-header/article-header.props';
-import type { Field, ImageField } from '@sitecore-content-sdk/nextjs';
+import type { Field, ImageField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 const sampleImage: ImageField = { value: { src: '/image.jpg', alt: 'img' } } as ImageField;
 export const fullProps: ArticleHeaderProps = {
@@ -14,6 +35,7 @@ export const fullProps: ArticleHeaderProps = {
     pageReadTime: { value: '3 min' } as Field<string>,
     pageDisplayDate: { value: '2025-10-01' } as Field<string>,
   },
+  page: mockPageNormal,
 };
 
 export const minimalProps: ArticleHeaderProps = {
@@ -23,6 +45,7 @@ export const minimalProps: ArticleHeaderProps = {
   externalFields: {
     pageHeaderTitle: { value: 'Article Title' } as Field<string>,
   },
+  page: mockPageNormal,
 };
 
 export const noFieldsProps: ArticleHeaderProps = {
@@ -32,4 +55,5 @@ export const noFieldsProps: ArticleHeaderProps = {
   externalFields: {
     pageHeaderTitle: { value: '' } as Field<string>,
   },
+  page: mockPageNormal,
 };

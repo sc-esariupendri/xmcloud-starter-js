@@ -81,6 +81,7 @@ jest.mock('../../components/hero/HeroDefault.dev', () => ({
           )}
 
           {fields?.image?.value?.src && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={fields.image.value.src}
               alt={fields.image.value.alt}

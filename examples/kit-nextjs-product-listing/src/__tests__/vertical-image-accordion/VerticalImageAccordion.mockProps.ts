@@ -3,6 +3,7 @@ import {
   AccordionItem,
 } from '../../components/vertical-image-accordion/vertical-image-accordion.props';
 import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
 
@@ -35,6 +36,7 @@ export const defaultVerticalImageAccordionProps: VerticalImageAccordionProps = {
   params: {
     styles: 'vertical-accordion-custom-styles',
   },
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -271,6 +273,7 @@ export const verticalImageAccordionPropsEmptyFields: VerticalImageAccordionProps
 export const verticalImageAccordionPropsNoFields: VerticalImageAccordionProps = {
   rendering: { componentName: 'VerticalImageAccordion' },
   params: {},
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: null as any,
 };

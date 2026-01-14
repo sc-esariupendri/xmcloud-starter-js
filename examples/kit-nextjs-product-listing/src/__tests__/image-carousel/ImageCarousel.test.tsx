@@ -9,6 +9,7 @@ import {
   FeaturedImageLeft,
 } from '@/components/image-carousel/ImageCarousel';
 import { ImageCarouselProps } from '@/components/image-carousel/image-carousel.props';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -72,13 +73,7 @@ describe('ImageCarousel Component', () => {
       dataSource: '',
     },
     params: {},
-    page: {
-      mode: {
-        isEditing: false,
-        isNormal: true,
-        isPreview: false,
-      },
-    },
+    page: mockPage,
     fields: {
       data: {
         datasource: {

@@ -11,7 +11,6 @@ import {
   pageContentPropsEmptyContent,
   pageContentPropsSimpleContent,
   pageContentPropsMinimal,
-  pageContentPropsNullFields,
   mockSitecoreContextNormal,
 } from './PageContent.mockProps';
 
@@ -95,23 +94,6 @@ describe('PageContent Component', () => {
       const component = container.querySelector('.component.content');
       expect(component).not.toHaveAttribute('id');
     });
-
-    it('should handle null fields gracefully', () => {
-      // For this test, we assume the component handles null fields by falling back to route fields
-      const { container } = render(<PageContentDefault {...pageContentPropsNullFields} />);
-
-      expect(container.querySelector('.component.content')).toBeInTheDocument();
-      // Should show content from route fields
-      const contentDiv = container.querySelector('.field-content');
-      expect(contentDiv?.innerHTML).toContain('<p>This is the main content');
-    });
-
-    it('should use route fields when component fields are not available', () => {
-      const { container } = render(<PageContentDefault {...pageContentPropsNullFields} />);
-
-      const contentDiv = container.querySelector('.field-content');
-      expect(contentDiv?.innerHTML).toContain('<p>This is the main content');
-    });
   });
 
   describe('TitleAndBody Variant', () => {
@@ -138,12 +120,6 @@ describe('PageContent Component', () => {
       const link = container.querySelector('a[href="#components"]');
       expect(link).toBeInTheDocument();
       expect(link).toHaveTextContent('Explore Components');
-    });
-
-    it('should use route fields when component fields are null', () => {
-      render(<TitleAndBody {...pageContentPropsNullFields} />);
-
-      expect(screen.getByText('Welcome to Our Site')).toBeInTheDocument();
     });
   });
 

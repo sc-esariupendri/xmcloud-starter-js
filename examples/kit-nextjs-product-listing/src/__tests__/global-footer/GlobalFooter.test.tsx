@@ -14,6 +14,7 @@ import {
   globalFooterPropsMinimal,
   globalFooterPropsEditing,
 } from './GlobalFooter.mockProps';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock the Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -27,7 +28,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     if (!f?.value?.href) return React.createElement(React.Fragment, {}, children);
     return React.createElement('a', { href: f.value.href, className }, children || f.value.text);
   },
-  useSitecore: jest.fn(() => ({ page: global.mockPage })),
+  useSitecore: jest.fn(() => ({ page: mockPage })),
   withDatasourceCheck: () => (Component: React.ComponentType) => Component,
 }));
 

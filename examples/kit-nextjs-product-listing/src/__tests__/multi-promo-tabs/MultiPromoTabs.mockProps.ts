@@ -3,6 +3,7 @@ import type {
   MultiPromoTabsFields,
 } from '../../components/multi-promo-tabs/multi-promo-tabs.props';
 import type { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -45,6 +46,7 @@ const mockTabItem3: MultiPromoTabsFields = {
 export const defaultMultiPromoTabsProps: MultiPromoTabsProps = {
   rendering: { componentName: 'MultiPromoTabs', params: {} },
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -61,6 +63,7 @@ export const defaultMultiPromoTabsProps: MultiPromoTabsProps = {
 export const multiPromoTabsPropsMinimal: MultiPromoTabsProps = {
   rendering: { componentName: 'MultiPromoTabs', params: {} },
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -75,6 +78,7 @@ export const multiPromoTabsPropsMinimal: MultiPromoTabsProps = {
 export const multiPromoTabsPropsNoTabs: MultiPromoTabsProps = {
   rendering: { componentName: 'MultiPromoTabs', params: {} },
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -91,6 +95,7 @@ export const multiPromoTabsPropsNoTabs: MultiPromoTabsProps = {
 export const multiPromoTabsPropsEmpty: MultiPromoTabsProps = {
   rendering: { componentName: 'MultiPromoTabs', params: {} },
   params: {},
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: undefined as any,
 };

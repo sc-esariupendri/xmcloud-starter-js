@@ -2,6 +2,7 @@
 import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import { PromoImageProps } from '../../components/promo-image/promo-image.props';
 import { ColorSchemeLimited as ColorScheme } from '../../enumerations/ColorSchemeLimited.enum';
+import { mockPage, mockPageEditing } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -19,6 +20,7 @@ export const defaultPromoImageProps: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/promo-hero-bg.jpg', 'Promo Background Image'),
     heading: createMockField('Experience Premium Audio'),
@@ -40,6 +42,7 @@ export const promoImagePropsMinimal: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.SECONDARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/simple-bg.jpg', 'Simple Background'),
     heading: createMockField('Simple Heading'),
@@ -58,6 +61,7 @@ export const promoImagePropsNoImage: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('', ''),
     heading: createMockField('Text Only Promo'),
@@ -77,6 +81,7 @@ export const promoImagePropsNoHeading: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.SECONDARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/no-heading.jpg', 'Image Only'),
     heading: createMockField(''),
@@ -96,6 +101,7 @@ export const promoImagePropsNoDescription: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/no-desc.jpg', 'No Description'),
     heading: createMockField('Heading Only'),
@@ -114,6 +120,7 @@ export const promoImagePropsNoLink: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.SECONDARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/info-only.jpg', 'Information Only'),
     heading: createMockField('Information Display'),
@@ -133,6 +140,7 @@ export const promoImagePropsEmptyLinkEditing: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPageEditing,
   fields: {
     image: createMockImageField('/images/editing.jpg', 'Editing Mode'),
     heading: createMockField('Editing Mode Title'),
@@ -172,6 +180,7 @@ export const promoImagePropsOrange: PromoImageProps = {
 // Props without color scheme (should use default)
 export const promoImagePropsNoColorScheme: PromoImageProps = {
   params: {},
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/default-color.jpg', 'Default Color'),
     heading: createMockField('Default Color Scheme'),
@@ -189,6 +198,7 @@ export const promoImagePropsNoColorScheme: PromoImageProps = {
 // Props without fields
 export const promoImagePropsNoFields: PromoImageProps = {
   params: {},
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: undefined as any,
   rendering: {
@@ -204,6 +214,7 @@ export const promoImagePropsEmptyFields: PromoImageProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('', ''),
     heading: createMockField(''),
@@ -221,6 +232,7 @@ export const promoImagePropsEmptyFields: PromoImageProps = {
 // Props in editing mode
 export const promoImagePropsEditing: PromoImageProps = {
   ...defaultPromoImageProps,
+  page: mockPageEditing,
   isPageEditing: true,
 };
 

@@ -1,6 +1,28 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { IGQLTextField } from 'types/igql';
+import type { Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Mock component-map BEFORE importing PlaceholderTabs to avoid circular dependency
 jest.mock('../../components/component-library/.sitecore/component-map', () => ({
@@ -141,6 +163,7 @@ const defaultProps = {
     componentName: 'PlaceholderTabs',
     dataSource: '',
   },
+  page: mockPageNormal,
 };
 
 describe('PlaceholderTabs', () => {

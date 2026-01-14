@@ -1,5 +1,47 @@
 import type { GlobalHeaderProps } from '../../components/global-header/global-header.props';
-import type { LinkField, ImageField } from '@sitecore-content-sdk/nextjs';
+import type { LinkField, ImageField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Inline utility functions
 const createMockLinkField = (href: string, text: string): LinkField =>
@@ -53,13 +95,7 @@ const mockUtilityNavLinks = [
 export const defaultGlobalHeaderProps: GlobalHeaderProps = {
   rendering: { componentName: 'GlobalHeader', params: {} },
   params: { mock_param: '' },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       item: {
@@ -76,13 +112,7 @@ export const defaultGlobalHeaderProps: GlobalHeaderProps = {
 export const globalHeaderPropsNoFields: GlobalHeaderProps = {
   rendering: { componentName: 'GlobalHeader', params: {} },
   params: { mock_param: '' },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       item: {
@@ -96,13 +126,7 @@ export const globalHeaderPropsNoFields: GlobalHeaderProps = {
 export const globalHeaderPropsMinimal: GlobalHeaderProps = {
   rendering: { componentName: 'GlobalHeader', params: {} },
   params: { mock_param: '' },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       item: {
@@ -116,13 +140,7 @@ export const globalHeaderPropsMinimal: GlobalHeaderProps = {
 
 export const globalHeaderPropsEditing: GlobalHeaderProps = {
   ...defaultGlobalHeaderProps,
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
   isPageEditing: true,
 };
 

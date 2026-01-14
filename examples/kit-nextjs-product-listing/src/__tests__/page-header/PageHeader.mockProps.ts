@@ -1,5 +1,47 @@
 import type { PageHeaderProps } from '../../components/page-header/page-header.props';
-import type { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import type { Field, ImageField, LinkField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -22,13 +64,7 @@ const mockLink2Field = createMockLinkField('/about', 'Learn More');
 export const defaultPageHeaderProps: PageHeaderProps = {
   rendering: { componentName: 'PageHeader', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -48,13 +84,7 @@ export const defaultPageHeaderProps: PageHeaderProps = {
 export const pageHeaderPropsMinimal: PageHeaderProps = {
   rendering: { componentName: 'PageHeader', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -72,13 +102,7 @@ export const pageHeaderPropsMinimal: PageHeaderProps = {
 export const pageHeaderPropsNoImage: PageHeaderProps = {
   rendering: { componentName: 'PageHeader', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -98,13 +122,7 @@ export const pageHeaderPropsNoImage: PageHeaderProps = {
 export const pageHeaderPropsNoLinks: PageHeaderProps = {
   rendering: { componentName: 'PageHeader', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -124,25 +142,13 @@ export const pageHeaderPropsWithPositionStyles: PageHeaderProps = {
   params: {
     styles: 'position-center position-bottom',
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 export const pageHeaderPropsEmpty: PageHeaderProps = {
   rendering: { componentName: 'PageHeader', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -169,11 +175,5 @@ export const mockUseSitecoreEditing = {
 // Editing mode props
 export const pageHeaderPropsEditing: PageHeaderProps = {
   ...defaultPageHeaderProps,
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
 };

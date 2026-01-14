@@ -18,6 +18,7 @@ import {
   testimonialCarouselPropsNoStyles,
   mockUseSitecoreNormal,
 } from './TestimonialCarousel.mockProps';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock Sitecore Content SDK
 const mockUseSitecore = jest.fn();
@@ -624,6 +625,7 @@ describe('TestimonialCarousel Component', () => {
       const propsWithMissingData = {
         rendering: { componentName: 'TestimonialCarousel' },
         params: {},
+        page: mockPage,
         fields: undefined as any,
         name: 'TestimonialCarousel',
         Testimonials: [],

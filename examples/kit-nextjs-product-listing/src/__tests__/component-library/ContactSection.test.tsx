@@ -10,6 +10,28 @@ import {
   ContactSection5,
   ContactSection6,
 } from '@/components/component-library/ContactSection';
+import type { Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Mock dependencies
@@ -22,6 +44,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     </a>
   ),
   NextImage: ({ field }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.jsonValue?.value?.src} data-testid="contact-image" alt="" />
   ),
   useSitecore: () => ({
@@ -84,13 +107,7 @@ const defaultProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 describe('ContactSectionDefault', () => {

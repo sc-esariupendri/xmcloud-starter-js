@@ -2,6 +2,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Default as MegaMenuItemDefault } from '@/components/site-three/MegaMenuItem';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock lucide-react
 jest.mock('lucide-react', () => ({
@@ -55,6 +56,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     </a>
   ),
   NextImage: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src || ''} alt={field?.value?.alt || ''} className={className} />
   ),
   Placeholder: ({ name }: any) => <div data-testid={`placeholder-${name}`} />,
@@ -69,6 +71,7 @@ describe('MegaMenuItem', () => {
     params: {
       styles: 'test-styles',
     },
+    page: mockPage,
     fields: {
       Title: {
         value: 'Products',

@@ -1,5 +1,47 @@
 import type { ImageGalleryProps } from '../../components/image-gallery/image-gallery.props';
-import type { Field, ImageField } from '@sitecore-content-sdk/nextjs';
+import type { Field, ImageField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -23,13 +65,7 @@ const mockEmptyImageField = createMockImageField('', '');
 export const defaultImageGalleryProps: ImageGalleryProps = {
   rendering: { componentName: 'ImageGallery', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     title: mockTitleField,
     description: mockDescriptionField,
@@ -44,13 +80,7 @@ export const defaultImageGalleryProps: ImageGalleryProps = {
 export const imageGalleryPropsNoFields: ImageGalleryProps = {
   rendering: { componentName: 'ImageGallery', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     image1: mockEmptyImageField,
     image2: mockEmptyImageField,
@@ -63,13 +93,7 @@ export const imageGalleryPropsNoFields: ImageGalleryProps = {
 export const imageGalleryPropsMinimal: ImageGalleryProps = {
   rendering: { componentName: 'ImageGallery', params: {} },
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     title: mockTitleField,
     image1: mockImage1,
@@ -82,13 +106,7 @@ export const imageGalleryPropsMinimal: ImageGalleryProps = {
 
 export const imageGalleryPropsEditing: ImageGalleryProps = {
   ...defaultImageGalleryProps,
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
   isPageEditing: true,
 };
 

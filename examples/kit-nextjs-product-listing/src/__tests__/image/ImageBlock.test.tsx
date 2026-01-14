@@ -2,6 +2,7 @@
 import { render, screen } from '@testing-library/react';
 import { Default as ImageBlock } from '@/components/image/ImageBlock';
 import { ImageProps } from '@/components/image/image.props';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock dependencies
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -65,6 +66,7 @@ describe('ImageBlock Component', () => {
     params: {
       styles: 'custom-style',
     },
+    page: mockPage,
   };
 
   it('renders image and caption when fields are provided', () => {

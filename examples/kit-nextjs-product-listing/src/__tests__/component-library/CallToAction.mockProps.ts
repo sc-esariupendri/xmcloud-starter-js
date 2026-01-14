@@ -1,4 +1,25 @@
-import { Field, LinkField, ImageField } from '@sitecore-content-sdk/nextjs';
+import { Field, LinkField, ImageField, Page } from '@sitecore-content-sdk/nextjs';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 export const defaultCallToActionProps = {
   rendering: {
@@ -39,13 +60,7 @@ export const defaultCallToActionProps = {
       },
     } as ImageField,
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 export const ctaPropsWithStyles = {
@@ -53,13 +68,7 @@ export const ctaPropsWithStyles = {
   params: {
     styles: 'custom-cta-class',
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 export const ctaPropsNoLinks = {
@@ -100,13 +109,7 @@ export const ctaPropsNoLinks = {
       },
     } as ImageField,
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 export const ctaPropsOnlyOneLink = {
@@ -147,11 +150,5 @@ export const ctaPropsOnlyOneLink = {
       },
     } as ImageField,
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };

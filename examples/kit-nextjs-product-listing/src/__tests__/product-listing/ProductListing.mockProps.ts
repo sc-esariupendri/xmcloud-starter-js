@@ -1,9 +1,51 @@
 // Mock props for ProductListing component tests
-import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, Page } from '@sitecore-content-sdk/nextjs';
 import {
   ProductListingProps,
   ProductItemProps,
 } from '../../components/product-listing/product-listing.props';
+
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/**
+ * Mock page object for editing mode
+ */
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isNormal: false,
+    isPreview: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -127,13 +169,7 @@ export const defaultProductListingProps: ProductListingProps = {
   params: {
     styles: 'test-product-listing',
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -220,26 +256,14 @@ export const productListingPropsMinimal: ProductListingProps = {
 // Props with editing mode enabled
 export const productListingPropsEditing: ProductListingProps = {
   ...defaultProductListingProps,
-  page: {
-    mode: {
-      isEditing: true,
-      isNormal: false,
-      isPreview: false,
-    },
-  },
+  page: mockPageEditing,
   isPageEditing: true,
 };
 
 // Props without datasource
 export const productListingPropsNoDataSource: ProductListingProps = {
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   fields: {
     data: {
       datasource: {
@@ -259,13 +283,7 @@ export const productListingPropsNoDataSource: ProductListingProps = {
 // Props without fields
 export const productListingPropsNoFields: ProductListingProps = {
   params: {},
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: undefined as any,
   rendering: {

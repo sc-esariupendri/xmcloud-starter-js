@@ -2,11 +2,34 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as LogoCloud } from '../../components/component-library/logo-cloud';
 import { IGQLImageField, IGQLLinkField, IGQLRichTextField, IGQLTextField } from 'types/igql';
+import type { Page } from '@sitecore-content-sdk/nextjs';
 
-/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/**
+ * Mock page object for normal mode
+ */
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isNormal: true,
+    isPreview: false,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Mock Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   NextImage: ({ field, className }: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="logo-image"
       src={field?.jsonValue?.value?.src}
@@ -93,13 +116,7 @@ const defaultProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-      isNormal: true,
-      isPreview: false,
-    },
-  },
+  page: mockPageNormal,
 };
 
 describe('LogoCloud', () => {

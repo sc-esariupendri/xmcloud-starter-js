@@ -3,6 +3,7 @@
  */
 
 import type { RichTextProps } from 'components/sxa/RichText';
+import { mockPage } from '../../test-utils/mockPage';
 
 /**
  * Base mock data for RichText component
@@ -54,6 +55,7 @@ export const defaultRichTextProps: RichTextProps = {
   rendering: {
     componentName: 'RichText',
   },
+  page: mockPage,
 };
 
 /**

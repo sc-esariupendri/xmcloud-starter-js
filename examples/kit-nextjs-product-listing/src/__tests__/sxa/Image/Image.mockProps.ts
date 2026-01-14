@@ -2,7 +2,9 @@
  * Test fixtures and mock data for Image component
  */
 
-import type { ImageField, LinkField, Field, Page } from '@sitecore-content-sdk/nextjs';
+import type { ImageField, LinkField, Field, Page, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import type { ComponentProps } from 'lib/component-props';
+import { mockPage as sharedMockPage, mockPageEditing as sharedMockPageEditing } from '../../test-utils/mockPage';
 
 interface ImageFields {
   Image: ImageField & { metadata?: { [key: string]: unknown } };
@@ -10,10 +12,8 @@ interface ImageFields {
   TargetUrl: LinkField;
 }
 
-type ImageProps = {
-  params: { [key: string]: string };
+type ImageProps = ComponentProps & {
   fields: ImageFields;
-  page: Page;
 };
 
 /**
@@ -77,42 +77,25 @@ export const mockEmptyTargetUrl: LinkField = {
 /**
  * Mock page object for Image component testing
  */
-export const mockPage: Page = {
-  mode: {
-    isEditing: false,
-    isNormal: true,
-    isPreview: false,
-  },
-  layout: {
-    sitecore: {
-      route: {
-        fields: {},
-      },
-    },
-  },
-  locale: 'en',
-};
+export const mockPage: Page = sharedMockPage;
 
-export const mockPageEditing: Page = {
-  mode: {
-    isEditing: true,
-    isNormal: false,
-    isPreview: false,
-  },
-  layout: {
-    sitecore: {
-      route: {
-        fields: {},
-      },
-    },
-  },
-  locale: 'en',
+export const mockPageEditing: Page = sharedMockPageEditing;
+
+/**
+ * Mock rendering object
+ */
+const mockRendering: ComponentRendering = {
+  componentName: 'Image',
+  dataSource: '',
+  uid: 'image-uid',
+  placeholders: {},
 };
 
 /**
  * Default props for Image component testing
  */
 export const defaultImageProps: ImageProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'image-1',
     styles: 'image-styles',
@@ -126,6 +109,7 @@ export const defaultImageProps: ImageProps = {
 };
 
 export const imagePropsWithCaption: ImageProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'image-2',
     styles: 'image-styles',
@@ -139,6 +123,7 @@ export const imagePropsWithCaption: ImageProps = {
 };
 
 export const imagePropsWithLink: ImageProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'image-3',
     styles: 'image-styles',
@@ -155,6 +140,7 @@ export const imagePropsWithLink: ImageProps = {
  * Props with empty image (editing placeholder)
  */
 export const imagePropsEmptyImage: ImageProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'image-4',
     styles: 'image-styles',
@@ -168,6 +154,7 @@ export const imagePropsEmptyImage: ImageProps = {
 };
 
 export const imagePropsMinimal: ImageProps = {
+  rendering: mockRendering,
   params: {},
   fields: {
     Image: mockImageData.basicImage,
@@ -178,6 +165,7 @@ export const imagePropsMinimal: ImageProps = {
 };
 
 export const imagePropsNullFields: ImageProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'image-5',
     styles: 'image-styles',
@@ -190,6 +178,7 @@ export const imagePropsNullFields: ImageProps = {
  * Props for Banner variant
  */
 export const bannerImageProps: ImageProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'banner-1',
     styles: 'hero-banner-styles',
@@ -206,6 +195,7 @@ export const bannerImageProps: ImageProps = {
  * Props for Banner variant with background image
  */
 export const bannerImagePropsWithBackground: ImageProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'banner-2',
     styles: 'hero-banner-styles',

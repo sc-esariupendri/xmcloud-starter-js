@@ -3,6 +3,7 @@ import {
   TestimonialCarouselItemProps,
 } from '../../components/testimonial-carousel/testimonial-carousel.props';
 import { Field } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
 
@@ -23,6 +24,7 @@ export const defaultTestimonialCarouselProps: TestimonialCarouselProps = {
   params: {
     styles: 'testimonial-carousel-custom-styles',
   },
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -183,6 +185,7 @@ export const testimonialCarouselPropsEmptyFields: TestimonialCarouselProps = {
 export const testimonialCarouselPropsNoFields: TestimonialCarouselProps = {
   rendering: { componentName: 'TestimonialCarousel' },
   params: {},
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: null as any,
   name: 'TestimonialCarousel',

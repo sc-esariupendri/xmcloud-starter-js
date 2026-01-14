@@ -20,6 +20,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   NextImage: ({ field, className }: any) => {
     if (!field?.value?.src) return null;
     return (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         src={field.value.src}
         alt={field.value.alt || ''}

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { mockPage } from '../test-utils/mockPage';
 
 // Mock utils and sitecore Placeholder used by Flex
 jest.mock('@/lib/utils', () => ({
@@ -62,7 +63,7 @@ describe('Flex', () => {
       params: { DynamicPlaceholderId: 'X' },
       rendering: {},
       fields: {},
-      page: global.mockPage,
+      page: mockPage,
     } as any;
     render(<XMFlex {...props} />);
 
@@ -74,7 +75,7 @@ describe('Flex', () => {
       params: { DynamicPlaceholderId: 'Y' },
       rendering: {},
       fields: {},
-      page: global.mockPage,
+      page: mockPage,
     } as any;
     render(<XMFlexItem {...props} />);
 

@@ -336,9 +336,7 @@ describe('TopicListing Component', () => {
               },
               children: {
                 results: [
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  { invalid: 'data' } as any,
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  { invalid: 'data' } as any,  
                   null as any,
                 ],
               },

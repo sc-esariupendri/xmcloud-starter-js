@@ -1,5 +1,6 @@
 import { SubscriptionBannerProps } from '../../components/subscription-banner/subscription-banner.props';
 import { Field, LinkField } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
 
@@ -13,6 +14,7 @@ export const defaultSubscriptionBannerProps: SubscriptionBannerProps = {
   params: {
     styles: 'custom-subscription-banner-styles',
   },
+  page: mockPage,
   fields: {
     titleRequired: createMockField('Stay Updated with SYNC Audio'),
     descriptionOptional: createMockField(
@@ -100,6 +102,7 @@ export const subscriptionBannerPropsEmptyFields: SubscriptionBannerProps = {
 export const subscriptionBannerPropsNoFields: SubscriptionBannerProps = {
   rendering: { componentName: 'SubscriptionBanner' },
   params: {},
+  page: mockPage,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fields: null as any,
 };

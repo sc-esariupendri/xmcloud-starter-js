@@ -2,8 +2,6 @@
  * Test helper utilities for component testing
  * Provides automatic page prop injection for components that require it
  */
-
-import React from 'react';
 import type { ComponentProps } from '@/lib/component-props';
 import { mockPage } from './mockPage';
 

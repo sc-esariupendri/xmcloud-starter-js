@@ -4,6 +4,7 @@ import type {
   LogoTabContent,
 } from '../../components/logo-tabs/logo-tabs.props';
 import type { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { mockPage } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -55,6 +56,7 @@ const mockTabContent3: LogoTabContent = {
 export const defaultLogoTabsProps: LogoTabsProps = {
   rendering: { componentName: 'LogoTabs', params: {} },
   params: { colorScheme: 'primary' },
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -74,6 +76,7 @@ export const defaultLogoTabsProps: LogoTabsProps = {
 export const logoTabsPropsNoLogos: LogoTabsProps = {
   rendering: { componentName: 'LogoTabs', params: {} },
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -92,6 +95,7 @@ export const logoTabsPropsNoLogos: LogoTabsProps = {
 export const logoTabsPropsMinimal: LogoTabsProps = {
   rendering: { componentName: 'LogoTabs', params: {} },
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {
@@ -110,6 +114,7 @@ export const logoTabsPropsMinimal: LogoTabsProps = {
 export const logoTabsPropsNoBackground: LogoTabsProps = {
   rendering: { componentName: 'LogoTabs', params: {} },
   params: {},
+  page: mockPage,
   fields: {
     data: {
       datasource: {

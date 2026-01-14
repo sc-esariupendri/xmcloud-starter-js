@@ -3,6 +3,7 @@
 import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import { PromoAnimatedProps } from '../../components/promo-animated/promo-animated.props';
 import { ColorSchemeLimited as ColorScheme } from '../../enumerations/ColorSchemeLimited.enum';
+import { mockPage, mockPageEditing } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -33,6 +34,7 @@ export const defaultPromoAnimatedProps: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/promo-hero.jpg', 'Promotional Hero Image'),
     title: createMockField('Revolutionary Audio Experience'),
@@ -54,6 +56,7 @@ export const promoAnimatedPropsMinimal: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.SECONDARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/simple-promo.jpg', 'Simple Promo'),
     title: createMockField('Simple Title'),
@@ -70,6 +73,7 @@ export const promoAnimatedPropsNoImage: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('', ''),
     title: createMockField('Text Only Promo'),
@@ -88,6 +92,7 @@ export const promoAnimatedPropsNoLinks: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.SECONDARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/info-promo.jpg', 'Info Promo'),
     title: createMockField('Information Only'),
@@ -105,6 +110,7 @@ export const promoAnimatedPropsPrimaryOnly: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/single-action.jpg', 'Single Action'),
     title: createMockField('Single Action Promo'),
@@ -123,6 +129,7 @@ export const promoAnimatedPropsSecondaryOnly: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.SECONDARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/learn-more.jpg', 'Learn More'),
     title: createMockField('Educational Content'),
@@ -135,6 +142,7 @@ export const promoAnimatedPropsSecondaryOnly: PromoAnimatedProps = {
 // Props in editing mode
 export const promoAnimatedPropsEditing: PromoAnimatedProps = {
   ...defaultPromoAnimatedProps,
+  page: mockPageEditing,
   isPageEditing: true,
 };
 
@@ -147,6 +155,7 @@ export const promoAnimatedPropsEmptyLinksEditing: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPageEditing,
   fields: {
     image: createMockImageField('/images/editing-mode.jpg', 'Editing Mode'),
     title: createMockField('Editing Mode Title'),
@@ -186,6 +195,7 @@ export const promoAnimatedPropsNoFields: PromoAnimatedProps = {
     componentName: 'PromoAnimated',
   },
   params: {},
+  page: mockPage,
   fields: undefined as any,
   isPageEditing: false,
 };
@@ -199,6 +209,7 @@ export const promoAnimatedPropsEmptyFields: PromoAnimatedProps = {
   params: {
     colorScheme: ColorScheme.PRIMARY,
   },
+  page: mockPage,
   fields: {
     image: createMockImageField('', ''),
     title: createMockField(''),
@@ -214,6 +225,7 @@ export const promoAnimatedPropsNoColorScheme: PromoAnimatedProps = {
     componentName: 'PromoAnimated',
   },
   params: {},
+  page: mockPage,
   fields: {
     image: createMockImageField('/images/default-scheme.jpg', 'Default Scheme'),
     title: createMockField('Default Color Scheme'),

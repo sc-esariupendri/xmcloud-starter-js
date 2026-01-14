@@ -3,6 +3,7 @@ import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import { PromoBlockProps } from '../../components/promo-block/promo-block.props';
 import { Orientation } from '../../enumerations/Orientation.enum';
 import { Variation } from '../../enumerations/Variation.enum';
+import { mockPage } from '../test-utils/mockPage';
 
 // Inline utility functions
 const createMockField = <T>(value: T): Field<T> => ({ value }) as unknown as Field<T>;
@@ -22,6 +23,7 @@ export const defaultPromoBlockProps: PromoBlockProps = {
     orientation: Orientation.IMAGE_LEFT,
     variation: Variation.DEFAULT,
   },
+  page: mockPage,
   fields: {
     heading: createMockField('Premium Audio Experience'),
     description: createMockField(
@@ -77,6 +79,7 @@ export const promoBlockPropsMinimal: PromoBlockProps = {
   params: {
     orientation: Orientation.IMAGE_LEFT,
   },
+  page: mockPage,
   fields: {
     heading: createMockField('Simple Heading'),
     description: createMockField('Simple description text'),
@@ -88,6 +91,7 @@ export const promoBlockPropsMinimal: PromoBlockProps = {
 export const promoBlockPropsEmpty: PromoBlockProps = {
   rendering: { componentName: 'PromoBlock', params: {} },
   params: {},
+  page: mockPage,
   fields: {
     heading: createMockField(''),
     description: createMockField(''),

@@ -2,7 +2,9 @@
  * Test fixtures and mock data for Title component
  */
 
-import type { LinkField, TextField, Page } from '@sitecore-content-sdk/nextjs';
+import type { LinkField, TextField, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import type { ComponentProps } from 'lib/component-props';
+import { mockPage as sharedMockPage, mockPageEditing as sharedMockPageEditing } from '../../test-utils/mockPage';
 
 interface TitleFields {
   data: {
@@ -33,10 +35,8 @@ interface TitleFields {
   };
 }
 
-type TitleProps = {
-  params: { [key: string]: string };
+type TitleProps = ComponentProps & {
   fields: TitleFields;
-  page: Page;
 };
 
 /**
@@ -104,78 +104,83 @@ export const mockLinkField: LinkField = {
 };
 
 /**
+ * Mock rendering object
+ */
+const mockRendering: ComponentRendering = {
+  componentName: 'Title',
+  dataSource: '',
+  uid: 'title-uid',
+  placeholders: {},
+};
+
+/**
  * Mock Sitecore context for normal mode
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const mockSitecoreContextNormal = {
   page: {
+    ...sharedMockPage,
     layout: {
       sitecore: {
+        ...sharedMockPage.layout.sitecore,
         route: {
           fields: {
             pageTitle: mockPageTitleField,
           },
-        },
+        } as any,
       },
     },
-    mode: {
-      isNormal: true,
-      isEditing: false,
-      isPreview: false,
-    },
-    locale: 'en',
   },
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
  * Mock Sitecore context for editing mode
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const mockSitecoreContextEditing = {
   page: {
+    ...sharedMockPageEditing,
     layout: {
       sitecore: {
+        ...sharedMockPageEditing.layout.sitecore,
         route: {
           fields: {
             pageTitle: mockPageTitleField,
           },
-        },
+        } as any,
       },
     },
-    mode: {
-      isNormal: false,
-      isEditing: true,
-      isPreview: false,
-    },
-    locale: 'en',
   },
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
  * Mock Sitecore context for editing mode with empty title
  */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export const mockSitecoreContextEditingEmpty = {
   page: {
+    ...sharedMockPageEditing,
     layout: {
       sitecore: {
+        ...sharedMockPageEditing.layout.sitecore,
         route: {
           fields: {
             pageTitle: mockEmptyPageTitleField,
           },
-        },
+        } as any,
       },
     },
-    mode: {
-      isNormal: false,
-      isEditing: true,
-      isPreview: false,
-    },
-    locale: 'en',
   },
 };
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 /**
  * Default props for Title component testing
  */
 export const defaultTitleProps: TitleProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'title-1',
     styles: 'title-styles',
@@ -193,6 +198,7 @@ export const defaultTitleProps: TitleProps = {
  * Props with empty title
  */
 export const titlePropsEmptyTitle: TitleProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'title-2',
     styles: 'title-styles',
@@ -210,6 +216,7 @@ export const titlePropsEmptyTitle: TitleProps = {
  * Props with minimal parameters
  */
 export const titlePropsMinimal: TitleProps = {
+  rendering: mockRendering,
   params: {},
   fields: {
     data: {
@@ -224,6 +231,7 @@ export const titlePropsMinimal: TitleProps = {
  * Props with null fields (edge case)
  */
 export const titlePropsNullFields: TitleProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'title-3',
     styles: 'title-styles',
@@ -236,6 +244,7 @@ export const titlePropsNullFields: TitleProps = {
  * Props with special characters in title
  */
 export const titlePropsSpecialChars: TitleProps = {
+  rendering: mockRendering,
   params: {
     RenderingIdentifier: 'title-4',
     styles: 'title-styles',
