@@ -24,16 +24,6 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
-  {
-    // Rules for test files only
-    files: ["**/*.test.ts", "**/*.test.tsx", "**/__tests__/**/*", "**/*.mockProps.ts"],
-    rules: {
-      // Allow any types in test files (needed for test mocks)
-      "@typescript-eslint/no-explicit-any": "off",
-      // Allow require() style imports in test files (needed for dynamic component loading)
-      "@typescript-eslint/no-require-imports": "off",
-    },
-  },
 ];
 
 export default eslintConfig;
