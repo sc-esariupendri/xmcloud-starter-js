@@ -1,23 +1,53 @@
-import { LinkField, ImageField } from '@sitecore-content-sdk/nextjs';
+import { LinkField, ImageField, Page, ComponentRendering, PageMode } from '@sitecore-content-sdk/nextjs';
 import { IconName } from '@/enumerations/Icon.enum';
 import { ButtonVariants, ButtonSize } from '@/enumerations/ButtonStyle.enum';
 import { IconPosition } from '@/enumerations/IconPosition.enum';
+import { EnumValues } from '@/enumerations/generic.enum';
+import type { ButtonComponentProps } from '@/components/button-component/ButtonComponent';
 
 // Mock page data
-export const mockPageData = {
-  page: {
-    mode: {
-      isEditing: false,
+const mockPageBase: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
     },
   },
+  locale: 'en',
+};
+
+const mockPageEditing: Page = {
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
+export const mockPageData = {
+  page: mockPageBase,
 };
 
 export const mockPageDataEditing = {
-  page: {
-    mode: {
-      isEditing: true,
-    },
-  },
+  page: mockPageEditing,
 };
 
 // Mock link fields
@@ -141,7 +171,7 @@ export const mockParamsEditing = {
   iconPosition: IconPosition.TRAILING,
   iconClassName: 'h-5 w-5',
   isPageEditing: true,
-} as any;
+};
 
 export const mockParamsLarge = {
   size: ButtonSize.LG,
@@ -155,142 +185,138 @@ export const mockParamsSmall = {
   iconClassName: 'h-4 w-4',
 };
 
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'ButtonComponent',
+} as ComponentRendering;
+
+// Type for ButtonComponent fields
+type ButtonFieldsType = {
+  buttonLink: LinkField;
+  icon?: { value: EnumValues<typeof IconName> };
+  isAriaHidden?: boolean;
+};
+
 // Complete props combinations - Default component
-export const defaultProps = {
+export const defaultProps: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsWithLeadingIcon = {
+export const propsWithLeadingIcon: ButtonComponentProps = {
   fields: mockFieldsWithLeadingIcon,
   params: mockParamsLeadingIcon,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsWithoutIcon = {
+export const propsWithoutIcon: ButtonComponentProps = {
   fields: mockFieldsWithoutIcon,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
 export const propsInEditing = {
   fields: mockFieldsDefault,
   params: mockParamsEditing,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  page: mockPageDataEditing.page as any,
-};
+  rendering: mockRendering,
+  page: mockPageEditing,
+} as unknown as ButtonComponentProps;
 
-export const propsWithInvalidLink = {
+export const propsWithInvalidLink: ButtonComponentProps = {
   fields: mockFieldsWithInvalidLink,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsPrimary = {
+export const propsPrimary: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsSecondary = {
+export const propsSecondary: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsDestructive = {
+export const propsDestructive: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsGhost = {
+export const propsGhost: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsOutline = {
+export const propsOutline: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsLink = {
+export const propsLink: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsTertiary = {
+export const propsTertiary: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsLargeSize = {
+export const propsLargeSize: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsLarge,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsSmallSize = {
+export const propsSmallSize: ButtonComponentProps = {
   fields: mockFieldsDefault,
   params: mockParamsSmall,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
-export const propsExternalLink = {
+export const propsExternalLink: ButtonComponentProps = {
   fields: mockFieldsExternalLink,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
 export const propsWithoutFields = {
-  fields: null as any,
+  fields: null as ButtonFieldsType | null,
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
-};
+  rendering: mockRendering,
+  page: mockPageBase,
+} as unknown as ButtonComponentProps;
 
-export const propsWithHttpOnlyLink = {
+export const propsWithHttpOnlyLink: ButtonComponentProps = {
   fields: {
     buttonLink: mockButtonLinkHttpOnly,
   },
   params: mockParamsDefault,
-  rendering: { componentName: 'ButtonComponent' } as any,
-  isPageEditing: false,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageBase,
 };
 
 // Props for EditableButton
@@ -348,3 +374,115 @@ export const editableImageButtonPropsWithoutSrc = {
   icon: mockIconImageWithoutSrc,
 };
 
+// Additional props for coverage
+export const editableButtonPropsWithLeadingIcon = {
+  ...editableButtonProps,
+  iconPosition: IconPosition.LEADING,
+};
+
+export const editableButtonPropsWithLeadingIconEditing = {
+  ...editableButtonPropsWithLeadingIcon,
+  isPageEditing: true,
+};
+
+export const editableImageButtonPropsWithLeadingIcon = {
+  ...editableImageButtonProps,
+  iconPosition: IconPosition.LEADING,
+};
+
+export const editableImageButtonPropsWithLeadingIconEditing = {
+  ...editableImageButtonPropsWithLeadingIcon,
+  isPageEditing: true,
+};
+
+// Props for EditableImageButton with icon but no text (to test isValidEditableLink)
+export const mockButtonLinkWithoutTextForImage: LinkField = {
+  value: {
+    href: '/test-page',
+    text: '',
+    linktype: 'internal',
+    url: '/test-page',
+  },
+};
+
+export const editableImageButtonPropsWithIconNoText = {
+  buttonLink: mockButtonLinkWithoutTextForImage,
+  icon: mockIconImage,
+  variant: ButtonVariants.PRIMARY,
+  size: ButtonSize.DEFAULT,
+  iconPosition: IconPosition.TRAILING,
+  iconClassName: 'h-6 w-6',
+  isAriaHidden: true,
+  className: 'custom-class',
+  isPageEditing: false,
+  asIconLink: false,
+};
+
+// Props for ButtonBase component
+export const buttonBaseProps = {
+  buttonLink: mockButtonLink,
+  icon: {
+    value: IconName.ARROW_RIGHT,
+  },
+  variant: ButtonVariants.PRIMARY,
+  size: ButtonSize.DEFAULT,
+  iconPosition: IconPosition.TRAILING,
+  iconClassName: 'h-5 w-5',
+  isAriaHidden: true,
+  className: 'custom-class',
+  isPageEditing: false,
+};
+
+export const buttonBasePropsWithLeadingIcon = {
+  ...buttonBaseProps,
+  iconPosition: IconPosition.LEADING,
+};
+
+export const buttonBasePropsEditing = {
+  ...buttonBaseProps,
+  isPageEditing: true,
+};
+
+// Props for Default component to test fallback icon logic
+export const propsWithoutIconAndLinktype = {
+  fields: {
+    buttonLink: {
+      value: {
+        href: '/test-page',
+        text: 'Click Me',
+        linktype: '',
+        url: '/test-page',
+      },
+    },
+  },
+  params: mockParamsDefault,
+  rendering: mockRendering,
+  page: mockPageBase,
+} as unknown as ButtonComponentProps;
+
+export const propsWithoutIconWithLinktype = {
+  fields: {
+    buttonLink: {
+      value: {
+        href: '/test-page',
+        text: 'Click Me',
+        linktype: 'external',
+        url: '/test-page',
+      },
+    },
+  },
+  params: mockParamsDefault,
+  rendering: mockRendering,
+  page: mockPageBase,
+} as unknown as ButtonComponentProps;
+
+// Props for Default component to test NoDataFallback (fields null but in editing mode)
+export const propsWithoutFieldsEditing = {
+  fields: null as ButtonFieldsType | null,
+  params: {
+    ...mockParamsDefault,
+    isPageEditing: true,
+  },
+  rendering: mockRendering,
+  page: mockPageEditing,
+} as unknown as ButtonComponentProps;

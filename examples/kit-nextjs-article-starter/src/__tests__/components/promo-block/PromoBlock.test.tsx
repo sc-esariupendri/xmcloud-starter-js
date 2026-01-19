@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as PromoBlock, ButtonLink, TextLink } from '@/components/promo-block/PromoBlock';
+import type { PromoBlockProps } from '@/components/promo-block/promo-block.props';
+import type { ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsImageRight,
@@ -12,9 +14,46 @@ import {
   propsWithoutFields,
 } from './PromoBlock.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+}
+
+interface MockRichTextProps {
+  field?: { value?: string };
+}
+
+interface MockLinkProps {
+  field?: LinkField;
+}
+
+interface MockFlexProps {
+  children?: React.ReactNode;
+  direction?: string;
+  justify?: string;
+  gap?: string;
+  className?: string;
+}
+
+interface MockImageWrapperProps {
+  image?: ImageField;
+  className?: string;
+}
+
+interface MockButtonProps {
+  children?: React.ReactNode;
+  asChild?: boolean;
+  className?: string;
+  [key: string]: unknown;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock dependencies
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -35,19 +74,19 @@ jest.mock('@/lib/utils', () => ({
 }));
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field }: any) => React.createElement('span', {}, field?.value || ''),
-  RichText: ({ field }: any) =>
+  Text: ({ field }: MockTextProps) => React.createElement('span', {}, field?.value || ''),
+  RichText: ({ field }: MockRichTextProps) =>
     React.createElement('div', {
       dangerouslySetInnerHTML: { __html: field?.value || '' },
     }),
-  Link: ({ field }: any) => {
+  Link: ({ field }: MockLinkProps) => {
     if (!field?.value?.href) return null;
     return React.createElement('a', { href: field.value.href }, field.value.text);
   },
 }));
 
 jest.mock('@/components/flex/Flex.dev', () => ({
-  Flex: ({ children, direction, justify, gap, className }: any) => (
+  Flex: ({ children, direction, justify, gap, className }: MockFlexProps) => (
     <div
       data-testid="flex"
       data-direction={direction}
@@ -61,29 +100,33 @@ jest.mock('@/components/flex/Flex.dev', () => ({
 }));
 
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: ({ image, className }: any) => (
+  Default: ({ image, className }: MockImageWrapperProps) => (
     <div data-testid="image-wrapper" className={className}>
-      <img src={image?.value?.src} alt={image?.value?.alt} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={image?.value?.src as string | undefined}
+        alt={image?.value?.alt as string | undefined}
+      />
     </div>
   ),
 }));
 
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, asChild, className, ...props }: any) => {
+  Button: ({ children, asChild, className, ...props }: MockButtonProps) => {
     if (asChild && React.isValidElement(children)) {
       return React.cloneElement(children, {
         'data-testid': 'promo-button',
         className,
         ...(children.props || {}),
         ...props,
-      } as any);
+      } as Partial<unknown>);
     }
     return React.createElement('button', { 'data-testid': 'promo-button', className, ...props }, children);
   },
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -313,7 +356,7 @@ describe('PromoBlock Component', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as PromoBlockProps['fields'],
       };
 
       render(<PromoBlock {...propsWithUndefinedFields} />);

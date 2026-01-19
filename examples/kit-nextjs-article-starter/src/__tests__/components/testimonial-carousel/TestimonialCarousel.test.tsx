@@ -12,18 +12,33 @@ import {
   propsWithUndefinedFields,
 } from './TestimonialCarousel.mockProps';
 
+// Type definitions for mock functions
+interface DebounceConfig {
+  delay: number;
+}
+
+type DebouncedFunction<T extends (...args: unknown[]) => unknown> = T & {
+  cancel: () => void;
+};
+
 // Mock radash debounce
 jest.mock('radash', () => ({
-  debounce: ({ delay }: any, fn: any) => {
-    const debouncedFn = (...args: any[]) => fn(...args);
+  debounce: <T extends (...args: unknown[]) => unknown>(
+    config: DebounceConfig,
+    fn: T
+  ): DebouncedFunction<T> => {
+    const debouncedFn = ((...args: Parameters<T>) => fn(...args)) as DebouncedFunction<T>;
     debouncedFn.cancel = jest.fn();
     return debouncedFn;
   },
 }));
 
+// Type definitions for cn utility
+type CnArgs = Array<string | boolean | Record<string, boolean> | undefined>;
+
 // Mock cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: CnArgs) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -43,11 +58,36 @@ jest.mock('@/lib/utils', () => ({
   },
 }));
 
-// Mock Carousel components
-let mockApi: any = null;
+// Type definitions for Carousel components
+import type { CarouselApi } from '@/components/ui/carousel';
 
+interface MockCarouselProps {
+  children?: React.ReactNode;
+  setApi?: (api: CarouselApi | undefined) => void;
+  className?: string;
+}
+
+interface MockCarouselContentProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockCarouselItemProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockCarouselButtonProps {
+  variant?: string;
+  className?: string;
+  disabled?: boolean;
+  onFocus?: (event: React.FocusEvent<HTMLButtonElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLButtonElement>) => void;
+}
+
+// Mock Carousel components
 jest.mock('@/components/ui/carousel', () => ({
-  Carousel: ({ children, setApi, className }: any) => {
+  Carousel: ({ children, setApi, className }: MockCarouselProps) => {
     React.useEffect(() => {
       const api = {
         on: jest.fn(),
@@ -59,9 +99,8 @@ jest.mock('@/components/ui/carousel', () => ({
         rootNode: jest.fn(() => ({
           addEventListener: jest.fn(),
           removeEventListener: jest.fn(),
-        })),
-      };
-      mockApi = api;
+        })) as unknown as () => HTMLElement,
+      } as unknown as CarouselApi;
       setApi?.(api);
     }, [setApi]);
     return (
@@ -70,17 +109,17 @@ jest.mock('@/components/ui/carousel', () => ({
       </div>
     );
   },
-  CarouselContent: ({ children, className }: any) => (
+  CarouselContent: ({ children, className }: MockCarouselContentProps) => (
     <div className={className} data-testid="carousel-content">
       {children}
     </div>
   ),
-  CarouselItem: ({ children, className }: any) => (
+  CarouselItem: ({ children, className }: MockCarouselItemProps) => (
     <div className={className} data-testid="carousel-item">
       {children}
     </div>
   ),
-  CarouselNext: ({ variant, className, disabled, onFocus, onBlur }: any) => (
+  CarouselNext: ({ variant, className, disabled, onFocus, onBlur }: MockCarouselButtonProps) => (
     <button
       className={className}
       disabled={disabled}
@@ -92,7 +131,7 @@ jest.mock('@/components/ui/carousel', () => ({
       Next
     </button>
   ),
-  CarouselPrevious: ({ variant, className, disabled, onFocus, onBlur }: any) => (
+  CarouselPrevious: ({ variant, className, disabled, onFocus, onBlur }: MockCarouselButtonProps) => (
     <button
       className={className}
       disabled={disabled}
@@ -106,9 +145,23 @@ jest.mock('@/components/ui/carousel', () => ({
   ),
 }));
 
+// Type definitions for TestimonialCarouselItem
+interface MockTestimonialCarouselItemProps {
+  testimonialQuote?: {
+    jsonValue?: {
+      value?: string;
+    };
+  };
+  testimonialAttribution?: {
+    jsonValue?: {
+      value?: string;
+    };
+  };
+}
+
 // Mock TestimonialCarouselItem
 jest.mock('@/components/testimonial-carousel/TestimonialCarouselItem', () => ({
-  Default: ({ testimonialQuote, testimonialAttribution }: any) => (
+  Default: ({ testimonialQuote, testimonialAttribution }: MockTestimonialCarouselItemProps) => (
     <div data-testid="testimonial-item">
       <p data-testid="testimonial-quote">{testimonialQuote?.jsonValue?.value}</p>
       {testimonialAttribution && (
@@ -118,9 +171,14 @@ jest.mock('@/components/testimonial-carousel/TestimonialCarouselItem', () => ({
   ),
 }));
 
+// Type definitions for NoDataFallback
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -128,7 +186,6 @@ jest.mock('@/utils/NoDataFallback', () => ({
 describe('TestimonialCarousel Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockApi = null;
   });
 
   describe('Basic rendering', () => {

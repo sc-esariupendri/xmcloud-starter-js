@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as RowSplitter } from '@/components/sxa/RowSplitter';
+import type { ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithTwoRows,
@@ -14,11 +15,17 @@ import {
   propsWithUndefinedParams,
 } from './RowSplitter.mockProps';
 
+// Type definitions for mock components
+interface MockAppPlaceholderProps {
+  name?: string;
+  rendering?: ComponentRendering;
+}
+
 // Mock the AppPlaceholder component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  AppPlaceholder: ({ name, rendering }: any) => (
-    <div data-testid={`placeholder-${name}`} data-rendering={rendering?.componentName}>
-      Placeholder Content for {name}
+  AppPlaceholder: ({ name, rendering }: MockAppPlaceholderProps) => (
+    <div data-testid={`placeholder-${name || 'empty'}`} data-rendering={rendering?.componentName}>
+      Placeholder Content for {name || 'empty'}
     </div>
   ),
 }));
@@ -113,6 +120,7 @@ describe('RowSplitter Component', () => {
             Styles1: 'row-style-1   ',
           },
         },
+        page: defaultProps.page,
       };
 
       const { container } = render(<RowSplitter {...propsWithTrailingSpace} />);
@@ -245,9 +253,10 @@ describe('RowSplitter Component', () => {
             EnabledPlaceholders: undefined,
           },
         },
+        page: defaultProps.page,
       };
 
-      const { container } = render(<RowSplitter {...propsWithUndefined} />);
+      const { container } = render(<RowSplitter {...(propsWithUndefined as unknown as Parameters<typeof RowSplitter>[0])} />);
 
       const splitter = container.querySelector('.component.row-splitter');
       expect(splitter).toBeInTheDocument();
@@ -277,9 +286,10 @@ describe('RowSplitter Component', () => {
             RenderingIdentifier: undefined,
           },
         },
+        page: defaultProps.page,
       };
 
-      const { container } = render(<RowSplitter {...propsWithUndefinedId} />);
+      const { container } = render(<RowSplitter {...(propsWithUndefinedId as unknown as Parameters<typeof RowSplitter>[0])} />);
 
       const splitter = container.querySelector('.component.row-splitter');
       expect(splitter).not.toHaveAttribute('id');
@@ -348,6 +358,7 @@ describe('RowSplitter Component', () => {
             Styles1: '   ',
           },
         },
+        page: defaultProps.page,
       };
 
       const { container } = render(<RowSplitter {...propsWithTrailingSpaces} />);

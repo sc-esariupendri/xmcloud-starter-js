@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as PageHeader } from '@/components/page-header/PageHeader';
+import type { PageHeaderProps } from '@/components/page-header/page-header.props';
+import type { ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsPrimaryColorScheme,
@@ -13,9 +15,49 @@ import {
   propsWithoutFields,
 } from './PageHeader.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+  tag?: string;
+  className?: string;
+}
+
+interface MockRichTextProps {
+  field?: { value?: string };
+  className?: string;
+}
+
+interface MockImageWrapperProps {
+  image?: ImageField;
+}
+
+interface MockAnimatedSectionProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockVideoBaseProps {
+  fields?: {
+    image?: ImageField;
+    video?: LinkField;
+  };
+  params?: {
+    darkPlayIcon?: string;
+  };
+  playButtonClassName?: string;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
+interface CvaConfig {
+  variants?: Record<string, Record<string, string>>;
+}
+
 // Mock dependencies
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -36,13 +78,14 @@ jest.mock('@/lib/utils', () => ({
 }));
 
 jest.mock('class-variance-authority', () => ({
-  cva: (base: string, config: any) => {
-    return (props: any) => {
+  cva: (base: string, config: CvaConfig) => {
+    return (props: Record<string, string>) => {
       let classes = base;
       if (config?.variants && props) {
         Object.keys(props).forEach((key) => {
-          if (config.variants[key] && config.variants[key][props[key]]) {
-            classes += ' ' + config.variants[key][props[key]];
+          const variant = config.variants?.[key];
+          if (variant && variant[props[key]]) {
+            classes += ' ' + variant[props[key]];
           }
         });
       }
@@ -52,11 +95,11 @@ jest.mock('class-variance-authority', () => ({
 }));
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field, tag, className }: any) => {
+  Text: ({ field, tag, className }: MockTextProps) => {
     const Tag = tag || 'span';
     return React.createElement(Tag, { className }, field?.value || '');
   },
-  RichText: ({ field, className }: any) =>
+  RichText: ({ field, className }: MockRichTextProps) =>
     React.createElement('div', {
       className,
       dangerouslySetInnerHTML: { __html: field?.value || '' },
@@ -71,15 +114,19 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 }));
 
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: ({ image }: any) => (
+  Default: ({ image }: MockImageWrapperProps) => (
     <div data-testid="image-wrapper">
-      <img src={image?.value?.src} alt={image?.value?.alt} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={image?.value?.src as string | undefined}
+        alt={image?.value?.alt as string | undefined}
+      />
     </div>
   ),
 }));
 
 jest.mock('@/components/animated-section/AnimatedSection.dev', () => ({
-  Default: ({ children, className }: any) => (
+  Default: ({ children, className }: MockAnimatedSectionProps) => (
     <div data-testid="animated-section" className={className}>
       {children}
     </div>
@@ -87,10 +134,14 @@ jest.mock('@/components/animated-section/AnimatedSection.dev', () => ({
 }));
 
 jest.mock('@/components/video/Video', () => ({
-  VideoBase: ({ fields, params, playButtonClassName }: any) => (
+  VideoBase: ({ fields, params, playButtonClassName }: MockVideoBaseProps) => (
     <div data-testid="video-component" data-dark-icon={params?.darkPlayIcon}>
-      <img src={fields?.image?.value?.src} alt={fields?.image?.value?.alt} />
-      <a href={fields?.video?.value?.href} className={playButtonClassName}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={fields?.image?.value?.src as string | undefined}
+        alt={fields?.image?.value?.alt as string | undefined}
+      />
+      <a href={fields?.video?.value?.href as string | undefined} className={playButtonClassName}>
         Play
       </a>
     </div>
@@ -98,7 +149,7 @@ jest.mock('@/components/video/Video', () => ({
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -107,7 +158,7 @@ jest.mock('@/utils/NoDataFallback', () => ({
 beforeAll(() => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: jest.fn().mockImplementation((query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -291,7 +342,7 @@ describe('PageHeader Component', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as PageHeaderProps['fields'],
       };
 
       render(<PageHeader {...propsWithUndefinedFields} />);

@@ -282,7 +282,7 @@ describe('AnimatedSection Component', () => {
           <button>Click</button>
         </div>
       );
-      render(<AnimatedSection {...defaultProps} children={complexChildren} />);
+      render(<AnimatedSection {...defaultProps}>{complexChildren}</AnimatedSection>);
       expect(screen.getByText('Title')).toBeInTheDocument();
       expect(screen.getByText('Description')).toBeInTheDocument();
       expect(screen.getByText('Click')).toBeInTheDocument();

@@ -1,4 +1,4 @@
-import { Field, ImageField } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { ImageProps } from '@/components/image/image.props';
 
 // Mock image fields
@@ -73,46 +73,77 @@ export const mockParamsWithoutStyles = {
   RenderingIdentifier: 'image-rendering-id',
 };
 
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'Image',
+};
+
+// Mock page
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
 // Complete props combinations
 export const defaultProps: ImageProps = {
   params: mockParams,
   fields: mockFields,
-  rendering: { componentName: 'Image' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutCaption: ImageProps = {
   params: mockParams,
   fields: mockFieldsWithoutCaption,
-  rendering: { componentName: 'Image' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithEmptyCaption: ImageProps = {
   params: mockParams,
   fields: mockFieldsWithEmptyCaption,
-  rendering: { componentName: 'Image' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutAlt: ImageProps = {
   params: mockParams,
   fields: mockFieldsWithoutAlt,
-  rendering: { componentName: 'Image' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithLargeImage: ImageProps = {
   params: mockParams,
   fields: mockFieldsLargeImage,
-  rendering: { componentName: 'Image' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutStyles: ImageProps = {
   params: mockParamsWithoutStyles,
   fields: mockFields,
-  rendering: { componentName: 'Image' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutFields: ImageProps = {
   params: mockParams,
-  fields: undefined as any,
-  rendering: { componentName: 'Image' } as any,
+  fields: undefined as unknown as ImageProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 

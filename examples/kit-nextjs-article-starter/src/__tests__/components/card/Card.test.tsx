@@ -118,6 +118,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => {
     ({ image, className }, ref) => {
       if (!image?.value?.src) return null;
       return (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           ref={ref}
           src={image?.value?.src}

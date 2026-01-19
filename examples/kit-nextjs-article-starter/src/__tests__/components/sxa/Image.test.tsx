@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as Image, Banner as ImageBanner } from '@/components/sxa/Image';
+import type { ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutStyles,
-  propsWithoutId,
   propsWithoutLink,
   propsWithEmptyImage,
   propsWithoutAlt,
@@ -12,20 +12,32 @@ import {
   mockPageDataEditing,
 } from './Image.mockProps';
 
+// Type definitions for mock components
+interface MockNextImageProps {
+  field?: ImageField;
+  [key: string]: unknown;
+}
+
+interface MockLinkProps {
+  field?: LinkField;
+  children?: React.ReactNode;
+}
+
 // Mock the useSitecore hook
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  NextImage: ({ field, ...props }: any) => (
+  NextImage: ({ field, ...props }: MockNextImageProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img 
-      src={field?.value?.src || ''} 
-      alt={field?.value?.alt || 'image'} 
+      src={field?.value?.src as string | undefined || ''} 
+      alt={field?.value?.alt as string | undefined || 'image'} 
       {...props}
       data-testid="next-image"
     />
   ),
-  Link: ({ field, children }: any) => (
-    <a href={field?.value?.href || '#'} data-testid="content-link">
+  Link: ({ field, children }: MockLinkProps) => (
+    <a href={field?.value?.href as string | undefined || '#'} data-testid="content-link">
       {children}
     </a>
   ),
@@ -82,7 +94,7 @@ describe('Image Component', () => {
     it('should handle missing fields gracefully', () => {
       const propsWithoutFields = {
         ...defaultProps,
-        fields: null as any,
+        fields: null as unknown as typeof defaultProps.fields,
       };
 
       render(<Image {...propsWithoutFields} />);
@@ -204,9 +216,9 @@ describe('Image Component', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
         fields: {
-          Image: { value: undefined } as any,
-          ImageCaption: { value: undefined } as any,
-          TargetUrl: { value: undefined } as any,
+          Image: { value: undefined as unknown as ImageField['value'] },
+          ImageCaption: { value: undefined as unknown as string },
+          TargetUrl: { value: undefined as unknown as LinkField['value'] },
         },
       };
 

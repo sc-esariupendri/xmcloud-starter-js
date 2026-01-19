@@ -1,4 +1,6 @@
-import { Field, ImageField, LinkField, Page, PageModeName } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { EnumValues } from '@/enumerations/generic.enum';
+import { ColorSchemeLimited } from '@/enumerations/ColorSchemeLimited.enum';
 import { PromoAnimatedProps } from '@/components/promo-animated/promo-animated.props';
 
 // Mock page objects
@@ -7,8 +9,8 @@ const mockPageBase: Page = {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal' as PageModeName,
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -25,8 +27,8 @@ const mockPageEditing: Page = {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit' as PageModeName,
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -117,41 +119,46 @@ export const mockFieldsWithoutSecondaryLink = {
 };
 
 // Mock params
-export const mockParamsDefault = {
-  colorScheme: 'default',
+export const mockParamsDefault: PromoAnimatedProps['params'] = {
+  colorScheme: 'default' as EnumValues<typeof ColorSchemeLimited>,
   styles: '',
   RenderingIdentifier: 'promo-animated-rendering-id',
 };
 
-export const mockParamsPrimary = {
-  colorScheme: 'primary',
+export const mockParamsPrimary: PromoAnimatedProps['params'] = {
+  colorScheme: 'primary' as EnumValues<typeof ColorSchemeLimited>,
   styles: 'custom-promo-style',
   RenderingIdentifier: 'promo-animated-rendering-id',
 };
 
-export const mockParamsSecondary = {
-  colorScheme: 'secondary',
+export const mockParamsSecondary: PromoAnimatedProps['params'] = {
+  colorScheme: 'secondary' as EnumValues<typeof ColorSchemeLimited>,
   styles: '',
   RenderingIdentifier: 'promo-animated-rendering-id',
 };
 
-export const mockParamsWithCustomStyles = {
-  colorScheme: 'default',
+export const mockParamsWithCustomStyles: PromoAnimatedProps['params'] = {
+  colorScheme: 'default' as EnumValues<typeof ColorSchemeLimited>,
   styles: 'position-center',
   RenderingIdentifier: 'promo-animated-rendering-id',
 };
 
-export const mockParamsWithPositionRight = {
-  colorScheme: 'default',
+export const mockParamsWithPositionRight: PromoAnimatedProps['params'] = {
+  colorScheme: 'default' as EnumValues<typeof ColorSchemeLimited>,
   styles: 'position-right',
   RenderingIdentifier: 'promo-animated-rendering-id',
+};
+
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'PromoAnimated',
 };
 
 // Complete props combinations
 export const defaultProps: PromoAnimatedProps = {
   params: mockParamsDefault,
   fields: mockFields,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -159,7 +166,7 @@ export const defaultProps: PromoAnimatedProps = {
 export const propsEditing: PromoAnimatedProps = {
   params: mockParamsDefault,
   fields: mockFields,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: true,
   page: mockPageEditing,
 };
@@ -167,7 +174,7 @@ export const propsEditing: PromoAnimatedProps = {
 export const propsPrimaryColorScheme: PromoAnimatedProps = {
   params: mockParamsPrimary,
   fields: mockFields,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -175,7 +182,7 @@ export const propsPrimaryColorScheme: PromoAnimatedProps = {
 export const propsSecondaryColorScheme: PromoAnimatedProps = {
   params: mockParamsSecondary,
   fields: mockFields,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -183,7 +190,7 @@ export const propsSecondaryColorScheme: PromoAnimatedProps = {
 export const propsWithoutDescription: PromoAnimatedProps = {
   params: mockParamsDefault,
   fields: mockFieldsWithoutDescription,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -191,7 +198,7 @@ export const propsWithoutDescription: PromoAnimatedProps = {
 export const propsWithoutLinks: PromoAnimatedProps = {
   params: mockParamsDefault,
   fields: mockFieldsWithoutLinks,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -199,7 +206,7 @@ export const propsWithoutLinks: PromoAnimatedProps = {
 export const propsWithoutPrimaryLink: PromoAnimatedProps = {
   params: mockParamsDefault,
   fields: mockFieldsWithoutPrimaryLink,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -207,7 +214,7 @@ export const propsWithoutPrimaryLink: PromoAnimatedProps = {
 export const propsWithoutSecondaryLink: PromoAnimatedProps = {
   params: mockParamsDefault,
   fields: mockFieldsWithoutSecondaryLink,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -215,7 +222,7 @@ export const propsWithoutSecondaryLink: PromoAnimatedProps = {
 export const propsWithCustomStyles: PromoAnimatedProps = {
   params: mockParamsWithCustomStyles,
   fields: mockFields,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
@@ -223,15 +230,15 @@ export const propsWithCustomStyles: PromoAnimatedProps = {
 export const propsWithPositionRight: PromoAnimatedProps = {
   params: mockParamsWithPositionRight,
   fields: mockFields,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };
 
 export const propsWithoutFields: PromoAnimatedProps = {
   params: mockParamsDefault,
-  fields: null as any,
-  rendering: { componentName: 'PromoAnimated' } as any,
+  fields: null as unknown as PromoAnimatedProps['fields'],
+  rendering: mockRendering,
   isPageEditing: false,
   page: mockPageBase,
 };

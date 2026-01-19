@@ -11,17 +11,18 @@ import {
   propsWithEmptyDescription,
   propsWithoutFields,
   propsWithEmptyParams,
+  type AlertBannerFieldsType,
 } from './AlertBanner.mockProps';
 
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: unknown[]) => {
     return args
       .flat(2)
       .filter(Boolean)
       .map((arg) => {
         if (typeof arg === 'string') return arg;
-        if (typeof arg === 'object' && !Array.isArray(arg)) {
+        if (typeof arg === 'object' && arg !== null && !Array.isArray(arg)) {
           return Object.entries(arg)
             .filter(([, value]) => Boolean(value))
             .map(([key]) => key)
@@ -37,15 +38,15 @@ jest.mock('@/lib/utils', () => ({
 
 // Mock the Sitecore Content SDK components
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field, tag, className }: any) => {
-    const Tag = tag || 'span';
+  Text: ({ field, tag, className }: { field?: { value?: string }; tag?: string; className?: string }) => {
+    const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, { className, 'data-testid': 'text-field' }, field?.value || '');
   },
 }));
 
 // Mock the Button component
 jest.mock('@/components/button-component/ButtonComponent', () => ({
-  ButtonBase: ({ buttonLink, variant }: any) => (
+  ButtonBase: ({ buttonLink, variant }: { buttonLink?: { value?: { href?: string; text?: string } }; variant?: string }) => (
     <a
       href={buttonLink?.value?.href || '#'}
       data-testid="alert-button"
@@ -58,7 +59,7 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
 
 // Mock the UI components
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, variant, size, onClick, className }: any) => (
+  Button: ({ children, variant, size, onClick, className }: { children?: React.ReactNode; variant?: string; size?: string; onClick?: () => void; className?: string }) => (
     <button
       className={className}
       data-testid="close-button"
@@ -72,17 +73,17 @@ jest.mock('@/components/ui/button', () => ({
 }));
 
 jest.mock('@/components/ui/alert', () => ({
-  Alert: ({ children, className }: any) => (
+  Alert: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className} data-testid="alert" role="alert">
       {children}
     </div>
   ),
-  AlertTitle: ({ children, className }: any) => (
+  AlertTitle: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className} data-testid="alert-title">
       {children}
     </div>
   ),
-  AlertDescription: ({ children, className }: any) => (
+  AlertDescription: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className} data-testid="alert-description">
       {children}
     </div>
@@ -96,7 +97,7 @@ jest.mock('lucide-react', () => ({
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: { componentName?: string }) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -294,20 +295,22 @@ describe('AlertBanner Component', () => {
     // This causes a runtime error. The check should happen before destructuring.
     it('should throw error when fields is null due to component bug', () => {
       // Component destructures before checking, causing error
+      // Using type assertion to test the component bug scenario
       expect(() => {
-        render(<AlertBanner {...propsWithoutFields} />);
+        render(<AlertBanner {...(propsWithoutFields as unknown as Parameters<typeof AlertBanner>[0])} />);
       }).toThrow();
     });
 
     it('should throw error when fields is undefined due to component bug', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as AlertBannerFieldsType | undefined,
       };
 
       // Component destructures before checking, causing error
+      // Using type assertion to test the component bug scenario
       expect(() => {
-        render(<AlertBanner {...propsWithUndefinedFields} />);
+        render(<AlertBanner {...(propsWithUndefinedFields as unknown as Parameters<typeof AlertBanner>[0])} />);
       }).toThrow();
     });
 

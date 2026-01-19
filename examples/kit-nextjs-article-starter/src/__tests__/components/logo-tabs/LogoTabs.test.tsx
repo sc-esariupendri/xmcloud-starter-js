@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Default as LogoTabs } from '@/components/logo-tabs/LogoTabs';
+import type { LogoTabsProps } from '@/components/logo-tabs/logo-tabs.props';
+import type { ImageField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutBackground,
@@ -15,9 +17,45 @@ import {
   mockPageDataEditing,
 } from './LogoTabs.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+  tag?: string;
+  className?: string;
+}
+
+interface MockImageProps {
+  field?: ImageField;
+  className?: string;
+}
+
+interface MockFieldProps {
+  field?: { value?: string };
+}
+
+interface MockEditableButtonProps {
+  buttonLink?: { value?: { href?: string; text?: string } };
+  variant?: string;
+  className?: string;
+  isPageEditing?: boolean;
+}
+
+interface MockLogoItemProps {
+  logo?: { jsonValue?: { value?: { src?: string; alt?: string } } };
+  title?: { jsonValue?: { value?: string } };
+  isActive?: boolean;
+  onClick?: () => void;
+  id?: string;
+  controls?: string;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat()
       .filter(Boolean)
@@ -39,11 +77,11 @@ jest.mock('@/lib/utils', () => ({
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Text: ({ field, tag, className }: any) => {
+  Text: ({ field, tag, className }: MockTextProps) => {
     const Tag = tag || 'span';
     return React.createElement(Tag, { className }, field?.value || '');
   },
-  Image: ({ field, className }: any) => {
+  Image: ({ field, className }: MockImageProps) => {
     if (!field?.value?.src) return null;
     return React.createElement('img', {
       src: field.value.src,
@@ -52,14 +90,14 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       'data-testid': 'logo-tabs-image',
     });
   },
-  Field: ({ field }: any) => {
+  Field: ({ field }: MockFieldProps) => {
     return React.createElement('span', {}, field?.value || '');
   },
 }));
 
 // Mock EditableButton component
 jest.mock('@/components/button-component/ButtonComponent', () => ({
-  EditableButton: ({ buttonLink, variant, className, isPageEditing }: any) => (
+  EditableButton: ({ buttonLink, variant, className, isPageEditing }: MockEditableButtonProps) => (
     <button
       data-testid="logo-tabs-button"
       data-href={buttonLink?.value?.href}
@@ -74,7 +112,7 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
 
 // Mock LogoItem component
 jest.mock('@/components/logo-tabs/LogoItem', () => ({
-  LogoItem: ({ logo, title, isActive, onClick, id, controls }: any) => (
+  LogoItem: ({ logo, title, isActive, onClick, id, controls }: MockLogoItemProps) => (
     <button
       data-testid="logo-item"
       data-active={isActive}
@@ -84,6 +122,7 @@ jest.mock('@/components/logo-tabs/LogoItem', () => ({
       role="tab"
       aria-selected={isActive}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={logo?.jsonValue?.value?.src} alt={logo?.jsonValue?.value?.alt} />
       <span>{title?.jsonValue?.value}</span>
     </button>
@@ -92,7 +131,7 @@ jest.mock('@/components/logo-tabs/LogoItem', () => ({
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -150,7 +189,7 @@ describe('LogoTabs Component', () => {
     });
 
     it('should render logo items with correct data', () => {
-      const { container } = render(<LogoTabs {...defaultProps} />);
+      render(<LogoTabs {...defaultProps} />);
 
       expect(screen.getByText('Brand A')).toBeInTheDocument();
       expect(screen.getByText('Brand B')).toBeInTheDocument();
@@ -454,7 +493,7 @@ describe('LogoTabs Component', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as LogoTabsProps['fields'],
       };
 
       render(<LogoTabs {...propsWithUndefinedFields} />);
@@ -476,7 +515,7 @@ describe('LogoTabs Component', () => {
           data: {
             datasource: {
               ...defaultProps.fields.data.datasource,
-              logos: {} as any,
+              logos: {} as unknown as LogoTabsProps['fields']['data']['datasource']['logos'],
             },
           },
         },

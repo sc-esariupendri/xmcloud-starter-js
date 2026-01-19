@@ -1,21 +1,47 @@
-import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { LogoTabsProps, LogoItemProps, LogoTabContent } from '@/components/logo-tabs/logo-tabs.props';
+import { EnumValues } from '@/enumerations/generic.enum';
+import { ColorSchemeLimited } from '@/enumerations/ColorSchemeLimited.enum';
 
 // Mock page data for useSitecore hook
 export const mockPageData = {
   page: {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as PageMode['name'],
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-  },
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
+    locale: 'en',
+  } as Page,
 };
 
 export const mockPageDataEditing = {
   page: {
     mode: {
       isEditing: true,
+      isPreview: false,
+      isNormal: false,
+      name: 'edit' as PageMode['name'],
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-  },
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
+    locale: 'en',
+  } as Page,
 };
 
 // Mock title field
@@ -210,7 +236,7 @@ export const mockFieldsWithoutBackground = {
         jsonValue: mockTitleField,
       },
       backgroundImage: {
-        jsonValue: { value: undefined } as any,
+        jsonValue: { value: undefined } as unknown as ImageField,
       },
       logos: {
         results: [mockLogoItem1, mockLogoItem2],
@@ -279,13 +305,19 @@ export const mockFieldsWithoutTitle = {
   },
 };
 
-export const mockFieldsWithoutDatasource = {
-  data: {},
+export const mockFieldsWithoutDatasource: LogoTabsProps['fields'] = {
+  data: {
+    datasource: {
+      title: {
+        jsonValue: { value: '' } as Field<string>,
+      },
+    },
+  },
 };
 
 // Mock params
 export const mockParams = {
-  colorScheme: 'primary',
+  colorScheme: 'primary' as EnumValues<typeof ColorSchemeLimited>,
   styles: 'custom-logo-tabs-style',
   RenderingIdentifier: 'logo-tabs-rendering-id',
 };
@@ -294,76 +326,81 @@ export const mockParamsWithoutStyles = {
   RenderingIdentifier: 'logo-tabs-rendering-id',
 };
 
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'LogoTabs',
+};
+
 // Complete props combinations
 export const defaultProps: LogoTabsProps = {
   params: mockParams,
-  fields: mockFields as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageData.page,
 };
 
 export const propsWithoutBackground: LogoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutBackground as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFieldsWithoutBackground,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageData.page,
 };
 
 export const propsWithoutLogos: LogoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutLogos as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFieldsWithoutLogos,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageData.page,
 };
 
 export const propsWithoutContent: LogoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutContent as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFieldsWithoutContent,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageData.page,
 };
 
 export const propsWithoutTitle: LogoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutTitle as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFieldsWithoutTitle,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageData.page,
 };
 
 export const propsEditing: LogoTabsProps = {
   params: mockParams,
-  fields: mockFields as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   isPageEditing: true,
-  page: mockPageDataEditing.page as any,
+  page: mockPageDataEditing.page,
 };
 
 export const propsEditingWithoutLogos: LogoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutLogos as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFieldsWithoutLogos,
+  rendering: mockRendering,
   isPageEditing: true,
-  page: mockPageDataEditing.page as any,
+  page: mockPageDataEditing.page,
 };
 
 export const propsWithoutDatasource: LogoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutDatasource as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: mockFieldsWithoutDatasource,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageData.page,
 };
 
 export const propsWithoutFields: LogoTabsProps = {
   params: mockParams,
-  fields: null as any,
-  rendering: { componentName: 'LogoTabs' } as any,
+  fields: null as unknown as LogoTabsProps['fields'],
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageData.page,
 };
 

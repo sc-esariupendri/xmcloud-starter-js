@@ -1,21 +1,47 @@
-import { Field, LinkField, ImageField } from '@sitecore-content-sdk/nextjs';
+import { Field, LinkField, ImageField, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { HeroProps } from '@/components/hero/hero.props';
+import { EnumValues } from '@/enumerations/generic.enum';
+import { ColorScheme } from '@/enumerations/CtaBannerColorScheme.enum';
 
 // Mock page data for useSitecore hook
 export const mockPageData = {
   page: {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as PageMode['name'],
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-  },
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
+    locale: 'en',
+  } as Page,
 };
 
 export const mockPageDataEditing = {
   page: {
     mode: {
       isEditing: true,
+      isPreview: false,
+      isNormal: false,
+      name: 'edit' as PageMode['name'],
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-  },
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
+    locale: 'en',
+  } as Page,
 };
 
 // Mock text fields
@@ -173,28 +199,28 @@ export const mockFieldsWithImagesOnly = {
 
 // Mock params for different color schemes
 export const mockParamsLight = {
-  colorScheme: 'light',
+  colorScheme: 'light' as EnumValues<typeof ColorScheme>,
   styles: 'custom-hero-style',
   RenderingIdentifier: 'hero-rendering-id',
 };
 
 export const mockParamsPrimary = {
-  colorScheme: 'primary',
+  colorScheme: 'primary' as EnumValues<typeof ColorScheme>,
   RenderingIdentifier: 'hero-rendering-id',
 };
 
 export const mockParamsSecondary = {
-  colorScheme: 'secondary',
+  colorScheme: 'secondary' as EnumValues<typeof ColorScheme>,
   RenderingIdentifier: 'hero-rendering-id',
 };
 
 export const mockParamsTertiary = {
-  colorScheme: 'tertiary',
+  colorScheme: 'tertiary' as EnumValues<typeof ColorScheme>,
   RenderingIdentifier: 'hero-rendering-id',
 };
 
 export const mockParamsDark = {
-  colorScheme: 'dark',
+  colorScheme: 'dark' as EnumValues<typeof ColorScheme>,
   RenderingIdentifier: 'hero-rendering-id',
 };
 
@@ -202,89 +228,93 @@ export const mockParamsWithoutColorScheme = {
   RenderingIdentifier: 'hero-rendering-id',
 };
 
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'Hero',
+};
+
 // Complete props combinations
 export const defaultProps: HeroProps = {
   params: mockParamsLight,
   fields: mockFields,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithPrimaryScheme: HeroProps = {
   params: mockParamsPrimary,
   fields: mockFields,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithSecondaryScheme: HeroProps = {
   params: mockParamsSecondary,
   fields: mockFields,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithTertiaryScheme: HeroProps = {
   params: mockParamsTertiary,
   fields: mockFields,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithDarkScheme: HeroProps = {
   params: mockParamsDark,
   fields: mockFields,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithoutDescription: HeroProps = {
   params: mockParamsLight,
   fields: mockFieldsWithoutDescription,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithoutLink: HeroProps = {
   params: mockParamsLight,
   fields: mockFieldsWithoutLink,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithOnlyTitle: HeroProps = {
   params: mockParamsLight,
   fields: mockFieldsWithOnlyTitle,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithImagesOnly: HeroProps = {
   params: mockParamsLight,
   fields: mockFieldsWithImagesOnly,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithoutColorScheme: HeroProps = {
   params: mockParamsWithoutColorScheme,
   fields: mockFields,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsWithoutFields: HeroProps = {
   params: mockParamsLight,
-  fields: null as any,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageData.page as any,
+  fields: null as unknown as HeroProps['fields'],
+  rendering: mockRendering,
+  page: mockPageData.page,
 };
 
 export const propsEditing: HeroProps = {
   params: mockParamsLight,
   fields: mockFields,
-  rendering: { componentName: 'Hero' } as any,
-  page: mockPageDataEditing.page as any,
-  isPageEditing: true,
+  rendering: mockRendering,
+  page: mockPageDataEditing.page,
 };
 

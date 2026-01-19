@@ -1,11 +1,10 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Default as MultiPromoTabs } from '@/components/multi-promo-tabs/MultiPromoTabs';
 import {
   defaultProps,
   propsWithoutDroplistLabel,
   propsWithoutTitle,
-  propsWithoutChildren,
   propsWithEmptyChildren,
   propsWithoutDatasource,
   propsWithoutFields,
@@ -14,84 +13,181 @@ import {
   mockPageDataEditing,
 } from './MultiPromoTabs.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+  tag?: string;
+  className?: string;
+}
+
+interface MockAnimatePresenceProps {
+  children?: React.ReactNode;
+  mode?: string;
+}
+
+interface MockTabsProps {
+  children?: React.ReactNode;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  className?: string;
+}
+
+interface MockTabsListProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockTabsTriggerProps {
+  children?: React.ReactNode;
+  value?: string;
+  className?: string;
+  onClick?: () => void;
+}
+
+interface MockTabsContentProps {
+  children?: React.ReactNode;
+  value?: string;
+}
+
+interface MockSelectProps {
+  children?: React.ReactNode;
+  onValueChange?: (value: string) => void;
+  defaultValue?: string;
+}
+
+interface MockSelectTriggerProps {
+  children?: React.ReactNode;
+  id?: string;
+  className?: string;
+}
+
+interface MockSelectValueProps {
+  placeholder?: string;
+}
+
+interface MockSelectContentProps {
+  children?: React.ReactNode;
+}
+
+interface MockSelectItemProps {
+  children?: React.ReactNode;
+  value?: string;
+  className?: string;
+}
+
+interface MockMultiPromoTabProps {
+  title?: { jsonValue?: { value?: string } };
+  image1?: { jsonValue?: { value?: { src?: string; alt?: string } } };
+  image2?: { jsonValue?: { value?: { src?: string; alt?: string } } };
+  link1?: { jsonValue?: { value?: { href?: string } } };
+  link2?: { jsonValue?: { value?: { href?: string } } };
+  isEditMode?: boolean;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock dependencies
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => args.flat().filter(Boolean).join(' ').trim(),
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) =>
+    args.flat().filter(Boolean).join(' ').trim(),
 }));
 
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Text: ({ field, tag, className }: any) => {
+  Text: ({ field, tag, className }: MockTextProps) => {
     const Tag = tag || 'span';
     return React.createElement(Tag, { className }, field?.value || '');
   },
 }));
 
 jest.mock('framer-motion', () => ({
-  AnimatePresence: ({ children }: any) => <>{children}</>,
+  AnimatePresence: ({ children }: MockAnimatePresenceProps) => <>{children}</>,
 }));
 
 jest.mock('@/components/ui/tabs', () => ({
-  Tabs: ({ children, value, onValueChange, className }: any) => (
+  Tabs: ({ children, value, onValueChange, className }: MockTabsProps) => (
     <div data-testid="tabs" data-value={value} data-classname={className}>
-      {React.Children.map(children, (child) =>
-        React.cloneElement(child, { onValueChange })
-      )}
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child, { onValueChange } as Partial<unknown>);
+        }
+        return child;
+      })}
     </div>
   ),
-  TabsList: ({ children, className }: any) => (
-    <div data-testid="tabs-list" className={className}>{children}</div>
+  TabsList: ({ children, className }: MockTabsListProps) => (
+    <div data-testid="tabs-list" className={className}>
+      {children}
+    </div>
   ),
-  TabsTrigger: ({ children, value, className, onClick }: any) => (
-    <button
-      data-testid="tab-trigger"
-      data-value={value}
-      className={className}
-      onClick={onClick}
-    >
+  TabsTrigger: ({ children, value, className, onClick }: MockTabsTriggerProps) => (
+    <button data-testid="tab-trigger" data-value={value} className={className} onClick={onClick}>
       {children}
     </button>
   ),
-  TabsContent: ({ children, value }: any) => (
-    <div data-testid="tab-content" data-value={value}>{children}</div>
+  TabsContent: ({ children, value }: MockTabsContentProps) => (
+    <div data-testid="tab-content" data-value={value}>
+      {children}
+    </div>
   ),
 }));
 
 jest.mock('@/components/ui/select', () => ({
-  Select: ({ children, onValueChange, defaultValue }: any) => (
+  Select: ({ children, onValueChange, defaultValue }: MockSelectProps) => (
     <div data-testid="select" data-default-value={defaultValue}>
-      {React.Children.map(children, (child) =>
-        React.cloneElement(child, { onValueChange })
-      )}
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          return React.cloneElement(child, { onValueChange } as Partial<unknown>);
+        }
+        return child;
+      })}
     </div>
   ),
-  SelectTrigger: ({ children, id, className }: any) => (
-    <button data-testid="select-trigger" id={id} className={className}>{children}</button>
+  SelectTrigger: ({ children, id, className }: MockSelectTriggerProps) => (
+    <button data-testid="select-trigger" id={id} className={className}>
+      {children}
+    </button>
   ),
-  SelectValue: ({ placeholder }: any) => (
+  SelectValue: ({ placeholder }: MockSelectValueProps) => (
     <span data-testid="select-value">{placeholder}</span>
   ),
-  SelectContent: ({ children }: any) => (
+  SelectContent: ({ children }: MockSelectContentProps) => (
     <div data-testid="select-content">{children}</div>
   ),
-  SelectItem: ({ children, value, className }: any) => (
-    <div data-testid="select-item" data-value={value} className={className}>{children}</div>
+  SelectItem: ({ children, value, className }: MockSelectItemProps) => (
+    <div data-testid="select-item" data-value={value} className={className}>
+      {children}
+    </div>
   ),
 }));
 
 jest.mock('@/components/multi-promo-tabs/MultiPromoTab.dev', () => ({
-  Default: ({ title, image1, image2, link1, link2, isEditMode }: any) => (
+  Default: ({ title, image1, image2, isEditMode }: MockMultiPromoTabProps) => (
     <div data-testid="promo-tab" data-edit-mode={isEditMode}>
       <div>{title?.jsonValue?.value}</div>
-      {image1 && <img src={image1.jsonValue?.value?.src} alt="Image 1" />}
-      {image2 && <img src={image2.jsonValue?.value?.src} alt="Image 2" />}
+      {image1 && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={image1.jsonValue?.value?.src as string | undefined}
+          alt={image1.jsonValue?.value?.alt as string | undefined}
+        />
+      )}
+      {image2 && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={image2.jsonValue?.value?.src as string | undefined}
+          alt={image2.jsonValue?.value?.alt as string | undefined}
+        />
+      )}
     </div>
   ),
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));

@@ -21,8 +21,22 @@ import {
   propsWithEmptyHeading,
   propsWithoutFields,
   propsWithUndefinedFields,
-  propsInEditingMode,
 } from './TextBanner.mockProps';
+
+// Type definitions for mock components
+import type { Field, LinkField } from '@sitecore-content-sdk/nextjs';
+
+interface MockTextProps {
+  field?: Field<string>;
+  tag?: keyof JSX.IntrinsicElements;
+  className?: string;
+}
+
+interface MockLinkProps {
+  field?: LinkField;
+  editable?: boolean;
+  className?: string;
+}
 
 // Mock useSitecore
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -33,25 +47,28 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       },
     },
   }),
-  Text: ({ field, tag, className }: any) => {
-    const Tag = tag || 'span';
+  Text: ({ field, tag, className }: MockTextProps) => {
+    const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, { className, 'data-testid': 'text-field' }, field?.value || '');
   },
-  Link: ({ field, editable, className }: any) => (
+  Link: ({ field, editable, className }: MockLinkProps) => (
     <a
-      href={field?.value?.href}
+      href={field?.value?.href as string | undefined}
       className={className}
       data-testid="link-field"
-      data-editable={editable}
+      data-editable={editable?.toString()}
     >
-      {field?.value?.text}
+      {field?.value?.text as string | undefined}
     </a>
   ),
 }));
 
+// Type definitions for cn utility
+type CnArgs = Array<string | boolean | Record<string, boolean> | undefined>;
+
 // Mock cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: CnArgs) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -71,12 +88,47 @@ jest.mock('@/lib/utils', () => ({
   },
 }));
 
+// Type definitions for UI components
+interface MockButtonProps {
+  children?: React.ReactNode;
+  asChild?: boolean;
+  variant?: string;
+  size?: string;
+  className?: string;
+}
+
+interface MockFlexProps {
+  children?: React.ReactNode;
+  wrap?: string;
+  align?: string;
+  justify?: string;
+  as?: keyof JSX.IntrinsicElements;
+  gap?: string;
+  className?: string;
+}
+
+interface MockFlexItemProps {
+  children?: React.ReactNode;
+  basis?: string;
+  grow?: string;
+  className?: string;
+}
+
+interface MockButtonBaseProps {
+  buttonLink?: LinkField;
+  variant?: string;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock UI components
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, asChild, variant, size, className }: any) => (
+  Button: ({ children, asChild, variant, size, className }: MockButtonProps) => (
     <div
       data-testid="button"
-      data-as-child={asChild}
+      data-as-child={asChild?.toString()}
       data-variant={variant}
       data-size={size}
       className={className}
@@ -88,8 +140,8 @@ jest.mock('@/components/ui/button', () => ({
 
 // Mock Flex components
 jest.mock('@/components/flex/Flex.dev', () => ({
-  Flex: ({ children, wrap, align, justify, as, gap, className }: any) => {
-    const Tag = as || 'div';
+  Flex: ({ children, wrap, align, justify, as, gap, className }: MockFlexProps) => {
+    const Tag = (as || 'div') as keyof JSX.IntrinsicElements;
     return React.createElement(
       Tag,
       {
@@ -103,7 +155,7 @@ jest.mock('@/components/flex/Flex.dev', () => ({
       children
     );
   },
-  FlexItem: ({ children, basis, grow, className }: any) => (
+  FlexItem: ({ children, basis, grow, className }: MockFlexItemProps) => (
     <div
       data-testid="flex-item"
       data-basis={basis}
@@ -117,20 +169,20 @@ jest.mock('@/components/flex/Flex.dev', () => ({
 
 // Mock ButtonBase
 jest.mock('@/components/button-component/ButtonComponent', () => ({
-  ButtonBase: ({ buttonLink, variant }: any) => (
+  ButtonBase: ({ buttonLink, variant }: MockButtonBaseProps) => (
     <a
-      href={buttonLink?.value?.href}
+      href={buttonLink?.value?.href as string | undefined}
       data-testid="button-base"
       data-variant={variant}
     >
-      {buttonLink?.value?.text}
+      {buttonLink?.value?.text as string | undefined}
     </a>
   ),
 }));
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));

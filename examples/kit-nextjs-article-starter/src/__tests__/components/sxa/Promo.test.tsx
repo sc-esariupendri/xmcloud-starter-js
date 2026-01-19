@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as Promo, WithText as PromoWithText } from '@/components/sxa/Promo';
+import type { ImageField, Field, LinkField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutStyles,
@@ -11,27 +12,45 @@ import {
   propsEmpty,
 } from './Promo.mockProps';
 
+// Type definitions for mock components
+interface MockNextImageProps {
+  field?: ImageField;
+  [key: string]: unknown;
+}
+
+interface MockRichTextProps {
+  field?: Field<string>;
+  className?: string;
+}
+
+interface MockLinkProps {
+  field?: LinkField;
+  children?: React.ReactNode;
+}
+
 // Mock the Sitecore Content SDK components
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  NextImage: ({ field, ...props }: any) => {
+  NextImage: ({ field, ...props }: MockNextImageProps) => {
     // Don't render if field.value is null or undefined
     if (!field?.value) {
+      // eslint-disable-next-line @next/next/no-img-element
       return <img data-testid="promo-image" alt="" />;
     }
     return (
+      // eslint-disable-next-line @next/next/no-img-element
       <img 
-        src={field.value.src || ''} 
-        alt={field.value.alt || ''} 
+        src={field.value.src as string | undefined || ''} 
+        alt={field.value.alt as string | undefined || ''} 
         {...props}
         data-testid="promo-image"
       />
     );
   },
-  RichText: ({ field, className }: any) => (
+  RichText: ({ field, className }: MockRichTextProps) => (
     <div className={className} dangerouslySetInnerHTML={{ __html: field?.value || '' }} />
   ),
-  Link: ({ field, children }: any) => (
-    <a href={field?.value?.href || '#'} data-testid="promo-link">
+  Link: ({ field, children }: MockLinkProps) => (
+    <a href={field?.value?.href as string | undefined || '#'} data-testid="promo-link">
       {children}
     </a>
   ),
@@ -93,7 +112,7 @@ describe('Promo Component', () => {
     it('should render PromoDefaultComponent when fields are not provided', () => {
       const propsWithoutFields = {
         ...defaultProps,
-        fields: null as any,
+        fields: null as unknown as typeof defaultProps.fields,
       };
 
       render(<Promo {...propsWithoutFields} />);
@@ -106,7 +125,7 @@ describe('Promo Component', () => {
       // Component only shows fallback when fields is null/undefined, not when empty
       const propsWithNullFields = {
         params: propsEmpty.params,
-        fields: null as any,
+        fields: null as unknown as typeof defaultProps.fields,
       };
       
       render(<Promo {...propsWithNullFields} />);
@@ -151,7 +170,7 @@ describe('Promo Component', () => {
     it('should render PromoDefaultComponent when fields are not provided', () => {
       const propsWithoutFields = {
         ...defaultProps,
-        fields: null as any,
+        fields: null as unknown as typeof defaultProps.fields,
       };
 
       render(<PromoWithText {...propsWithoutFields} />);

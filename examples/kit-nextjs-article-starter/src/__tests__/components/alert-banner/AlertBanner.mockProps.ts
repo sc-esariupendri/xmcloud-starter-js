@@ -1,4 +1,4 @@
-import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, Page, ComponentRendering, PageMode } from '@sitecore-content-sdk/nextjs';
 
 // Mock fields data
 export const mockTitleField: Field<string> = {
@@ -36,6 +36,25 @@ export const mockLinkFieldEmpty: LinkField = {
     target: '',
     linktype: '',
   },
+};
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
 };
 
 export const mockFields = {
@@ -99,9 +118,9 @@ export const mockExternalFields = {
 };
 
 // Mock rendering data
-export const mockRendering = {
+export const mockRendering: ComponentRendering = {
   componentName: 'AlertBanner',
-} as any;
+} as ComponentRendering;
 
 // Complete props combinations
 export const defaultProps = {
@@ -109,6 +128,7 @@ export const defaultProps = {
   fields: mockFields,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutLink = {
@@ -116,6 +136,7 @@ export const propsWithoutLink = {
   fields: mockFieldsWithoutLink,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutImage = {
@@ -123,6 +144,7 @@ export const propsWithoutImage = {
   fields: mockFieldsWithoutImage,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithEmptyLink = {
@@ -130,6 +152,7 @@ export const propsWithEmptyLink = {
   fields: mockFieldsWithEmptyLink,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsMinimal = {
@@ -137,6 +160,7 @@ export const propsMinimal = {
   fields: mockFieldsMinimal,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithEmptyTitle = {
@@ -144,6 +168,7 @@ export const propsWithEmptyTitle = {
   fields: mockFieldsWithEmptyTitle,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithEmptyDescription = {
@@ -151,13 +176,27 @@ export const propsWithEmptyDescription = {
   fields: mockFieldsWithEmptyDescription,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
+
+type AlertBannerFields = {
+  fields: {
+    title: Field<string>;
+    description: Field<string>;
+    image?: ImageField;
+    link?: LinkField;
+  };
+};
+
+// Export the fields type for use in tests
+export type AlertBannerFieldsType = AlertBannerFields['fields'];
 
 export const propsWithoutFields = {
   params: mockParams,
-  fields: null as any,
+  fields: null as AlertBannerFields['fields'] | null,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithEmptyParams = {
@@ -165,6 +204,7 @@ export const propsWithEmptyParams = {
   fields: mockFields,
   externalFields: mockExternalFields,
   rendering: mockRendering,
+  page: mockPage,
 };
 
 

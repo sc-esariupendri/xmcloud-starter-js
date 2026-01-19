@@ -1,21 +1,50 @@
-import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { MultiPromoTabsProps, MultiPromoTabsFields } from '@/components/multi-promo-tabs/multi-promo-tabs.props';
+
+// Mock page objects
+const mockPageBase: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
+const mockPageEditing: Page = {
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
 
 // Mock page data for useSitecore hook
 export const mockPageData = {
-  page: {
-    mode: {
-      isEditing: false,
-    },
-  },
+  page: mockPageBase,
 };
 
 export const mockPageDataEditing = {
-  page: {
-    mode: {
-      isEditing: true,
-    },
-  },
+  page: mockPageEditing,
 };
 
 // Mock text fields
@@ -250,8 +279,14 @@ export const mockFieldsWithEmptyChildren = {
   },
 };
 
-export const mockFieldsWithoutDatasource = {
-  data: {},
+export const mockFieldsWithoutDatasource: MultiPromoTabsProps['fields'] = {
+  data: {
+    datasource: {
+      title: {
+        jsonValue: { value: '' } as Field<string>,
+      },
+    },
+  },
 };
 
 // Mock params
@@ -260,68 +295,73 @@ export const mockParams = {
   RenderingIdentifier: 'multi-promo-tabs-rendering-id',
 };
 
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'MultiPromoTabs',
+};
+
 // Complete props combinations
 export const defaultProps: MultiPromoTabsProps = {
   params: mockParams,
-  fields: mockFields as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutDroplistLabel: MultiPromoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutDroplistLabel as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: mockFieldsWithoutDroplistLabel,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutTitle: MultiPromoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutTitle as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: mockFieldsWithoutTitle,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutChildren: MultiPromoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutChildren as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: mockFieldsWithoutChildren,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithEmptyChildren: MultiPromoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithEmptyChildren as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: mockFieldsWithEmptyChildren,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutDatasource: MultiPromoTabsProps = {
   params: mockParams,
-  fields: mockFieldsWithoutDatasource as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: mockFieldsWithoutDatasource,
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutFields: MultiPromoTabsProps = {
   params: mockParams,
-  fields: null as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: null as unknown as MultiPromoTabsProps['fields'],
+  rendering: mockRendering,
   isPageEditing: false,
-  page: mockPageData.page as any,
+  page: mockPageBase,
 };
 
 export const propsEditing: MultiPromoTabsProps = {
   params: mockParams,
-  fields: mockFields as any,
-  rendering: { componentName: 'MultiPromoTabs' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   isPageEditing: true,
-  page: mockPageDataEditing.page as any,
+  page: mockPageEditing,
 };
 

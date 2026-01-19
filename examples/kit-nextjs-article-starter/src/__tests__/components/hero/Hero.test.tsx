@@ -17,10 +17,52 @@ import {
   mockPageData,
   mockPageDataEditing,
 } from './Hero.mockProps';
+import type { HeroProps } from '@/components/hero/hero.props';
+
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+  tag?: string;
+  className?: string;
+}
+
+interface MockEditableButtonProps {
+  buttonLink?: { value?: { href?: string; text?: string } };
+  className?: string;
+  isPageEditing?: boolean;
+}
+
+interface MockAnimatedSectionProps {
+  children?: React.ReactNode;
+  direction?: string;
+  className?: string;
+  isPageEditing?: boolean;
+}
+
+interface MockMediaSectionProps {
+  video?: string;
+  image?: { value?: { src?: string } };
+  className?: string;
+  pause?: boolean;
+  reducedMotion?: boolean;
+}
+
+interface MockButtonProps {
+  children?: React.ReactNode;
+  variant?: string;
+  size?: string;
+  onClick?: () => void;
+  className?: string;
+  [key: string]: unknown;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
 
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat()
       .filter(Boolean)
@@ -42,7 +84,7 @@ jest.mock('@/lib/utils', () => ({
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Text: ({ field, tag, className }: any) => {
+  Text: ({ field, tag, className }: MockTextProps) => {
     const Tag = tag || 'span';
     return React.createElement(Tag, { className }, field?.value || '');
   },
@@ -50,7 +92,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 
 // Mock EditableButton component
 jest.mock('@/components/button-component/ButtonComponent', () => ({
-  EditableButton: ({ buttonLink, className, isPageEditing }: any) => (
+  EditableButton: ({ buttonLink, className, isPageEditing }: MockEditableButtonProps) => (
     <button
       data-testid="hero-button"
       data-href={buttonLink?.value?.href}
@@ -64,7 +106,7 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
 
 // Mock AnimatedSection component
 jest.mock('@/components/animated-section/AnimatedSection.dev', () => ({
-  Default: ({ children, direction, className, isPageEditing }: any) => (
+  Default: ({ children, direction, className, isPageEditing }: MockAnimatedSectionProps) => (
     <div
       data-testid="animated-section"
       data-direction={direction}
@@ -78,7 +120,7 @@ jest.mock('@/components/animated-section/AnimatedSection.dev', () => ({
 
 // Mock MediaSection component
 jest.mock('@/components/media-section/MediaSection.dev', () => ({
-  Default: ({ video, image, className, pause, reducedMotion }: any) => (
+  Default: ({ video, image, className, pause, reducedMotion }: MockMediaSectionProps) => (
     <div
       data-testid="media-section"
       data-video={video}
@@ -92,7 +134,7 @@ jest.mock('@/components/media-section/MediaSection.dev', () => ({
 
 // Mock UI Button component
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, variant, size, onClick, className, ...props }: any) => (
+  Button: ({ children, variant, size, onClick, className, ...props }: MockButtonProps) => (
     <button
       data-testid="control-button"
       data-variant={variant}
@@ -114,7 +156,7 @@ jest.mock('lucide-react', () => ({
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -468,7 +510,7 @@ describe('Hero Component', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as HeroProps['fields'],
       };
 
       render(<Hero {...propsWithUndefinedFields} />);

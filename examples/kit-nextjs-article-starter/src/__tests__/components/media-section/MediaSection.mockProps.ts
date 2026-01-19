@@ -56,7 +56,7 @@ export const defaultProps = {
 // Props with only video
 export const propsWithOnlyVideo = {
   video: '/videos/only-video.mp4',
-  image: undefined as any,
+  image: undefined,
   className: '',
   pause: false,
   reducedMotion: false,
@@ -110,7 +110,7 @@ export const propsWithImageNoSize = {
 // Props with no media (should not render)
 export const propsWithNoMedia = {
   video: undefined,
-  image: undefined as any,
+  image: undefined,
   className: '',
   pause: false,
   reducedMotion: false,

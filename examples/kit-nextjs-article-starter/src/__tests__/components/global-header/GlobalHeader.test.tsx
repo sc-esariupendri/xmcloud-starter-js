@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Default as GlobalHeader } from '@/components/global-header/GlobalHeader';
 import {
   defaultProps,
@@ -9,12 +9,13 @@ import {
   propsWithEmptyItem,
   propsEditing,
   mockPageData,
-  mockPageDataEditing,
 } from './GlobalHeader.mockProps';
+import type { GlobalHeaderProps } from '@/components/global-header/global-header.props';
+import type { LinkField } from '@sitecore-content-sdk/nextjs';
 
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: (string | Record<string, boolean> | undefined)[]) => {
     return args
       .flat()
       .filter(Boolean)
@@ -32,15 +33,26 @@ jest.mock('@/lib/utils', () => ({
   },
 }));
 
+// Type definitions for mock components
+interface MockLinkProps {
+  field?: { value?: { href?: string; text?: string } };
+  children?: React.ReactNode;
+}
+
+interface MockImageProps {
+  field?: { value?: { src?: string; alt?: string } };
+  className?: string;
+}
+
 // Mock the useSitecore hook
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Link: ({ field, children }: any) => {
+  Link: ({ field, children }: MockLinkProps) => {
     if (!field?.value?.href) return null;
     return React.createElement('a', { href: field.value.href }, field.value.text || children);
   },
-  Image: ({ field, className }: any) => {
+  Image: ({ field, className }: MockImageProps) => {
     if (!field?.value?.src) return null;
     return React.createElement('img', {
       src: field.value.src,
@@ -52,31 +64,59 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 }));
 
 // Mock Next.js Link
+interface MockNextLinkProps {
+  children?: React.ReactNode;
+  href?: string;
+}
+
 jest.mock('next/link', () => ({
   __esModule: true,
-  default: ({ children, href }: any) => {
+  default: ({ children, href }: MockNextLinkProps) => {
     return React.createElement('a', { href }, children);
   },
 }));
 
 // Mock the Logo component
+interface MockLogoProps {
+  logo?: { value?: { src?: string; alt?: string } };
+  className?: string;
+}
+
 jest.mock('@/components/logo/Logo.dev', () => ({
-  Default: ({ logo, className }: any) => (
+  Default: ({ logo, className }: MockLogoProps) => (
     <div data-testid="logo-component" className={className}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={logo?.value?.src} alt={logo?.value?.alt} />
     </div>
   ),
 }));
 
 // Mock framer-motion
-jest.mock('framer-motion', () => ({
-  motion: {
-    header: React.forwardRef(({ children, ...props }: any, ref: any) =>
-      React.createElement('header', { ...props, ref }, children)
-    ),
-  },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
-}));
+interface MockMotionHeaderProps {
+  children?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+interface MockAnimatePresenceProps {
+  children?: React.ReactNode;
+}
+
+jest.mock('framer-motion', () => {
+  const MockMotionHeader = React.forwardRef<HTMLElement, MockMotionHeaderProps>(
+    ({ children, ...props }, ref) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return React.createElement('header', { ...(props as any), ref }, children as React.ReactNode);
+    }
+  );
+  MockMotionHeader.displayName = 'MockMotionHeader';
+
+  return {
+    motion: {
+      header: MockMotionHeader,
+    },
+    AnimatePresence: ({ children }: MockAnimatePresenceProps) => <>{children}</>,
+  };
+});
 
 // Mock lucide-react
 jest.mock('lucide-react', () => ({
@@ -84,46 +124,87 @@ jest.mock('lucide-react', () => ({
 }));
 
 // Mock UI components
+interface MockNavigationMenuProps {
+  children?: React.ReactNode;
+}
+
 jest.mock('@/components/ui/navigation-menu', () => ({
-  NavigationMenu: ({ children }: any) => (
+  NavigationMenu: ({ children }: MockNavigationMenuProps) => (
     <nav data-testid="navigation-menu">{children}</nav>
   ),
-  NavigationMenuList: ({ children }: any) => <ul data-testid="nav-menu-list">{children}</ul>,
-  NavigationMenuItem: ({ children }: any) => <li data-testid="nav-menu-item">{children}</li>,
+  NavigationMenuList: ({ children }: MockNavigationMenuProps) => (
+    <ul data-testid="nav-menu-list">{children}</ul>
+  ),
+  NavigationMenuItem: ({ children }: MockNavigationMenuProps) => (
+    <li data-testid="nav-menu-item">{children}</li>
+  ),
 }));
 
-jest.mock('@/components/ui/button', () => ({
-  Button: React.forwardRef(
-    ({ children, variant, size, asChild, className, onClick, ...props }: any, ref: any) => {
-      const buttonProps = {
-        ...props,
-        ref,
-        className,
-        onClick,
-        'data-variant': variant,
-        'data-size': size,
-        'data-as-child': asChild,
-      };
-      return React.createElement('button', buttonProps, children);
+interface MockButtonProps {
+  children?: React.ReactNode;
+  variant?: string;
+  size?: string;
+  className?: string;
+  onClick?: () => void;
+  [key: string]: unknown;
+}
+
+jest.mock('@/components/ui/button', () => {
+  const MockButton = React.forwardRef<HTMLButtonElement, MockButtonProps>(
+    ({ children, variant, size, className, onClick, ...props }, ref) => {
+      // Filter out asChild prop to avoid React warning (it's a Radix UI prop)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+      const { asChild, ...domProps } = props as any;
+      return React.createElement('button', { ...domProps, ref, className, onClick, 'data-variant': variant, 'data-size': size }, children as React.ReactNode);
     }
-  ),
-}));
+  );
+  MockButton.displayName = 'MockButton';
 
-jest.mock('@/components/ui/sheet', () => ({
-  Sheet: ({ children, open, onOpenChange }: any) => (
-    <div data-testid="sheet" data-open={open}>
-      {children}
-    </div>
-  ),
-  SheetTrigger: React.forwardRef(({ children, asChild, ...props }: any, ref: any) =>
-    React.createElement('div', { ...props, ref, 'data-testid': 'sheet-trigger' }, children)
-  ),
-  SheetContent: ({ children, side }: any) => (
-    <div data-testid="sheet-content" data-side={side}>
-      {children}
-    </div>
-  ),
-}));
+  return {
+    Button: MockButton,
+  };
+});
+
+interface MockSheetProps {
+  children?: React.ReactNode;
+  open?: boolean;
+}
+
+interface MockSheetTriggerProps {
+  children?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+interface MockSheetContentProps {
+  children?: React.ReactNode;
+  side?: string;
+}
+
+jest.mock('@/components/ui/sheet', () => {
+  const MockSheetTrigger = React.forwardRef<HTMLDivElement, MockSheetTriggerProps>(
+    ({ children, ...props }, ref) => {
+      // Filter out asChild prop to avoid React warning (it's a Radix UI prop)
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+      const { asChild, ...domProps } = props as any;
+      return React.createElement('div', { ...domProps, ref, 'data-testid': 'sheet-trigger' }, children as React.ReactNode);
+    }
+  );
+  MockSheetTrigger.displayName = 'MockSheetTrigger';
+
+  return {
+    Sheet: ({ children, open }: MockSheetProps) => (
+      <div data-testid="sheet" data-open={open}>
+        {children}
+      </div>
+    ),
+    SheetTrigger: MockSheetTrigger,
+    SheetContent: ({ children, side }: MockSheetContentProps) => (
+      <div data-testid="sheet-content" data-side={side}>
+        {children}
+      </div>
+    ),
+  };
+});
 
 describe('GlobalHeader Component', () => {
   beforeEach(() => {
@@ -194,7 +275,7 @@ describe('GlobalHeader Component', () => {
     });
 
     it('should render navigation links with correct hrefs', () => {
-      const { container } = render(<GlobalHeader {...defaultProps} />);
+      render(<GlobalHeader {...defaultProps} />);
 
       const aboutLinks = screen.getAllByText('About');
       const servicesLinks = screen.getAllByText('Services');
@@ -344,7 +425,7 @@ describe('GlobalHeader Component', () => {
     it('should handle undefined fields gracefully', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as GlobalHeaderProps['fields'],
       };
 
       render(<GlobalHeader {...propsWithUndefinedFields} />);
@@ -366,12 +447,12 @@ describe('GlobalHeader Component', () => {
           data: {
             item: {
               logo: defaultProps.fields.data.item.logo,
-              children: {} as any,
+              children: {} as unknown as { results?: Array<{ link: { jsonValue: LinkField } }> },
               headerContact: defaultProps.fields.data.item.headerContact,
             },
           },
         },
-      };
+      } as unknown as GlobalHeaderProps;
 
       render(<GlobalHeader {...propsWithoutChildren} />);
 

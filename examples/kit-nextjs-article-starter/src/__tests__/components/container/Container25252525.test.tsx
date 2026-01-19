@@ -48,12 +48,12 @@ const mockUseSitecore = useSitecore as jest.MockedFunction<typeof useSitecore>;
 describe('Container25252525 Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+    mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
   });
 
   describe('Basic rendering', () => {
     it('should render container with all four placeholders', () => {
-      render(<Container25252525 {...defaultProps} />);
+      render(<Container25252525 {...(defaultProps as unknown as Parameters<typeof Container25252525>[0])} />);
 
       expect(screen.getByTestId('placeholder-container-25-one-main-25')).toBeInTheDocument();
       expect(screen.getByTestId('placeholder-container-25-two-main-25')).toBeInTheDocument();
@@ -62,14 +62,14 @@ describe('Container25252525 Component', () => {
     });
 
     it('should apply container--25252525 class', () => {
-      const { container } = render(<Container25252525 {...defaultProps} />);
+      const { container } = render(<Container25252525 {...(defaultProps as unknown as Parameters<typeof Container25252525>[0])} />);
 
       const section = container.querySelector('section');
       expect(section).toHaveClass('container--25252525');
     });
 
     it('should apply custom styles', () => {
-      const { container } = render(<Container25252525 {...defaultProps} />);
+      const { container } = render(<Container25252525 {...(defaultProps as unknown as Parameters<typeof Container25252525>[0])} />);
 
       const section = container.querySelector('section');
       expect(section).toHaveClass('custom-style');
@@ -78,7 +78,7 @@ describe('Container25252525 Component', () => {
 
   describe('Layout structure', () => {
     it('should render four column layout', () => {
-      const { container } = render(<Container25252525 {...defaultProps} />);
+      const { container } = render(<Container25252525 {...(defaultProps as unknown as Parameters<typeof Container25252525>[0])} />);
 
       const flexWrapper = container.querySelector('.w-full.mx-auto.max-w-\\[1760px\\]');
       expect(flexWrapper).toBeInTheDocument();
@@ -86,14 +86,14 @@ describe('Container25252525 Component', () => {
     });
 
     it('should render four FlexItem components', () => {
-      const { container } = render(<Container25252525 {...defaultProps} />);
+      const { container } = render(<Container25252525 {...(defaultProps as unknown as Parameters<typeof Container25252525>[0])} />);
 
       const flexItems = container.querySelectorAll('.w-full.p-4.mb-4');
       expect(flexItems.length).toBe(4);
     });
 
     it('should apply responsive column width classes', () => {
-      const { container } = render(<Container25252525 {...defaultProps} />);
+      const { container } = render(<Container25252525 {...(defaultProps as unknown as Parameters<typeof Container25252525>[0])} />);
 
       const flexItems = container.querySelectorAll('.w-full.p-4.mb-4');
       flexItems.forEach((item) => {
@@ -104,14 +104,14 @@ describe('Container25252525 Component', () => {
 
   describe('Margin handling', () => {
     it('should apply default top margin', () => {
-      const { container } = render(<Container25252525 {...defaultProps} />);
+      const { container } = render(<Container25252525 {...(defaultProps as unknown as Parameters<typeof Container25252525>[0])} />);
 
       const section = container.querySelector('section');
       expect(section).toHaveClass('mt-10');
     });
 
     it('should exclude top margin when excludeTopMargin is 1', () => {
-      const { container } = render(<Container25252525 {...propsWithExcludeTopMargin} />);
+      const { container } = render(<Container25252525 {...(propsWithExcludeTopMargin as unknown as Parameters<typeof Container25252525>[0])} />);
 
       const section = container.querySelector('section');
       expect(section).toHaveClass('mt-0');
@@ -120,8 +120,8 @@ describe('Container25252525 Component', () => {
 
   describe('Empty placeholder handling', () => {
     it('should not render when placeholders are empty and not editing', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
-      const { container } = render(<Container25252525 {...propsWithEmptyPlaceholders} />);
+      mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
+      const { container } = render(<Container25252525 {...(propsWithEmptyPlaceholders as unknown as Parameters<typeof Container25252525>[0])} />);
 
       expect(container.firstChild).toBeNull();
     });
@@ -132,7 +132,7 @@ describe('Container25252525 Component', () => {
         ...propsWithEmptyPlaceholders,
         page: mockSitecoreContextEditing.page,
       };
-      const { container } = render(<Container25252525 {...propsEditing} />);
+      const { container } = render(<Container25252525 {...(propsEditing as unknown as Parameters<typeof Container25252525>[0])} />);
 
       expect(container.querySelector('section')).toBeInTheDocument();
     });

@@ -1,16 +1,47 @@
-import { Field, LinkField, ImageField } from '@sitecore-content-sdk/nextjs';
+import { Field, LinkField, ImageField, ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { TextBannerProps } from '@/components/text-banner/text-banner.props';
 
-const mockPage = {
-  mode: {
-    isEditing: false,
-  },
+// Mock rendering object
+const mockRendering: ComponentRendering = {
+  componentName: 'TextBanner',
+  dataSource: '',
+  params: {},
 };
 
-const mockPageEditing = {
+// Mock page object
+const mockPage: Page = {
   mode: {
-    isEditing: true,
+    name: 'normal' as PageMode['name'],
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
   },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
+};
+
+// Mock page object for editing mode
+const mockPageEditing: Page = {
+  mode: {
+    name: 'edit' as PageMode['name'],
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
 };
 
 // Mock fields
@@ -61,8 +92,8 @@ export const defaultProps: TextBannerProps = {
   params: {
     theme: 'primary',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without image
@@ -76,8 +107,8 @@ export const propsWithoutImage: TextBannerProps = {
   params: {
     theme: 'primary',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with single link
@@ -88,8 +119,8 @@ export const propsWithSingleLink: TextBannerProps = {
     link: mockLink,
   },
   params: {},
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without links
@@ -99,8 +130,8 @@ export const propsWithoutLinks: TextBannerProps = {
     description: mockDescription,
   },
   params: {},
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without description
@@ -110,8 +141,8 @@ export const propsWithoutDescription: TextBannerProps = {
     link: mockLink,
   },
   params: {},
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with theme variants
@@ -124,8 +155,8 @@ export const propsWithSecondaryTheme: TextBannerProps = {
   params: {
     theme: 'secondary',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithDarkTheme: TextBannerProps = {
@@ -137,8 +168,8 @@ export const propsWithDarkTheme: TextBannerProps = {
   params: {
     theme: 'dark',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithLightTheme: TextBannerProps = {
@@ -150,8 +181,8 @@ export const propsWithLightTheme: TextBannerProps = {
   params: {
     theme: 'light',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithMutedTheme: TextBannerProps = {
@@ -163,8 +194,8 @@ export const propsWithMutedTheme: TextBannerProps = {
   params: {
     theme: 'muted',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithAccentTheme: TextBannerProps = {
@@ -176,8 +207,8 @@ export const propsWithAccentTheme: TextBannerProps = {
   params: {
     theme: 'accent',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with exclude top margin
@@ -190,8 +221,8 @@ export const propsWithExcludeTopMargin: TextBannerProps = {
   params: {
     excludeTopMargin: '1',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with custom styles
@@ -204,8 +235,8 @@ export const propsWithCustomStyles: TextBannerProps = {
   params: {
     styles: 'custom-banner-styles',
   },
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with empty heading
@@ -216,24 +247,24 @@ export const propsWithEmptyHeading: TextBannerProps = {
     link: mockLink,
   },
   params: {},
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without fields (null scenario)
 export const propsWithoutFields: TextBannerProps = {
-  fields: null as any,
+  fields: null as unknown as typeof defaultProps.fields,
   params: {},
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with undefined fields
 export const propsWithUndefinedFields: TextBannerProps = {
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
   params: {},
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props for editing mode
@@ -246,7 +277,7 @@ export const propsInEditingMode: TextBannerProps = {
   },
   params: {},
   isPageEditing: true,
-  rendering: { componentName: 'TextBanner' } as any,
-  page: mockPageEditing as any,
+  rendering: mockRendering,
+  page: mockPageEditing,
 };
 

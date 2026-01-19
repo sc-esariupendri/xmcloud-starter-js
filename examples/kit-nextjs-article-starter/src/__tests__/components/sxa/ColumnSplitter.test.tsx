@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as ColumnSplitter } from '@/components/sxa/ColumnSplitter';
+import type { ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithTwoColumns,
@@ -11,11 +12,17 @@ import {
   propsWithMaxColumns,
 } from './ColumnSplitter.mockProps';
 
+// Type definition for AppPlaceholder mock
+interface MockAppPlaceholderProps {
+  name?: string;
+  rendering?: ComponentRendering;
+}
+
 // Mock the Placeholder component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  AppPlaceholder: ({ name, rendering }: any) => (
-    <div data-testid={`placeholder-${name}`} data-rendering={rendering.componentName}>
-      Placeholder Content for {name}
+  AppPlaceholder: ({ name, rendering }: MockAppPlaceholderProps) => (
+    <div data-testid={`placeholder-${name || 'undefined'}`} data-rendering={rendering?.componentName}>
+      Placeholder Content for {name || 'undefined'}
     </div>
   ),
 }));
@@ -157,13 +164,13 @@ describe('ColumnSplitter Component', () => {
         params: {
           ...defaultProps.params,
           EnabledPlaceholders: undefined,
-        } as any,
+        } as unknown as typeof defaultProps.params,
         rendering: {
           ...defaultProps.rendering,
           params: {
             ...defaultProps.params,
             EnabledPlaceholders: undefined,
-          } as any,
+          } as unknown as typeof defaultProps.params,
         },
       };
 
@@ -177,13 +184,14 @@ describe('ColumnSplitter Component', () => {
     });
 
     it('should handle missing params gracefully', () => {
-      const emptyParams = {} as any;
+      const emptyParams = {} as typeof defaultProps.params;
       const propsWithoutParams = {
         rendering: {
           ...defaultProps.rendering,
           params: emptyParams,
         },
         params: emptyParams,
+        page: defaultProps.page,
       };
 
       const { container } = render(<ColumnSplitter {...propsWithoutParams} />);
@@ -198,13 +206,13 @@ describe('ColumnSplitter Component', () => {
         params: {
           ...defaultProps.params,
           RenderingIdentifier: undefined,
-        } as any,
+        } as unknown as typeof defaultProps.params,
         rendering: {
           ...defaultProps.rendering,
           params: {
             ...defaultProps.params,
             RenderingIdentifier: undefined,
-          } as any,
+          } as unknown as typeof defaultProps.params,
         },
       };
 
@@ -250,6 +258,7 @@ describe('ColumnSplitter Component', () => {
   describe('Dynamic column numbering', () => {
     it('should handle non-sequential column numbers', () => {
       const propsWithNonSequential = {
+        ...defaultProps,
         params: {
           EnabledPlaceholders: '2,5,7',
           ColumnWidth2: 'col-4',
@@ -259,8 +268,7 @@ describe('ColumnSplitter Component', () => {
           styles: '',
         },
         rendering: {
-          componentName: 'ColumnSplitter',
-          dataSource: '',
+          ...defaultProps.rendering,
           params: {
             EnabledPlaceholders: '2,5,7',
             ColumnWidth2: 'col-4',
@@ -281,6 +289,7 @@ describe('ColumnSplitter Component', () => {
 
     it('should apply correct widths to non-sequential columns', () => {
       const propsWithNonSequential = {
+        ...defaultProps,
         params: {
           EnabledPlaceholders: '3,6',
           ColumnWidth3: 'col-8',
@@ -291,8 +300,7 @@ describe('ColumnSplitter Component', () => {
           styles: 'asymmetric-layout',
         },
         rendering: {
-          componentName: 'ColumnSplitter',
-          dataSource: '',
+          ...defaultProps.rendering,
           params: {
             EnabledPlaceholders: '3,6',
             ColumnWidth3: 'col-8',

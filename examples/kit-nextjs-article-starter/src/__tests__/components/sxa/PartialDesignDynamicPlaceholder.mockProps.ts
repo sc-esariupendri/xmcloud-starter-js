@@ -1,4 +1,25 @@
-import { ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, ComponentParams, Page, PageMode } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    name: 'normal' as PageMode['name'],
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
+};
+
+// Mock params
+const mockParams: ComponentParams = {};
 
 // Default props with sig parameter
 export const defaultProps = {
@@ -9,6 +30,8 @@ export const defaultProps = {
       sig: 'main-content-dynamic',
     },
   } as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 
 // Props with different sig
@@ -20,6 +43,8 @@ export const propsWithCustomSig = {
       sig: 'sidebar-content-{*}',
     },
   } as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 
 // Props with complex sig pattern
@@ -31,6 +56,8 @@ export const propsWithComplexSig = {
       sig: 'dynamic-placeholder-{GUID}-{*}',
     },
   } as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 
 // Props with empty sig
@@ -42,6 +69,8 @@ export const propsWithEmptySig = {
       sig: '',
     },
   } as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 
 // Props without sig parameter
@@ -51,6 +80,8 @@ export const propsWithoutSig = {
     dataSource: '',
     params: {},
   } as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 
 // Props with undefined params
@@ -59,12 +90,16 @@ export const propsWithUndefinedParams = {
     componentName: 'PartialDesignDynamicPlaceholder',
     dataSource: '',
     params: undefined,
-  } as any,
+  } as unknown as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 
 // Props with null rendering
 export const propsWithNullRendering = {
-  rendering: null as any,
+  rendering: null as unknown as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 
 // Props with numeric sig
@@ -76,5 +111,7 @@ export const propsWithNumericSig = {
       sig: 'placeholder-123',
     },
   } as ComponentRendering,
+  params: mockParams,
+  page: mockPage,
 };
 

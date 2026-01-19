@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Default as MultiPromo } from '@/components/multi-promo/MultiPromo';
+import type { MultiPromoProps } from '@/components/multi-promo/multi-promo.props';
 import {
   defaultProps,
   propsWith4Columns,
@@ -8,7 +9,6 @@ import {
   propsWithoutDescription,
   propsWithoutTitle,
   propsWithoutChildren,
-  propsWith3Items,
   propsWithoutDatasource,
   propsWithoutFields,
   propsEditing,
@@ -16,9 +16,49 @@ import {
   mockPageDataEditing,
 } from './MultiPromo.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+  tag?: string;
+  className?: string;
+}
+
+interface MockRichTextProps {
+  field?: { value?: string };
+  className?: string;
+}
+
+interface MockCarouselProps {
+  children?: React.ReactNode;
+  setApi?: (api: unknown) => void;
+  opts?: Record<string, unknown>;
+  className?: string;
+}
+
+interface MockCarouselContentProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockCarouselItemProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockMultiPromoItemProps {
+  heading?: { jsonValue?: { value?: string } };
+  image?: { jsonValue?: { value?: { src?: string; alt?: string } } };
+  link?: { jsonValue?: { value?: { href?: string; text?: string } } };
+  isPageEditing?: boolean;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat()
       .filter(Boolean)
@@ -40,11 +80,11 @@ jest.mock('@/lib/utils', () => ({
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Text: ({ field, tag, className }: any) => {
+  Text: ({ field, tag, className }: MockTextProps) => {
     const Tag = tag || 'span';
     return React.createElement(Tag, { className }, field?.value || '');
   },
-  RichText: ({ field, className }: any) => {
+  RichText: ({ field, className }: MockRichTextProps) => {
     return React.createElement('div', {
       className,
       dangerouslySetInnerHTML: { __html: field?.value || '' },
@@ -54,15 +94,14 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 
 // Mock radash debounce
 jest.mock('radash', () => ({
-  debounce: ({ delay }: any, fn: any) => {
-    const debouncedFn = fn;
+  debounce: <T extends (...args: unknown[]) => unknown>(_delay: number, fn: T): T => {
+    const debouncedFn = fn as T & { cancel: () => void };
     debouncedFn.cancel = jest.fn();
     return debouncedFn;
   },
 }));
 
 // Mock Carousel components
-const mockSetApi = jest.fn();
 const mockApi = {
   on: jest.fn(),
   scrollNext: jest.fn(),
@@ -74,45 +113,58 @@ const mockApi = {
   })),
 };
 
-jest.mock('@/components/ui/carousel', () => ({
-  Carousel: React.forwardRef(({ children, setApi, opts, className }: any, ref: any) => {
-    React.useEffect(() => {
-      if (setApi) {
-        setApi(mockApi);
-      }
-    }, [setApi]);
+jest.mock('@/components/ui/carousel', () => {
+  const MockCarousel = React.forwardRef<HTMLDivElement, MockCarouselProps>(
+    ({ children, setApi, opts, className }, ref) => {
+      React.useEffect(() => {
+        if (setApi) {
+          setApi(mockApi);
+        }
+      }, [setApi]);
 
-    return React.createElement(
-      'div',
-      {
-        ref,
-        'data-testid': 'carousel',
-        'data-opts': JSON.stringify(opts),
-        className,
-      },
-      children
-    );
-  }),
-  CarouselContent: ({ children, className }: any) =>
-    React.createElement('div', { 'data-testid': 'carousel-content', className }, children),
-  CarouselItem: ({ children, className }: any) =>
-    React.createElement('div', { 'data-testid': 'carousel-item', className }, children),
-}));
+      return React.createElement(
+        'div',
+        {
+          ref,
+          'data-testid': 'carousel',
+          'data-opts': JSON.stringify(opts),
+          className,
+        },
+        children
+      );
+    }
+  );
+  MockCarousel.displayName = 'MockCarousel';
+
+  return {
+    Carousel: MockCarousel,
+    CarouselContent: ({ children, className }: MockCarouselContentProps) =>
+      React.createElement('div', { 'data-testid': 'carousel-content', className }, children),
+    CarouselItem: ({ children, className }: MockCarouselItemProps) =>
+      React.createElement('div', { 'data-testid': 'carousel-item', className }, children),
+  };
+});
 
 // Mock MultiPromoItem component
 jest.mock('@/components/multi-promo/MultiPromoItem.dev', () => ({
-  Default: ({ heading, image, link, isPageEditing }: any) => (
+  Default: ({ heading, image, link, isPageEditing }: MockMultiPromoItemProps) => (
     <div data-testid="multi-promo-item" data-editing={isPageEditing}>
-      <img src={image?.jsonValue?.value?.src} alt={image?.jsonValue?.value?.alt} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={image?.jsonValue?.value?.src as string | undefined}
+        alt={image?.jsonValue?.value?.alt as string | undefined}
+      />
       <h3>{heading?.jsonValue?.value}</h3>
-      {link?.jsonValue?.value?.href && <a href={link.jsonValue.value.href}>{link.jsonValue.value.text}</a>}
+      {link?.jsonValue?.value?.href && (
+        <a href={link.jsonValue.value.href as string}>{link.jsonValue.value.text}</a>
+      )}
     </div>
   ),
 }));
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -319,7 +371,7 @@ describe('MultiPromo Component', () => {
       await waitFor(() => {
         const rootNode = mockApi.rootNode();
         const keydownListener = rootNode.addEventListener.mock.calls.find(
-          (call: any) => call[0] === 'keydown'
+          (call: [string, EventListener]) => call[0] === 'keydown'
         )?.[1];
 
         if (keydownListener) {
@@ -340,7 +392,7 @@ describe('MultiPromo Component', () => {
       await waitFor(() => {
         const rootNode = mockApi.rootNode();
         const keydownListener = rootNode.addEventListener.mock.calls.find(
-          (call: any) => call[0] === 'keydown'
+          (call: [string, EventListener]) => call[0] === 'keydown'
         )?.[1];
 
         if (keydownListener) {
@@ -361,7 +413,7 @@ describe('MultiPromo Component', () => {
       await waitFor(() => {
         const rootNode = mockApi.rootNode();
         const keydownListener = rootNode.addEventListener.mock.calls.find(
-          (call: any) => call[0] === 'keydown'
+          (call: [string, EventListener]) => call[0] === 'keydown'
         )?.[1];
 
         if (keydownListener) {
@@ -385,7 +437,7 @@ describe('MultiPromo Component', () => {
       await waitFor(() => {
         const rootNode = mockApi.rootNode();
         const wheelListener = rootNode.addEventListener.mock.calls.find(
-          (call: any) => call[0] === 'wheel'
+          (call: [string, EventListener]) => call[0] === 'wheel'
         )?.[1];
 
         if (wheelListener) {
@@ -403,7 +455,7 @@ describe('MultiPromo Component', () => {
       await waitFor(() => {
         const rootNode = mockApi.rootNode();
         const wheelListener = rootNode.addEventListener.mock.calls.find(
-          (call: any) => call[0] === 'wheel'
+          (call: [string, EventListener]) => call[0] === 'wheel'
         )?.[1];
 
         if (wheelListener) {
@@ -430,7 +482,7 @@ describe('MultiPromo Component', () => {
 
       await waitFor(() => {
         const selectCallback = mockApi.on.mock.calls.find(
-          (call: any[]) => call[0] === 'select'
+          (call: [string, () => void]) => call[0] === 'select'
         )?.[1];
 
         if (selectCallback) {
@@ -481,7 +533,7 @@ describe('MultiPromo Component', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as MultiPromoProps['fields'],
       };
 
       render(<MultiPromo {...propsWithUndefinedFields} />);
@@ -505,7 +557,7 @@ describe('MultiPromo Component', () => {
             datasource: {
               title: defaultProps.fields.data.datasource.title,
               description: defaultProps.fields.data.datasource.description,
-              children: {} as any,
+              children: {} as unknown as MultiPromoProps['fields']['data']['datasource']['children'],
             },
           },
         },

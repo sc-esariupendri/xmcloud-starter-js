@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Default as Navigation } from '@/components/sxa/Navigation';
+import type { LinkField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithChildren,
@@ -12,15 +13,23 @@ import {
   mockPageDataEditing,
 } from './Navigation.mockProps';
 
+// Type definitions for mock components
+interface MockLinkProps {
+  field?: LinkField;
+  children?: React.ReactNode;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
+  editable?: boolean;
+}
+
 // Mock the useSitecore hook
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Link: ({ field, children, onClick, editable }: any) => (
+  Link: ({ field, children, onClick, editable }: MockLinkProps) => (
     <a 
-      href={field?.value?.href || '#'} 
+      href={field?.value?.href as string | undefined || '#'} 
       onClick={onClick}
-      data-editable={editable}
+      data-editable={editable?.toString()}
       data-testid="nav-link"
     >
       {children}
@@ -36,14 +45,14 @@ describe('Navigation Component', () => {
 
   describe('Basic rendering', () => {
     it('should render navigation with single item', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('Home')).toBeInTheDocument();
       expect(screen.getByTestId('nav-link')).toBeInTheDocument();
     });
 
     it('should render navigation with children', () => {
-      render(<Navigation {...propsWithChildren} />);
+      render(<Navigation {...(propsWithChildren as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('Products')).toBeInTheDocument();
       expect(screen.getByText('Product 1')).toBeInTheDocument();
@@ -51,20 +60,20 @@ describe('Navigation Component', () => {
     });
 
     it('should render empty navigation when fields are empty', () => {
-      render(<Navigation {...(propsEmpty as any)} />);
+      render(<Navigation {...(propsEmpty as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('[Navigation]')).toBeInTheDocument();
     });
 
     it('should apply custom styles', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const container = screen.getByText('Home').closest('.component.navigation');
       expect(container).toHaveClass('component', 'navigation', 'col-12', 'custom-nav-style');
     });
 
     it('should render without custom styles when not provided', () => {
-      render(<Navigation {...propsWithoutStyles} />);
+      render(<Navigation {...(propsWithoutStyles as unknown as Parameters<typeof Navigation>[0])} />);
 
       const container = screen.getByText('Home').closest('.component.navigation');
       expect(container).toHaveClass('component', 'navigation', 'col-12');
@@ -72,14 +81,14 @@ describe('Navigation Component', () => {
     });
 
     it('should have correct rendering identifier', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const container = screen.getByText('Home').closest('.component.navigation');
       expect(container).toHaveAttribute('id', 'nav-rendering-id');
     });
 
     it('should render without id when RenderingIdentifier is not provided', () => {
-      render(<Navigation {...propsWithoutId} />);
+      render(<Navigation {...(propsWithoutId as unknown as Parameters<typeof Navigation>[0])} />);
 
       const container = screen.getByText('Home').closest('.component.navigation');
       expect(container).not.toHaveAttribute('id');
@@ -88,7 +97,7 @@ describe('Navigation Component', () => {
 
   describe('Mobile menu functionality', () => {
     it('should render mobile menu toggle', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const checkbox = screen.getByRole('checkbox');
       expect(checkbox).toBeInTheDocument();
@@ -96,7 +105,7 @@ describe('Navigation Component', () => {
     });
 
     it('should toggle menu when checkbox is clicked', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const checkbox = screen.getByRole('checkbox');
       expect(checkbox).not.toBeChecked();
@@ -112,7 +121,7 @@ describe('Navigation Component', () => {
       mockUseSitecore.mockReturnValue(mockPageDataEditing);
       const mockPreventDefault = jest.fn();
       
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const checkbox = screen.getByRole('checkbox');
       fireEvent.click(checkbox, { preventDefault: mockPreventDefault });
@@ -124,7 +133,7 @@ describe('Navigation Component', () => {
 
   describe('Navigation text handling', () => {
     it('should use NavigationTitle when available', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('Home')).toBeInTheDocument();
     });
@@ -134,19 +143,19 @@ describe('Navigation Component', () => {
         ...defaultProps,
         fields: {
           item1: {
-            ...(defaultProps.fields as any).item1,
-            NavigationTitle: null as any,
+            ...defaultProps.fields.item1,
+            NavigationTitle: null,
           },
-        } as any,
+        },
       };
 
-      render(<Navigation {...(propsWithTitleOnly as any)} />);
+      render(<Navigation {...(propsWithTitleOnly as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('Home Page')).toBeInTheDocument();
     });
 
     it('should fallback to DisplayName when neither title is available', () => {
-      render(<Navigation {...(propsWithoutTitle as any)} />);
+      render(<Navigation {...(propsWithoutTitle as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('About')).toBeInTheDocument();
     });
@@ -154,7 +163,7 @@ describe('Navigation Component', () => {
 
   describe('Link generation', () => {
     it('should generate correct link field', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const link = screen.getByTestId('nav-link');
       expect(link).toHaveAttribute('href', '/home');
@@ -165,13 +174,13 @@ describe('Navigation Component', () => {
         ...defaultProps,
         fields: {
           item1: {
-            ...(defaultProps.fields as any).item1,
+            ...defaultProps.fields.item1,
             Querystring: '?param=value',
           },
-        } as any,
+        },
       };
 
-      render(<Navigation {...propsWithQuerystring} />);
+      render(<Navigation {...(propsWithQuerystring as unknown as Parameters<typeof Navigation>[0])} />);
 
       const link = screen.getByTestId('nav-link');
       expect(link).toHaveAttribute('href', '/home');
@@ -180,7 +189,7 @@ describe('Navigation Component', () => {
 
   describe('Children rendering', () => {
     it('should render children with correct relative level', () => {
-      render(<Navigation {...propsWithChildren} />);
+      render(<Navigation {...(propsWithChildren as unknown as Parameters<typeof Navigation>[0])} />);
 
       const product1 = screen.getByText('Product 1');
       const product1Container = product1.closest('li');
@@ -189,7 +198,7 @@ describe('Navigation Component', () => {
     });
 
     it('should handle click events for children', () => {
-      render(<Navigation {...propsWithChildren} />);
+      render(<Navigation {...(propsWithChildren as unknown as Parameters<typeof Navigation>[0])} />);
 
       // Find the link by getting all nav-link elements and filtering by text
       const product1 = screen.getByText('Product 1');
@@ -206,7 +215,7 @@ describe('Navigation Component', () => {
 
   describe('Component structure', () => {
     it('should render correct DOM structure', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const container = screen.getByText('Home').closest('.component.navigation');
       expect(container).toHaveClass('component', 'navigation');
@@ -231,7 +240,7 @@ describe('Navigation Component', () => {
     });
 
     it('should render navigation list items correctly', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const listItem = screen.getByText('Home').closest('li');
       // Top-level items get relativeLevel=1
@@ -242,7 +251,7 @@ describe('Navigation Component', () => {
 
   describe('Active state handling', () => {
     it('should toggle active state when navigation title is clicked', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const navigationTitle = screen.getByText('Home').closest('.navigation-title');
       expect(navigationTitle).toBeInTheDocument();
@@ -258,7 +267,7 @@ describe('Navigation Component', () => {
     it('should render with editable links in editing mode', () => {
       mockUseSitecore.mockReturnValue(mockPageDataEditing);
       
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const link = screen.getByTestId('nav-link');
       expect(link).toHaveAttribute('data-editable', 'true');
@@ -267,7 +276,7 @@ describe('Navigation Component', () => {
     it('should render without editable links in normal mode', () => {
       mockUseSitecore.mockReturnValue(mockPageData);
       
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const link = screen.getByTestId('nav-link');
       expect(link).toHaveAttribute('data-editable', 'false');
@@ -277,19 +286,19 @@ describe('Navigation Component', () => {
   describe('Edge cases', () => {
     it('should handle missing params gracefully', () => {
       const propsWithoutParams = {
-        params: null as any,
+        params: null as unknown as typeof defaultProps.params,
         fields: defaultProps.fields,
         handleClick: defaultProps.handleClick,
         relativeLevel: defaultProps.relativeLevel,
       };
 
-      render(<Navigation {...propsWithoutParams} />);
+      render(<Navigation {...(propsWithoutParams as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('Home')).toBeInTheDocument();
     });
 
     it('should handle empty children array', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const listItem = screen.getByText('Home').closest('li');
       const childrenUl = listItem?.querySelector('ul');
@@ -297,7 +306,7 @@ describe('Navigation Component', () => {
     });
 
     it('should handle missing field values gracefully', () => {
-      render(<Navigation {...(propsEmpty as any)} />);
+      render(<Navigation {...(propsEmpty as unknown as Parameters<typeof Navigation>[0])} />);
 
       expect(screen.getByText('[Navigation]')).toBeInTheDocument();
     });
@@ -305,14 +314,14 @@ describe('Navigation Component', () => {
 
   describe('Accessibility', () => {
     it('should have proper tabindex for keyboard navigation', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const listItem = screen.getByText('Home').closest('li');
       expect(listItem).toHaveAttribute('tabIndex', '0');
     });
 
     it('should have proper checkbox for mobile menu', () => {
-      render(<Navigation {...defaultProps} />);
+      render(<Navigation {...(defaultProps as unknown as Parameters<typeof Navigation>[0])} />);
 
       const checkbox = screen.getByRole('checkbox');
       expect(checkbox).toBeInTheDocument();

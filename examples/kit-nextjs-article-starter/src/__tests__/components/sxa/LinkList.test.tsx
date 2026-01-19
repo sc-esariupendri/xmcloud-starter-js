@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as LinkList } from '@/components/sxa/LinkList';
+import type { LinkField, Field } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithSingleLink,
@@ -14,16 +15,27 @@ import {
   propsWithEmptyResults,
 } from './LinkList.mockProps';
 
+// Type definitions for mock components
+interface MockLinkProps {
+  field: LinkField;
+}
+
+interface MockTextProps {
+  field: Field<string>;
+  tag?: string;
+}
+
 // Mock Sitecore SDK components
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Link: ({ field }: any) => (
+  Link: ({ field }: MockLinkProps) => (
     <a href={field.value.href} title={field.value.title} data-testid="link">
       {field.value.text}
     </a>
   ),
-  Text: ({ field, tag: Tag = 'span' }: any) => (
-    <Tag data-testid="title">{field.value}</Tag>
-  ),
+  Text: ({ field, tag: Tag = 'span' }: MockTextProps) => {
+    const TagElement = (Tag || 'span') as keyof JSX.IntrinsicElements;
+    return React.createElement(TagElement, { 'data-testid': 'title' }, field.value);
+  },
 }));
 
 describe('LinkList Component', () => {
@@ -96,7 +108,7 @@ describe('LinkList Component', () => {
     });
 
     it('should filter out invalid links', () => {
-      render(<LinkList {...propsWithInvalidLinks} />);
+      render(<LinkList {...(propsWithInvalidLinks as unknown as Parameters<typeof LinkList>[0])} />);
 
       const links = screen.getAllByTestId('link');
       // Should only render valid links (mockLink1 and mockLink2)
@@ -244,7 +256,7 @@ describe('LinkList Component', () => {
 
   describe('Edge cases', () => {
     it('should handle missing params gracefully', () => {
-      const emptyParams = {} as any;
+      const emptyParams = {} as typeof defaultProps.params;
       const propsWithoutParams = {
         params: emptyParams,
         fields: defaultProps.fields,
@@ -277,7 +289,7 @@ describe('LinkList Component', () => {
         params: {
           ...defaultProps.params,
           RenderingIdentifier: undefined,
-        } as any,
+        } as unknown as typeof defaultProps.params,
       };
 
       const { container } = render(<LinkList {...propsWithUndefinedId} />);
@@ -289,7 +301,7 @@ describe('LinkList Component', () => {
 
   describe('Data filtering', () => {
     it('should only render items with valid link fields', () => {
-      render(<LinkList {...propsWithInvalidLinks} />);
+      render(<LinkList {...(propsWithInvalidLinks as unknown as Parameters<typeof LinkList>[0])} />);
 
       const links = screen.getAllByTestId('link');
       // Only valid links should be rendered
@@ -305,7 +317,7 @@ describe('LinkList Component', () => {
               children: {
                 results: [
                   { field: { link: defaultProps.fields.data.datasource.children.results[0].field.link } },
-                  { field: undefined } as any,
+                  { field: undefined } as unknown as { field?: { link?: LinkField } },
                   { field: { link: defaultProps.fields.data.datasource.children.results[1].field.link } },
                 ],
               },
@@ -317,7 +329,7 @@ describe('LinkList Component', () => {
         },
       };
 
-      render(<LinkList {...propsWithUndefinedField} />);
+      render(<LinkList {...(propsWithUndefinedField as unknown as Parameters<typeof LinkList>[0])} />);
 
       const links = screen.getAllByTestId('link');
       expect(links.length).toBe(2);

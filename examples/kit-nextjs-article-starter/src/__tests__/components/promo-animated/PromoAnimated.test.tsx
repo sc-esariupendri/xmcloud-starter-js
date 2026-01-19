@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as PromoAnimated, ImageRight } from '@/components/promo-animated/PromoAnimated';
+import type { PromoAnimatedProps } from '@/components/promo-animated/promo-animated.props';
+import type { ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsEditing,
@@ -15,9 +17,41 @@ import {
   propsWithoutFields,
 } from './PromoAnimated.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+  tag?: string;
+}
+
+interface MockRichTextProps {
+  field?: { value?: string };
+}
+
+interface MockImageWrapperProps {
+  image?: ImageField;
+  className?: string;
+  wrapperClass?: string;
+}
+
+interface MockAnimatedSectionProps {
+  children?: React.ReactNode;
+  className?: string;
+  animationType?: string;
+}
+
+interface MockButtonBaseProps {
+  buttonLink?: LinkField;
+  variant?: string;
+  isPageEditing?: boolean;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock dependencies
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -38,11 +72,11 @@ jest.mock('@/lib/utils', () => ({
 }));
 
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field, tag }: any) => {
+  Text: ({ field, tag }: MockTextProps) => {
     const Tag = tag || 'span';
     return React.createElement(Tag, {}, field?.value || '');
   },
-  RichText: ({ field }: any) =>
+  RichText: ({ field }: MockRichTextProps) =>
     React.createElement('div', {
       dangerouslySetInnerHTML: { __html: field?.value || '' },
     }),
@@ -56,15 +90,20 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 }));
 
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: ({ image, className, wrapperClass }: any) => (
+  Default: ({ image, className, wrapperClass }: MockImageWrapperProps) => (
     <div data-testid="image-wrapper" className={wrapperClass}>
-      <img src={image?.value?.src} alt={image?.value?.alt} className={className} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={image?.value?.src as string | undefined}
+        alt={image?.value?.alt as string | undefined}
+        className={className}
+      />
     </div>
   ),
 }));
 
 jest.mock('@/components/animated-section/AnimatedSection.dev', () => ({
-  Default: ({ children, className, animationType }: any) => (
+  Default: ({ children, className, animationType }: MockAnimatedSectionProps) => (
     <div data-testid="animated-section" data-animation-type={animationType} className={className}>
       {children}
     </div>
@@ -72,13 +111,13 @@ jest.mock('@/components/animated-section/AnimatedSection.dev', () => ({
 }));
 
 jest.mock('@/components/button-component/ButtonComponent', () => ({
-  ButtonBase: ({ buttonLink, variant, isPageEditing }: any) => {
+  ButtonBase: ({ buttonLink, variant, isPageEditing }: MockButtonBaseProps) => {
     if (!buttonLink?.value?.href && !isPageEditing) return null;
     return (
       <a
         data-testid="button-component"
         data-variant={variant || 'default'}
-        href={buttonLink?.value?.href}
+        href={buttonLink?.value?.href as string | undefined}
       >
         {buttonLink?.value?.text}
       </a>
@@ -87,7 +126,7 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -96,7 +135,7 @@ jest.mock('@/utils/NoDataFallback', () => ({
 beforeAll(() => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation((query) => ({
+    value: jest.fn().mockImplementation((query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -270,8 +309,8 @@ describe('PromoAnimated Component - Default Variant', () => {
         ...propsEditing,
         fields: {
           ...propsEditing.fields,
-          primaryLink: { value: {} } as any,
-          secondaryLink: { value: {} } as any,
+          primaryLink: { value: {} } as unknown as LinkField,
+          secondaryLink: { value: {} } as unknown as LinkField,
         },
       };
 
@@ -293,7 +332,7 @@ describe('PromoAnimated Component - Default Variant', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as PromoAnimatedProps['fields'],
       };
 
       render(<PromoAnimated {...propsWithUndefinedFields} />);
@@ -401,7 +440,7 @@ describe('PromoAnimated - Reduced Motion', () => {
   });
 
   it('should detect prefers-reduced-motion media query', () => {
-    const matchMediaMock = jest.fn().mockImplementation((query) => ({
+    const matchMediaMock = jest.fn().mockImplementation((query: string) => ({
       matches: query === '(prefers-reduced-motion: reduce)',
       media: query,
       onchange: null,
@@ -412,7 +451,7 @@ describe('PromoAnimated - Reduced Motion', () => {
       dispatchEvent: jest.fn(),
     }));
 
-    window.matchMedia = matchMediaMock;
+    window.matchMedia = matchMediaMock as typeof window.matchMedia;
 
     render(<PromoAnimated {...defaultProps} />);
 

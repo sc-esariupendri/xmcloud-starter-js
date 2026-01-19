@@ -1,12 +1,30 @@
-import { ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { BackgroundColor } from '@/enumerations/BackgroundColor.enum';
+
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
 
 export const defaultProps = {
   params: {
     DynamicPlaceholderId: 'main-fullbleed',
     styles: 'custom-fullbleed-style',
     excludeTopMargin: '0',
-    backgroundColor: undefined as any,
+    backgroundColor: undefined as BackgroundColor | undefined,
     backgroundImagePath: '',
     inset: '0',
   },
@@ -17,6 +35,7 @@ export const defaultProps = {
       'container-fullbleed-main-fullbleed': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithPrimaryBackground = {
@@ -35,6 +54,7 @@ export const propsWithPrimaryBackground = {
       'container-fullbleed-primary-bg': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithSecondaryBackground = {
@@ -53,6 +73,7 @@ export const propsWithSecondaryBackground = {
       'container-fullbleed-secondary-bg': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithTertiaryBackground = {
@@ -71,6 +92,7 @@ export const propsWithTertiaryBackground = {
       'container-fullbleed-tertiary-bg': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithTransparentBackground = {
@@ -89,6 +111,7 @@ export const propsWithTransparentBackground = {
       'container-fullbleed-transparent-bg': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithInset = {
@@ -107,6 +130,7 @@ export const propsWithInset = {
       'container-fullbleed-inset': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithBackgroundImage = {
@@ -114,7 +138,7 @@ export const propsWithBackgroundImage = {
     DynamicPlaceholderId: 'bg-image',
     styles: '',
     excludeTopMargin: '0',
-    backgroundColor: undefined as any,
+    backgroundColor: undefined as BackgroundColor | undefined,
     backgroundImagePath: '/images/background.jpg',
     inset: '0',
   },
@@ -125,6 +149,7 @@ export const propsWithBackgroundImage = {
       'container-fullbleed-bg-image': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithExcludeTopMargin = {
@@ -132,7 +157,7 @@ export const propsWithExcludeTopMargin = {
     DynamicPlaceholderId: 'no-margin',
     styles: '',
     excludeTopMargin: '1',
-    backgroundColor: undefined as any,
+    backgroundColor: undefined as BackgroundColor | undefined,
     backgroundImagePath: '',
     inset: '0',
   },
@@ -143,6 +168,7 @@ export const propsWithExcludeTopMargin = {
       'container-fullbleed-no-margin': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 export const propsWithInsetAndTransparent = {
@@ -161,5 +187,6 @@ export const propsWithInsetAndTransparent = {
       'container-fullbleed-inset-transparent': [{ componentName: 'Content' }],
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 

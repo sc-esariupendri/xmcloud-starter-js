@@ -1,4 +1,4 @@
-import { Field, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, LinkField, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { SubscriptionBannerProps } from '@/components/subscription-banner/subscription-banner.props';
 
 // Mock fields
@@ -31,6 +31,30 @@ export const mockThankYouMessage: Field<string> = {
   value: 'Thank you for subscribing!',
 };
 
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'SubscriptionBanner',
+};
+
 // Default props with all fields
 export const defaultProps: SubscriptionBannerProps = {
   fields: {
@@ -42,7 +66,8 @@ export const defaultProps: SubscriptionBannerProps = {
     thankYouMessage: mockThankYouMessage,
   },
   params: {},
-  rendering: { componentName: 'SubscriptionBanner' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without optional description
@@ -55,7 +80,8 @@ export const propsWithoutDescription: SubscriptionBannerProps = {
     thankYouMessage: mockThankYouMessage,
   },
   params: {},
-  rendering: { componentName: 'SubscriptionBanner' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with only required fields
@@ -65,7 +91,8 @@ export const propsMinimal: SubscriptionBannerProps = {
     buttonLink: mockButtonLink,
   },
   params: {},
-  rendering: { componentName: 'SubscriptionBanner' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with empty title
@@ -76,20 +103,23 @@ export const propsWithEmptyTitle: SubscriptionBannerProps = {
     buttonLink: mockButtonLink,
   },
   params: {},
-  rendering: { componentName: 'SubscriptionBanner' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without fields (null scenario)
 export const propsWithoutFields: SubscriptionBannerProps = {
-  fields: null as any,
+  fields: null as unknown as SubscriptionBannerProps['fields'],
   params: {},
-  rendering: { componentName: 'SubscriptionBanner' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with undefined fields
 export const propsWithUndefinedFields: SubscriptionBannerProps = {
-  fields: undefined as any,
+  fields: undefined as unknown as SubscriptionBannerProps['fields'],
   params: {},
-  rendering: { componentName: 'SubscriptionBanner' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 

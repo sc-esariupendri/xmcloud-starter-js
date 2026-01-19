@@ -1,5 +1,17 @@
 import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import { IconName } from '@/enumerations/Icon.enum';
+import { EnumValues } from '@/enumerations/generic.enum';
+
+// Type for Card component props (matching Card.dev.tsx)
+type CardPropsType = {
+  heading: Field<string>;
+  description: Field<string>;
+  image?: ImageField;
+  link: LinkField;
+  icon?: EnumValues<typeof IconName>;
+  className?: string;
+  editable?: boolean;
+};
 
 // Mock text fields
 export const mockHeadingField: Field<string> = {
@@ -89,10 +101,10 @@ export const propsWithoutLink = {
   heading: mockHeadingField,
   description: mockDescriptionField,
   image: mockImageField,
-  link: undefined as any,
+  link: undefined as unknown as LinkField,
   icon: IconName.ARROW_RIGHT,
   editable: false,
-};
+} as unknown as CardPropsType;
 
 export const propsWithEmptyLink = {
   heading: mockHeadingField,
@@ -143,10 +155,10 @@ export const propsMinimal = {
   heading: mockHeadingField,
   description: mockDescriptionField,
   image: undefined,
-  link: undefined as any,
+  link: undefined as unknown as LinkField,
   icon: undefined,
   editable: false,
-};
+} as unknown as CardPropsType;
 
 export const propsWithCustomIcon = {
   heading: mockHeadingField,

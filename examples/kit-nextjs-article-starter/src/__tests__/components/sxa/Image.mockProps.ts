@@ -25,7 +25,6 @@ export const mockImageField: ImageField = {
     width: 800,
     height: 600,
   },
-  editable: 'Test Image',
 };
 
 export const mockImageFieldWithoutAlt: ImageField = {
@@ -35,12 +34,10 @@ export const mockImageFieldWithoutAlt: ImageField = {
     width: 800,
     height: 600,
   },
-  editable: 'Test Image',
 };
 
 export const mockImageFieldEmpty: ImageField = {
-  value: null,
-  editable: '',
+  value: undefined,
 };
 
 // Mock link field data
@@ -53,7 +50,7 @@ export const mockLinkField: LinkField = {
 };
 
 export const mockLinkFieldEmpty: LinkField = {
-  value: null,
+  value: undefined as unknown as LinkField['value'],
 };
 
 // Mock fields data

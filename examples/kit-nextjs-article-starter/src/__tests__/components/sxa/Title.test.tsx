@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as Title } from '@/components/sxa/Title';
+import type { Field } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutStyles,
@@ -13,13 +14,21 @@ import {
   mockParams,
 } from './Title.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: Field<string>;
+  tag?: keyof JSX.IntrinsicElements;
+  className?: string;
+  editable?: boolean;
+}
+
 // Mock the useSitecore hook
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Text: ({ field, tag, className, editable }: any) => {
-    const Tag = tag || 'h2';
-    return React.createElement(Tag, { className, 'data-editable': editable }, field?.value || 'Add Title');
+  Text: ({ field, tag, className, editable }: MockTextProps) => {
+    const Tag = (tag || 'h2') as keyof JSX.IntrinsicElements;
+    return React.createElement(Tag, { className, 'data-editable': editable?.toString() }, field?.value || 'Add Title');
   },
 }));
 
@@ -39,7 +48,7 @@ describe('Title Component', () => {
 
     it('should render with context title when datasource is not available', () => {
       mockUseSitecore.mockReturnValue(mockPageData);
-      render(<Title {...(propsWithoutDatasource as any)} />);
+      render(<Title {...(propsWithoutDatasource as unknown as Parameters<typeof Title>[0])} />);
 
       expect(screen.getByText('Context Title')).toBeInTheDocument();
     });
@@ -50,14 +59,14 @@ describe('Title Component', () => {
         fields: { data: { datasource: null, contextItem: null } },
       };
       mockUseSitecore.mockReturnValue(mockPageData);
-      render(<Title {...(propsWithoutBoth as any)} />);
+      render(<Title {...(propsWithoutBoth as unknown as Parameters<typeof Title>[0])} />);
 
       expect(screen.getByText('Page Title')).toBeInTheDocument();
     });
 
     it('should render with default text when all sources are not available', () => {
       mockUseSitecore.mockReturnValue(mockPageDataWithoutTitle);
-      render(<Title {...(propsWithEmptyFields as any)} />);
+      render(<Title {...(propsWithEmptyFields as unknown as Parameters<typeof Title>[0])} />);
 
       expect(screen.getByText('Add Title')).toBeInTheDocument();
     });
@@ -154,7 +163,7 @@ describe('Title Component', () => {
   describe('Edge cases', () => {
     it('should handle empty field values gracefully', () => {
       mockUseSitecore.mockReturnValue(mockPageDataWithoutTitle);
-      render(<Title {...(propsWithEmptyFields as any)} />);
+      render(<Title {...(propsWithEmptyFields as unknown as Parameters<typeof Title>[0])} />);
 
       expect(screen.getByText('Add Title')).toBeInTheDocument();
     });
@@ -173,11 +182,11 @@ describe('Title Component', () => {
     it('should handle missing fields gracefully', () => {
       const propsWithoutFields = {
         params: defaultProps.params,
-        fields: null as any,
+        fields: null as unknown as typeof defaultProps.fields,
       };
       
       mockUseSitecore.mockReturnValue(mockPageDataWithoutTitle);
-      render(<Title {...propsWithoutFields} />);
+      render(<Title {...(propsWithoutFields as unknown as Parameters<typeof Title>[0])} />);
 
       expect(screen.getByText('Add Title')).toBeInTheDocument();
     });

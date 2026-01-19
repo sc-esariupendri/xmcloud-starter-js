@@ -1,5 +1,24 @@
-import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { PromoBlockProps } from '@/components/promo-block/promo-block.props';
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
 
 // Mock text fields
 export const mockHeadingField: Field<string> = {
@@ -82,52 +101,65 @@ export const mockParamsDefault = {
   RenderingIdentifier: 'promo-block-rendering-id',
 };
 
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'PromoBlock',
+};
+
 // Complete props combinations
 export const defaultProps: PromoBlockProps = {
   params: mockParamsImageLeft,
   fields: mockFields,
-  rendering: { componentName: 'PromoBlock' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsImageRight: PromoBlockProps = {
   params: mockParamsImageRight,
   fields: mockFields,
-  rendering: { componentName: 'PromoBlock' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsVersionTwo: PromoBlockProps = {
   params: mockParamsVersionTwo,
   fields: mockFields,
-  rendering: { componentName: 'PromoBlock' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsVersionTwoImageRight: PromoBlockProps = {
   params: mockParamsVersionTwoImageRight,
   fields: mockFields,
-  rendering: { componentName: 'PromoBlock' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutLink: PromoBlockProps = {
   params: mockParamsImageLeft,
   fields: mockFieldsWithoutLink,
-  rendering: { componentName: 'PromoBlock' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutDescription: PromoBlockProps = {
   params: mockParamsImageLeft,
   fields: mockFieldsWithoutDescription,
-  rendering: { componentName: 'PromoBlock' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutParams: PromoBlockProps = {
   params: mockParamsDefault,
   fields: mockFields,
-  rendering: { componentName: 'PromoBlock' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutFields: PromoBlockProps = {
   params: mockParamsImageLeft,
-  fields: null as any,
-  rendering: { componentName: 'PromoBlock' } as any,
+  fields: null as unknown as PromoBlockProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 

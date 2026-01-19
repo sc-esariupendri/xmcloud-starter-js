@@ -1,8 +1,26 @@
-import { Field } from '@sitecore-content-sdk/nextjs';
+import { Field, ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import {
   TestimonialCarouselProps,
   TestimonialCarouselItemProps,
 } from '@/components/testimonial-carousel/testimonial-carousel.props';
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    name: 'normal' as PageMode['name'],
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
+};
 
 // Mock testimonial items
 export const mockTestimonialItem1: TestimonialCarouselItemProps = {
@@ -52,6 +70,13 @@ export const mockTestimonialItemWithoutAttribution: TestimonialCarouselItemProps
   },
 };
 
+// Mock rendering object
+const mockRendering: ComponentRendering = {
+  componentName: 'TestimonialCarousel',
+  dataSource: '',
+  params: {},
+};
+
 // Default props with multiple testimonials
 export const defaultProps: TestimonialCarouselProps = {
   fields: {
@@ -66,7 +91,8 @@ export const defaultProps: TestimonialCarouselProps = {
   params: {
     styles: 'custom-carousel-styles',
   },
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],
@@ -84,7 +110,8 @@ export const propsWithSingleTestimonial: TestimonialCarouselProps = {
     },
   },
   params: {},
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],
@@ -102,7 +129,8 @@ export const propsWithTwoTestimonials: TestimonialCarouselProps = {
     },
   },
   params: {},
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],
@@ -120,7 +148,8 @@ export const propsWithTestimonialWithoutAttribution: TestimonialCarouselProps = 
     },
   },
   params: {},
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],
@@ -138,7 +167,8 @@ export const propsWithEmptyTestimonials: TestimonialCarouselProps = {
     },
   },
   params: {},
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],
@@ -148,11 +178,12 @@ export const propsWithEmptyTestimonials: TestimonialCarouselProps = {
 export const propsWithoutChildren: TestimonialCarouselProps = {
   fields: {
     data: {
-      datasource: {} as any,
+      datasource: {} as unknown as typeof defaultProps.fields.data.datasource,
     },
   },
   params: {},
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],
@@ -160,9 +191,10 @@ export const propsWithoutChildren: TestimonialCarouselProps = {
 
 // Props without fields (null scenario)
 export const propsWithoutFields: TestimonialCarouselProps = {
-  fields: null as any,
+  fields: null as unknown as typeof defaultProps.fields,
   params: {},
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],
@@ -170,9 +202,10 @@ export const propsWithoutFields: TestimonialCarouselProps = {
 
 // Props with undefined fields
 export const propsWithUndefinedFields: TestimonialCarouselProps = {
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
   params: {},
-  rendering: { componentName: 'TestimonialCarousel' } as any,
+  rendering: mockRendering,
+  page: mockPage,
   name: 'TestimonialCarousel',
   sitecoreProvider: {},
   Testimonials: [],

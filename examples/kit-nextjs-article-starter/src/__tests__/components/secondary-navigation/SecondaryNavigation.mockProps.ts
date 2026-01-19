@@ -1,3 +1,4 @@
+import { Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import {
   SecondaryNavigationProps,
   SecondaryNavigationPage,
@@ -232,6 +233,30 @@ export const mockFieldsWithoutDatasource = {
   data: {},
 };
 
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'SecondaryNavigation',
+};
+
 // Mock params
 export const mockParams = {
   RenderingIdentifier: 'secondary-navigation-rendering-id',
@@ -240,38 +265,44 @@ export const mockParams = {
 // Complete props combinations
 export const defaultProps: SecondaryNavigationProps = {
   params: mockParams,
-  fields: mockFields as any,
-  rendering: { componentName: 'SecondaryNavigation' } as any,
+  fields: mockFields as SecondaryNavigationProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutChildren: SecondaryNavigationProps = {
   params: mockParams,
-  fields: mockFieldsWithoutChildren as any,
-  rendering: { componentName: 'SecondaryNavigation' } as any,
+  fields: mockFieldsWithoutChildren as SecondaryNavigationProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutParent: SecondaryNavigationProps = {
   params: mockParams,
-  fields: mockFieldsWithoutParent as any,
-  rendering: { componentName: 'SecondaryNavigation' } as any,
+  fields: mockFieldsWithoutParent as SecondaryNavigationProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithFallbackTitles: SecondaryNavigationProps = {
   params: mockParams,
-  fields: mockFieldsWithFallbackTitles as any,
-  rendering: { componentName: 'SecondaryNavigation' } as any,
+  fields: mockFieldsWithFallbackTitles as SecondaryNavigationProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutDatasource: SecondaryNavigationProps = {
   params: mockParams,
-  fields: mockFieldsWithoutDatasource as any,
-  rendering: { componentName: 'SecondaryNavigation' } as any,
+  fields: mockFieldsWithoutDatasource as SecondaryNavigationProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutFields: SecondaryNavigationProps = {
   params: mockParams,
-  fields: null as any,
-  rendering: { componentName: 'SecondaryNavigation' } as any,
+  fields: null as unknown as SecondaryNavigationProps['fields'],
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 

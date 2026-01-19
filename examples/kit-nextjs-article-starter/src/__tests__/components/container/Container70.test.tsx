@@ -5,7 +5,6 @@ import {
   defaultProps,
   propsWithExcludeTopMargin,
   propsWithEmptyPlaceholders,
-  propsWithChildren,
   mockSitecoreContext,
   mockSitecoreContextEditing,
 } from './Container70.mockProps';
@@ -73,7 +72,7 @@ const mockUseSitecore = useSitecore as jest.MockedFunction<typeof useSitecore>;
 describe('Container70 Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+    mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
   });
 
   describe('Basic rendering', () => {
@@ -147,7 +146,7 @@ describe('Container70 Component', () => {
 
   describe('Empty placeholder handling', () => {
     it('should not render when placeholder is empty and not editing', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+      mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
       const { container } = render(<Container70 {...propsWithEmptyPlaceholders} />);
 
       expect(container.firstChild).toBeNull();
@@ -165,10 +164,10 @@ describe('Container70 Component', () => {
     });
 
     it('should render when children are provided', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+      mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
       const propsWithEmptyAndChildren = {
         ...propsWithEmptyPlaceholders,
-        children: 'Child content' as any,
+        children: 'Child content' as unknown as React.ReactElement,
       };
 
       const { container } = render(<Container70 {...propsWithEmptyAndChildren} />);

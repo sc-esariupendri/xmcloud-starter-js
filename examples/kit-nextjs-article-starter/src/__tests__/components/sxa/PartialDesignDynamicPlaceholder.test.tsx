@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import PartialDesignDynamicPlaceholder from '@/components/sxa/PartialDesignDynamicPlaceholder';
+import type { ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithCustomSig,
@@ -12,9 +13,15 @@ import {
   propsWithNumericSig,
 } from './PartialDesignDynamicPlaceholder.mockProps';
 
+// Type definitions for mock components
+interface MockAppPlaceholderProps {
+  name?: string;
+  rendering?: ComponentRendering;
+}
+
 // Mock the Placeholder component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  AppPlaceholder: ({ name, rendering }: any) => (
+  AppPlaceholder: ({ name, rendering }: MockAppPlaceholderProps) => (
     <div data-testid={`placeholder-${name || 'empty'}`} data-rendering={rendering?.componentName || 'unknown'}>
       Dynamic Placeholder Content: {name || 'empty'}
     </div>
@@ -99,7 +106,9 @@ describe('PartialDesignDynamicPlaceholder Component', () => {
 
     it('should handle undefined rendering', () => {
       const propsWithUndefinedRendering = {
-        rendering: undefined as any,
+        rendering: undefined as unknown as ComponentRendering,
+        params: defaultProps.params,
+        page: defaultProps.page,
       };
 
       render(<PartialDesignDynamicPlaceholder {...propsWithUndefinedRendering} />);
@@ -116,7 +125,9 @@ describe('PartialDesignDynamicPlaceholder Component', () => {
           params: {
             sig: 'placeholder-with-dashes_and_underscores',
           },
-        },
+        } as ComponentRendering,
+        params: defaultProps.params,
+        page: defaultProps.page,
       };
 
       render(<PartialDesignDynamicPlaceholder {...propsWithSpecialChars} />);
@@ -181,7 +192,9 @@ describe('PartialDesignDynamicPlaceholder Component', () => {
           params: {
             sig: 'content-{*}',
           },
-        },
+        } as ComponentRendering,
+        params: defaultProps.params,
+        page: defaultProps.page,
       };
 
       render(<PartialDesignDynamicPlaceholder {...propsWithWildcard} />);
@@ -198,7 +211,9 @@ describe('PartialDesignDynamicPlaceholder Component', () => {
           params: {
             sig: 'placeholder-{12345678-1234-1234-1234-123456789abc}',
           },
-        },
+        } as ComponentRendering,
+        params: defaultProps.params,
+        page: defaultProps.page,
       };
 
       render(<PartialDesignDynamicPlaceholder {...propsWithGuid} />);
@@ -215,7 +230,9 @@ describe('PartialDesignDynamicPlaceholder Component', () => {
           params: {
             sig: 'section/subsection/placeholder',
           },
-        },
+        } as ComponentRendering,
+        params: defaultProps.params,
+        page: defaultProps.page,
       };
 
       render(<PartialDesignDynamicPlaceholder {...propsWithPath} />);

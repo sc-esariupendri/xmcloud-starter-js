@@ -1,5 +1,22 @@
 import { TextField } from '@sitecore-content-sdk/nextjs';
 
+// Type for navigation fields structure
+interface NavigationFields {
+  Id: string;
+  DisplayName: string;
+  Title: TextField | null;
+  NavigationTitle: TextField | null;
+  Href: string;
+  Querystring: string;
+  Children: NavigationFields[];
+  Styles: string[];
+}
+
+// Type for fields prop (object with navigation items)
+type NavigationFieldsObject = {
+  [key: string]: NavigationFields;
+};
+
 // Mock page data for useSitecore hook
 export const mockPageData = {
   page: {
@@ -85,22 +102,22 @@ export const mockNavigationFieldsWithChildren = {
   Styles: ['nav-item', 'has-children'],
 };
 
-export const mockNavigationFieldsWithoutTitle = {
+export const mockNavigationFieldsWithoutTitle: NavigationFields = {
   Id: 'nav-3',
   DisplayName: 'About',
-  Title: null as any,
-  NavigationTitle: null as any,
+  Title: null,
+  NavigationTitle: null,
   Href: '/about',
   Querystring: '',
   Children: [],
   Styles: ['nav-item'],
 };
 
-export const mockNavigationFieldsEmpty = {
+export const mockNavigationFieldsEmpty: NavigationFields = {
   Id: '',
   DisplayName: '',
-  Title: null as any,
-  NavigationTitle: null as any,
+  Title: null,
+  NavigationTitle: null,
   Href: '',
   Querystring: '',
   Children: [],
@@ -130,42 +147,42 @@ export const mockParamsWithoutId = {
 // Note: Navigation Default component expects fields to be an object where each property is a navigation item
 export const defaultProps = {
   params: mockParams,
-  fields: { item1: mockNavigationFields } as any,
+  fields: { item1: mockNavigationFields } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
 };
 
 export const propsWithChildren = {
   params: mockParams,
-  fields: { item1: mockNavigationFieldsWithChildren } as any,
+  fields: { item1: mockNavigationFieldsWithChildren } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
 };
 
 export const propsWithoutStyles = {
   params: mockParamsWithoutStyles,
-  fields: { item1: mockNavigationFields } as any,
+  fields: { item1: mockNavigationFields } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
 };
 
 export const propsWithoutId = {
   params: mockParamsWithoutId,
-  fields: { item1: mockNavigationFields } as any,
+  fields: { item1: mockNavigationFields } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
 };
 
 export const propsWithoutTitle = {
   params: mockParams,
-  fields: { item1: mockNavigationFieldsWithoutTitle } as any,
+  fields: { item1: mockNavigationFieldsWithoutTitle } as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
 };
 
 export const propsEmpty = {
   params: mockParams,
-  fields: {} as any,
+  fields: {} as NavigationFieldsObject,
   handleClick: jest.fn(),
   relativeLevel: 0,
 };

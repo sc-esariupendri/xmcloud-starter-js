@@ -1,4 +1,6 @@
-import { Field, ImageField, LinkField, Page, PageModeName } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { EnumValues } from '@/enumerations/generic.enum';
+import { ColorSchemeLimited } from '@/enumerations/ColorSchemeLimited.enum';
 import { PageHeaderProps } from '@/components/page-header/page-header.props';
 
 // Mock page objects
@@ -7,8 +9,8 @@ const mockPageBase: Page = {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal' as PageModeName,
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -25,8 +27,8 @@ const mockPageEditing: Page = {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit' as PageModeName,
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -200,8 +202,8 @@ export const mockFieldsWithoutLogos = {
   },
 };
 
-// Fields with pageTitle instead of pageHeaderTitle
-export const mockFieldsWithPageTitle = {
+// Fields with pageTitle instead of pageHeaderTitle (pageHeaderTitle should be undefined to test fallback)
+export const mockFieldsWithPageTitle: PageHeaderProps['fields'] = {
   data: {
     datasource: {
       imageRequired: {
@@ -215,6 +217,9 @@ export const mockFieldsWithPageTitle = {
       pageTitle: {
         jsonValue: mockPageTitleField,
       },
+      pageHeaderTitle: {
+        jsonValue: undefined as unknown as Field<string>,
+      },
       pageSubtitle: {
         jsonValue: mockPageSubtitleField,
       },
@@ -222,8 +227,8 @@ export const mockFieldsWithPageTitle = {
   },
 };
 
-// Fields without subtitle
-export const mockFieldsWithoutSubtitle = {
+// Fields without subtitle (subtitle should be undefined to test optional field)
+export const mockFieldsWithoutSubtitle: PageHeaderProps['fields'] = {
   data: {
     datasource: {
       imageRequired: {
@@ -237,103 +242,111 @@ export const mockFieldsWithoutSubtitle = {
       pageHeaderTitle: {
         jsonValue: mockPageHeaderTitleField,
       },
+      pageSubtitle: {
+        jsonValue: undefined as unknown as Field<string>,
+      },
     },
   },
 };
 
 // Mock params
-export const mockParamsDefault = {
-  colorScheme: 'default',
-  darkPlayIcon: '0',
+export const mockParamsDefault: PageHeaderProps['params'] = {
+  colorScheme: 'default' as EnumValues<typeof ColorSchemeLimited> | 'default',
+  darkPlayIcon: '0' as '0' | '1',
   RenderingIdentifier: 'page-header-rendering-id',
 };
 
-export const mockParamsPrimary = {
-  colorScheme: 'primary',
-  darkPlayIcon: '0',
+export const mockParamsPrimary: PageHeaderProps['params'] = {
+  colorScheme: 'primary' as EnumValues<typeof ColorSchemeLimited>,
+  darkPlayIcon: '0' as '0' | '1',
   RenderingIdentifier: 'page-header-rendering-id',
 };
 
-export const mockParamsSecondary = {
-  colorScheme: 'secondary',
-  darkPlayIcon: '1',
+export const mockParamsSecondary: PageHeaderProps['params'] = {
+  colorScheme: 'secondary' as EnumValues<typeof ColorSchemeLimited>,
+  darkPlayIcon: '1' as '0' | '1',
   RenderingIdentifier: 'page-header-rendering-id',
 };
 
-export const mockParamsWithDarkIcon = {
-  colorScheme: 'default',
-  darkPlayIcon: '1',
+export const mockParamsWithDarkIcon: PageHeaderProps['params'] = {
+  colorScheme: 'default' as EnumValues<typeof ColorSchemeLimited> | 'default',
+  darkPlayIcon: '1' as '0' | '1',
   RenderingIdentifier: 'page-header-rendering-id',
+};
+
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'PageHeader',
 };
 
 // Complete props combinations
 export const defaultProps: PageHeaderProps = {
   params: mockParamsDefault,
-  fields: mockFields as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsPrimaryColorScheme: PageHeaderProps = {
   params: mockParamsPrimary,
-  fields: mockFields as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsSecondaryColorScheme: PageHeaderProps = {
   params: mockParamsSecondary,
-  fields: mockFields as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsWithDarkIcon: PageHeaderProps = {
   params: mockParamsWithDarkIcon,
-  fields: mockFields as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsWithoutVideo: PageHeaderProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithoutVideo as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFieldsWithoutVideo,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsWithoutLogos: PageHeaderProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithoutLogos as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFieldsWithoutLogos,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsWithPageTitle: PageHeaderProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithPageTitle as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFieldsWithPageTitle,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsWithoutSubtitle: PageHeaderProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithoutSubtitle as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFieldsWithoutSubtitle,
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsWithoutFields: PageHeaderProps = {
   params: mockParamsDefault,
-  fields: null as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: null as unknown as PageHeaderProps['fields'],
+  rendering: mockRendering,
   page: mockPageBase,
 };
 
 export const propsEditing: PageHeaderProps = {
   params: mockParamsDefault,
-  fields: mockFields as any,
-  rendering: { componentName: 'PageHeader' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   page: mockPageEditing,
 };
 

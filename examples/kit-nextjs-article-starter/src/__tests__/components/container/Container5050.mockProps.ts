@@ -1,24 +1,42 @@
-import { ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 
-// Mock Sitecore context
-export const mockSitecoreContext = {
-  page: {
-    mode: {
-      isEditing: false,
-      isPreview: false,
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
     },
-    layout: {},
+  },
+  locale: 'en',
+};
+
+const mockPageEditing: Page = {
+  ...mockPage,
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
   },
 };
 
+// Mock Sitecore context
+export const mockSitecoreContext = {
+  page: mockPage,
+};
+
 export const mockSitecoreContextEditing = {
-  page: {
-    mode: {
-      isEditing: true,
-      isPreview: false,
-    },
-    layout: {},
-  },
+  page: mockPageEditing,
 };
 
 // Default props with placeholders

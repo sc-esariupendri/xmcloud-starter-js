@@ -13,20 +13,20 @@ import {
 
 // Mock UI components
 jest.mock('@/components/ui/breadcrumb', () => ({
-  Breadcrumb: ({ children }: any) => <nav data-testid="breadcrumb">{children}</nav>,
-  BreadcrumbList: ({ children }: any) => <ol data-testid="breadcrumb-list">{children}</ol>,
-  BreadcrumbItem: ({ children }: any) => <li data-testid="breadcrumb-item">{children}</li>,
-  BreadcrumbLink: ({ children, href }: any) => (
+  Breadcrumb: ({ children }: { children?: React.ReactNode }) => <nav data-testid="breadcrumb">{children}</nav>,
+  BreadcrumbList: ({ children }: { children?: React.ReactNode }) => <ol data-testid="breadcrumb-list">{children}</ol>,
+  BreadcrumbItem: ({ children }: { children?: React.ReactNode }) => <li data-testid="breadcrumb-item">{children}</li>,
+  BreadcrumbLink: ({ children, href }: { children?: React.ReactNode; href?: string }) => (
     <a href={href} data-testid="breadcrumb-link">
       {children}
     </a>
   ),
-  BreadcrumbPage: ({ children }: any) => <span data-testid="breadcrumb-page">{children}</span>,
+  BreadcrumbPage: ({ children }: { children?: React.ReactNode }) => <span data-testid="breadcrumb-page">{children}</span>,
   BreadcrumbSeparator: () => <span data-testid="breadcrumb-separator">/</span>,
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: { componentName?: string }) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -124,7 +124,7 @@ describe('Breadcrumbs Component', () => {
 
   describe('Edge cases', () => {
     it('should render home link when no ancestors', () => {
-      render(<Breadcrumbs {...propsWithoutAncestors} />);
+      render(<Breadcrumbs {...(propsWithoutAncestors as unknown as Parameters<typeof Breadcrumbs>[0])} />);
 
       const link = screen.getByTestId('breadcrumb-link');
       expect(link).toHaveTextContent('Home');
@@ -140,14 +140,14 @@ describe('Breadcrumbs Component', () => {
     });
 
     it('should handle empty ancestors array', () => {
-      render(<Breadcrumbs {...propsEmptyAncestors} />);
+      render(<Breadcrumbs {...(propsEmptyAncestors as unknown as Parameters<typeof Breadcrumbs>[0])} />);
 
       // When ancestors array is empty (but defined), should show home link
       expect(screen.getByTestId('breadcrumb')).toBeInTheDocument();
     });
 
     it('should render NoDataFallback when fields is null', () => {
-      render(<Breadcrumbs {...propsWithoutFields} />);
+      render(<Breadcrumbs {...(propsWithoutFields as unknown as Parameters<typeof Breadcrumbs>[0])} />);
 
       const fallback = screen.getByTestId('no-data-fallback');
       expect(fallback).toBeInTheDocument();
@@ -160,9 +160,11 @@ describe('Breadcrumbs Component', () => {
         fields: {
           data: {},
         },
+        rendering: defaultProps.rendering,
+        page: defaultProps.page,
       };
 
-      render(<Breadcrumbs {...propsWithoutDatasource as any} />);
+      render(<Breadcrumbs {...(propsWithoutDatasource as unknown as Parameters<typeof Breadcrumbs>[0])} />);
 
       // Should render home link fallback
       expect(screen.getByTestId('breadcrumb')).toBeInTheDocument();

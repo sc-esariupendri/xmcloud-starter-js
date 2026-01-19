@@ -12,20 +12,21 @@ import {
   propsWithoutDatasource,
   propsWithoutFields,
   mockPageData,
-  mockPageDataEditing,
 } from './AccordionBlock.mockProps';
+import type { Field, RichTextField } from '@sitecore-content-sdk/nextjs';
+import type { AccordionFields, AccordionItemProps } from '@/components/accordion-block/accordion-block.props';
 
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: unknown[]) => {
     return args
       .flat()
       .filter(Boolean)
       .map((arg) => {
         if (typeof arg === 'string') return arg;
-        if (typeof arg === 'object') {
+        if (typeof arg === 'object' && arg !== null) {
           return Object.keys(arg)
-            .filter((key) => arg[key])
+            .filter((key) => (arg as Record<string, unknown>)[key])
             .join(' ');
         }
         return '';
@@ -39,12 +40,12 @@ jest.mock('@/lib/utils', () => ({
 const mockUseSitecore = jest.fn();
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => mockUseSitecore(),
-  Text: ({ field, tag, className }: any) => {
-    const Tag = tag || 'span';
+  Text: ({ field, tag, className }: { field?: Field<string>; tag?: string; className?: string }) => {
+    const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, { className }, field?.value || '');
   },
-  RichText: ({ field, tag, className }: any) => {
-    const Tag = tag || 'div';
+  RichText: ({ field, tag, className }: { field?: RichTextField; tag?: string; className?: string }) => {
+    const Tag = (tag || 'div') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, {
       className,
       dangerouslySetInnerHTML: { __html: field?.value || '' },
@@ -54,7 +55,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 
 // Mock the Button component
 jest.mock('@/components/button-component/ButtonComponent', () => ({
-  ButtonBase: ({ buttonLink }: any) => (
+  ButtonBase: ({ buttonLink }: { buttonLink?: { value?: { href?: string; text?: string } } }) => (
     <a href={buttonLink?.value?.href || '#'} data-testid="accordion-button">
       {buttonLink?.value?.text || 'Button'}
     </a>
@@ -63,7 +64,7 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
 
 // Mock the Accordion components
 jest.mock('@/components/ui/accordion', () => ({
-  Accordion: ({ children, type, className, value, onValueChange }: any) => (
+  Accordion: ({ children, type, className, value, onValueChange }: { children?: React.ReactNode; type?: string; className?: string; value?: string[]; onValueChange?: (value: string[]) => void }) => (
     <div
       className={className}
       data-testid="accordion"
@@ -74,17 +75,17 @@ jest.mock('@/components/ui/accordion', () => ({
       {children}
     </div>
   ),
-  AccordionItem: ({ children, value, className }: any) => (
+  AccordionItem: ({ children, value, className }: { children?: React.ReactNode; value?: string; className?: string }) => (
     <div className={className} data-testid="accordion-item" data-value={value}>
       {children}
     </div>
   ),
-  AccordionTrigger: ({ children, className }: any) => (
+  AccordionTrigger: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <button className={className} data-testid="accordion-trigger">
       {children}
     </button>
   ),
-  AccordionContent: ({ children, className }: any) => (
+  AccordionContent: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className} data-testid="accordion-content">
       {children}
     </div>
@@ -93,7 +94,7 @@ jest.mock('@/components/ui/accordion', () => ({
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: { componentName?: string }) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -276,7 +277,7 @@ describe('AccordionBlock Component', () => {
       it('should render NoDataFallback when fields is undefined', () => {
         const propsWithUndefinedFields = {
           ...defaultProps,
-          fields: undefined as any,
+          fields: undefined as AccordionFields['fields'] | undefined,
         };
 
         render(<AccordionBlockDefault {...propsWithUndefinedFields} />);
@@ -301,7 +302,7 @@ describe('AccordionBlock Component', () => {
                 heading: defaultProps.fields.data.datasource.heading,
                 description: defaultProps.fields.data.datasource.description,
                 link: defaultProps.fields.data.datasource.link,
-                children: {} as any,
+                children: {} as { results?: AccordionItemProps[] },
               },
             },
           },

@@ -1,4 +1,4 @@
-import { Field, ImageField, LinkField, Page, PageModeName } from '@sitecore-content-sdk/nextjs';
+import { Field, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { MultiPromoProps, MultiPromoItemProps } from '@/components/multi-promo/multi-promo.props';
 
 // Mock page objects
@@ -7,8 +7,8 @@ const mockPageBase: Page = {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal' as PageModeName,
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -25,8 +25,8 @@ const mockPageEditing: Page = {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit' as PageModeName,
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -221,9 +221,12 @@ export const mockFieldsWithoutDescription = {
   },
 };
 
-export const mockFieldsWithoutTitle = {
+export const mockFieldsWithoutTitle: MultiPromoProps['fields'] = {
   data: {
     datasource: {
+      title: {
+        jsonValue: { value: '' } as Field<string>,
+      },
       description: {
         jsonValue: mockDescriptionField,
       },
@@ -263,8 +266,14 @@ export const mockFieldsWith3Items = {
   },
 };
 
-export const mockFieldsWithoutDatasource = {
-  data: {},
+export const mockFieldsWithoutDatasource: MultiPromoProps['fields'] = {
+  data: {
+    datasource: {
+      title: {
+        jsonValue: { value: '' } as Field<string>,
+      },
+    },
+  },
 };
 
 // Mock params
@@ -290,11 +299,16 @@ export const mockParamsWithoutStyles = {
   RenderingIdentifier: 'multi-promo-rendering-id',
 };
 
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'MultiPromo',
+};
+
 // Complete props combinations
 export const defaultProps: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: mockFields as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -302,8 +316,8 @@ export const defaultProps: MultiPromoProps = {
 
 export const propsWith4Columns: MultiPromoProps = {
   params: mockParams4Columns,
-  fields: mockFields as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -311,8 +325,8 @@ export const propsWith4Columns: MultiPromoProps = {
 
 export const propsWithPositionStyles: MultiPromoProps = {
   params: mockParamsWithPositionStyles,
-  fields: mockFields as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -320,8 +334,8 @@ export const propsWithPositionStyles: MultiPromoProps = {
 
 export const propsWithoutDescription: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithoutDescription as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFieldsWithoutDescription,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -329,8 +343,8 @@ export const propsWithoutDescription: MultiPromoProps = {
 
 export const propsWithoutTitle: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithoutTitle as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFieldsWithoutTitle,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -338,8 +352,8 @@ export const propsWithoutTitle: MultiPromoProps = {
 
 export const propsWithoutChildren: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithoutChildren as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFieldsWithoutChildren,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -347,8 +361,8 @@ export const propsWithoutChildren: MultiPromoProps = {
 
 export const propsWith3Items: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWith3Items as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFieldsWith3Items,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -356,8 +370,8 @@ export const propsWith3Items: MultiPromoProps = {
 
 export const propsWithoutDatasource: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: mockFieldsWithoutDatasource as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFieldsWithoutDatasource,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -365,8 +379,8 @@ export const propsWithoutDatasource: MultiPromoProps = {
 
 export const propsWithoutFields: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: null as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: null as unknown as MultiPromoProps['fields'],
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageBase,
@@ -374,8 +388,8 @@ export const propsWithoutFields: MultiPromoProps = {
 
 export const propsEditing: MultiPromoProps = {
   params: mockParamsDefault,
-  fields: mockFields as any,
-  rendering: { componentName: 'MultiPromo' } as any,
+  fields: mockFields,
+  rendering: mockRendering,
   name: 'MultiPromo',
   promos: [],
   page: mockPageEditing,

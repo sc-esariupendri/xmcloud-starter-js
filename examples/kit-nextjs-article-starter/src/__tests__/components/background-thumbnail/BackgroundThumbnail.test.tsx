@@ -10,7 +10,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 
 // Mock Badge component
 jest.mock('@/components/ui/badge', () => ({
-  Badge: ({ children, className }: any) => (
+  Badge: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className} data-testid="badge">
       {children}
     </div>
@@ -114,6 +114,7 @@ describe('BackgroundThumbnail Component', () => {
     });
 
     it('should render with image children', () => {
+      // eslint-disable-next-line @next/next/no-img-element
       const imageChild = <img src="/test.jpg" alt="Test" data-testid="image-child" />;
       render(<BackgroundThumbnail>{imageChild}</BackgroundThumbnail>);
       expect(screen.getByTestId('image-child')).toBeInTheDocument();
@@ -154,7 +155,7 @@ describe('BackgroundThumbnail Component', () => {
         },
       });
 
-      const { container } = render(<BackgroundThumbnail>{undefined as any}</BackgroundThumbnail>);
+      const { container } = render(<BackgroundThumbnail>{undefined as unknown as React.ReactElement}</BackgroundThumbnail>);
       expect(container.firstChild).toBeInTheDocument();
       expect(screen.getByText('Update Background')).toBeInTheDocument();
     });
@@ -168,7 +169,7 @@ describe('BackgroundThumbnail Component', () => {
         },
       });
 
-      const { container } = render(<BackgroundThumbnail>{null as any}</BackgroundThumbnail>);
+      const { container } = render(<BackgroundThumbnail>{null as unknown as React.ReactElement}</BackgroundThumbnail>);
       expect(container.firstChild).toBeInTheDocument();
       expect(screen.getByText('Update Background')).toBeInTheDocument();
     });

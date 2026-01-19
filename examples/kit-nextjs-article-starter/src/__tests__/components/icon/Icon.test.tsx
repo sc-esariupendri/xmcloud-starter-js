@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Default as Icon } from '@/components/icon/Icon';
+import type { IconProps } from '@/components/icon/Icon';
 import {
   mockFacebookIconProps,
   mockInstagramIconProps,
@@ -24,9 +25,17 @@ import {
   mockIconWithoutClassName,
 } from './Icon.mockProps';
 
+// Type definition for SVG icon component props
+interface MockSvgIconProps {
+  className?: string;
+  isAriaHidden?: boolean;
+  altText?: string;
+  [key: string]: unknown;
+}
+
 // Mock the SVG icon components
 const createMockSvgComponent = (name: string) => {
-  return ({ className, isAriaHidden, altText, ...rest }: any) => {
+  const MockSvgComponent = ({ className, isAriaHidden, altText, ...rest }: MockSvgIconProps) => {
     const props = {
       'data-testid': `icon-${name}`,
       className,
@@ -36,6 +45,8 @@ const createMockSvgComponent = (name: string) => {
     };
     return React.createElement('svg', props, name);
   };
+  MockSvgComponent.displayName = `Mock${name}`;
+  return MockSvgComponent;
 };
 
 jest.mock('@/components/icon/svg/FacebookIcon.dev.tsx', () => ({
@@ -437,7 +448,7 @@ describe('Icon Component', () => {
 
   describe('Edge cases', () => {
     it('should handle undefined iconName gracefully', async () => {
-      const { container } = render(<Icon iconName={undefined as any} />);
+      const { container } = render(<Icon iconName={undefined as unknown as IconProps['iconName']} />);
 
       // Should return null for undefined iconName
       await waitFor(() => {

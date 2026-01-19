@@ -1,5 +1,30 @@
-import { ImageField, LinkField, TextField } from '@sitecore-content-sdk/nextjs';
+import { ImageField, LinkField, TextField, ComponentRendering, Page, PageMode, ComponentParams } from '@sitecore-content-sdk/nextjs';
 import { VideoComponentProps, VideoParams, VideoFields } from '@/components/video/video-props';
+
+// Mock rendering object
+const mockRendering: ComponentRendering = {
+  componentName: 'Video',
+  dataSource: '',
+  params: {},
+};
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    name: 'normal' as PageMode['name'],
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
+};
 
 // Mock video link fields
 export const mockYouTubeVideo: LinkField = {
@@ -81,26 +106,26 @@ export const mockVideoFieldsMinimal: VideoFields = {
   video: mockYouTubeVideo,
 };
 
-// Mock video params
-export const mockVideoParamsDefault: VideoParams = {
+// Mock video params (must be ComponentParams & VideoParams)
+export const mockVideoParamsDefault: ComponentParams & VideoParams = {
   useModal: '1',
   darkPlayIcon: '0',
   displayIcon: '1',
 };
 
-export const mockVideoParamsNoModal: VideoParams = {
+export const mockVideoParamsNoModal: ComponentParams & VideoParams = {
   useModal: '0',
   darkPlayIcon: '0',
   displayIcon: '1',
 };
 
-export const mockVideoParamsDarkIcon: VideoParams = {
+export const mockVideoParamsDarkIcon: ComponentParams & VideoParams = {
   useModal: '1',
   darkPlayIcon: '1',
   displayIcon: '1',
 };
 
-export const mockVideoParamsNoDisplayIcon: VideoParams = {
+export const mockVideoParamsNoDisplayIcon: ComponentParams & VideoParams = {
   useModal: '1',
   darkPlayIcon: '0',
   displayIcon: '0',
@@ -110,42 +135,48 @@ export const mockVideoParamsNoDisplayIcon: VideoParams = {
 export const defaultProps: VideoComponentProps = {
   fields: mockVideoFields,
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without image (will use YouTube thumbnail)
 export const propsWithoutImage: VideoComponentProps = {
   fields: mockVideoFieldsWithoutImage,
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without modal
 export const propsWithoutModal: VideoComponentProps = {
   fields: mockVideoFields,
   params: mockVideoParamsNoModal,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with dark play icon
 export const propsWithDarkIcon: VideoComponentProps = {
   fields: mockVideoFields,
   params: mockVideoParamsDarkIcon,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without display icon
 export const propsWithoutDisplayIcon: VideoComponentProps = {
   fields: mockVideoFields,
   params: mockVideoParamsNoDisplayIcon,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with minimal fields
 export const propsMinimal: VideoComponentProps = {
   fields: mockVideoFieldsMinimal,
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with Vimeo video
@@ -155,14 +186,16 @@ export const propsWithVimeoVideo: VideoComponentProps = {
     video: mockVimeoVideo,
   },
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without video URL
 export const propsWithoutVideoUrl: VideoComponentProps = {
   fields: mockVideoFieldsWithoutVideo,
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with custom play button class
@@ -170,21 +203,24 @@ export const propsWithCustomButtonClass: VideoComponentProps = {
   fields: mockVideoFields,
   params: mockVideoParamsDefault,
   playButtonClassName: 'custom-play-button',
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without fields (null scenario)
 export const propsWithoutFields: VideoComponentProps = {
-  fields: null as any,
+  fields: null as unknown as typeof defaultProps.fields,
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with undefined fields
 export const propsWithUndefinedFields: VideoComponentProps = {
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with empty video
@@ -194,12 +230,15 @@ export const propsWithEmptyVideo: VideoComponentProps = {
     image: mockVideoImage,
   },
   params: mockVideoParamsDefault,
-  rendering: { componentName: 'Video' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
-// Props without params
+// Props without params (use empty params object)
 export const propsWithoutParams: VideoComponentProps = {
   fields: mockVideoFields,
-  rendering: { componentName: 'Video' } as any,
+  params: {} as ComponentParams & VideoParams,
+  rendering: mockRendering,
+  page: mockPage,
 };
 

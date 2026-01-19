@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Default as SecondaryNavigation } from '@/components/secondary-navigation/SecondaryNavigation';
+import type { SecondaryNavigationProps } from '@/components/secondary-navigation/secondary-navigation.props';
 import {
   defaultProps,
   propsWithoutChildren,
@@ -10,9 +11,47 @@ import {
   propsWithoutFields,
 } from './SecondaryNavigation.mockProps';
 
+// Type definitions for mock components
+interface MockNextLinkProps {
+  children?: React.ReactNode;
+  href?: string;
+  className?: string;
+}
+
+interface MockButtonProps {
+  children?: React.ReactNode;
+  asChild?: boolean;
+  variant?: string;
+  className?: string;
+  [key: string]: unknown;
+}
+
+interface MockNavigationRootProps {
+  children?: React.ReactNode;
+  className?: string;
+  orientation?: string;
+}
+
+interface MockNavigationListProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockNavigationItemProps {
+  children?: React.ReactNode;
+}
+
+interface MockChevronIconProps {
+  className?: string;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock dependencies
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -33,12 +72,16 @@ jest.mock('@/lib/utils', () => ({
 }));
 
 jest.mock('next/link', () => {
-  return ({ children, href, className }: any) =>
+  const MockNextLink = ({ children, href, className }: MockNextLinkProps) =>
     React.createElement('a', { href, className, 'data-testid': 'next-link' }, children);
+  return {
+    __esModule: true,
+    default: MockNextLink,
+  };
 });
 
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, asChild, variant, className, ...props }: any) => {
+  Button: ({ children, asChild, variant, className, ...props }: MockButtonProps) => {
     // The Button component with asChild passes props to the child link
     // In the actual component, it doesn't render the Button wrapper
     if (asChild && React.isValidElement(children)) {
@@ -53,21 +96,21 @@ jest.mock('@/components/ui/button', () => ({
 }));
 
 jest.mock('@radix-ui/react-navigation-menu', () => ({
-  Root: ({ children, className, orientation }: any) => (
+  Root: ({ children, className, orientation }: MockNavigationRootProps) => (
     <nav data-testid="navigation-root" data-orientation={orientation} className={className}>
       {children}
     </nav>
   ),
-  List: ({ children, className }: any) => (
+  List: ({ children, className }: MockNavigationListProps) => (
     <ul data-testid="navigation-list" className={className}>
       {children}
     </ul>
   ),
-  Item: ({ children }: any) => <li data-testid="navigation-item">{children}</li>,
+  Item: ({ children }: MockNavigationItemProps) => <li data-testid="navigation-item">{children}</li>,
 }));
 
 jest.mock('@radix-ui/react-icons', () => ({
-  ChevronDownIcon: ({ className }: any) => (
+  ChevronDownIcon: ({ className }: MockChevronIconProps) => (
     <span data-testid="chevron-icon" className={className}>
       ▼
     </span>
@@ -75,7 +118,7 @@ jest.mock('@radix-ui/react-icons', () => ({
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -289,7 +332,7 @@ describe('SecondaryNavigation Component', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as SecondaryNavigationProps['fields'],
       };
 
       render(<SecondaryNavigation {...propsWithUndefinedFields} />);

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as GlobalFooter } from '@/components/global-footer/GlobalFooter';
+import type { GlobalFooterProps, FooterSocialLink } from '@/components/global-footer/global-footer.props';
 import {
   defaultProps,
   propsWithoutPromoLink,
@@ -9,7 +10,6 @@ import {
   propsWithoutFields,
   propsEditing,
   mockPageData,
-  mockPageDataEditing,
 } from './GlobalFooter.mockProps';
 
 // Mock the cn utility
@@ -94,6 +94,7 @@ interface MockNoDataFallbackProps {
 jest.mock('@/components/logo/Logo.dev', () => ({
   Default: ({ logo }: MockLogoProps) => (
     <div data-testid="footer-logo">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={logo?.value?.src} alt={logo?.value?.alt} />
     </div>
   ),
@@ -125,7 +126,10 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
       data-editing={isPageEditing}
       className={className}
     >
-      {icon?.value?.src && <img src={icon.value.src} alt={icon.value.alt} />}
+      {icon?.value?.src && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={icon.value.src} alt={icon.value.alt} />
+      )}
     </button>
   ),
 }));
@@ -313,7 +317,7 @@ describe('GlobalFooter Component', () => {
     it('should render NoDataFallback when fields is undefined', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
-        fields: undefined as any,
+        fields: undefined as unknown as GlobalFooterProps['fields'],
       };
 
       render(<GlobalFooter {...propsWithUndefinedFields} />);
@@ -336,7 +340,7 @@ describe('GlobalFooter Component', () => {
           data: {
             datasource: {
               ...defaultProps.fields.data.datasource,
-              footerSocialLinks: {} as any,
+              footerSocialLinks: {} as unknown as { results: FooterSocialLink[] },
             },
           },
         },

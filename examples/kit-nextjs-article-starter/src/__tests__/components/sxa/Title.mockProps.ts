@@ -91,7 +91,7 @@ export const mockFields = {
 
 export const mockFieldsWithoutDatasource = {
   data: {
-    datasource: null as any,
+    datasource: null as unknown as typeof mockFields.data.datasource,
     contextItem: {
       url: {
         path: '/context-path',

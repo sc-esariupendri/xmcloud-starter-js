@@ -1,13 +1,13 @@
-import { ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 
 // Mock page object with all required Page properties
-const mockPageBase = {
+const mockPageBase: Page = {
   mode: {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal',
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -19,14 +19,14 @@ const mockPageBase = {
   locale: 'en',
 };
 
-const mockPageEditing = {
+const mockPageEditing: Page = {
   ...mockPageBase,
   mode: {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit',
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
 };

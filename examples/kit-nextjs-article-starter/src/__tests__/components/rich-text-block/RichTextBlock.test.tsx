@@ -11,12 +11,11 @@ import {
   propsWithUndefinedText,
   propsWithComplexHtml,
   propsWithMultipleStyles,
-  mockFields,
 } from './RichTextBlock.mockProps';
 
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -36,7 +35,7 @@ jest.mock('@/lib/utils', () => ({
   },
 }));
 
-// RichText component is already mocked in setup.js
+// RichText component is already mocked in jest.setup.js
 
 describe('RichTextBlock Component', () => {
 
@@ -146,13 +145,14 @@ describe('RichTextBlock Component', () => {
     });
 
     it('should pass the correct field to RichText component', () => {
-      const { RichText } = require('@sitecore-content-sdk/nextjs');
-      
+      // RichText is already mocked in jest.setup.js
+      // We can verify it was called correctly by checking the rendered output
       render(<RichTextBlock {...defaultProps} />);
 
-      expect(RichText).toHaveBeenCalledWith(
-        { field: mockFields.text },
-        undefined
+      // Verify that the RichText content is rendered with the correct field value
+      expect(screen.getByTestId('rich-text-content')).toBeInTheDocument();
+      expect(screen.getByTestId('rich-text-content')).toHaveTextContent(
+        'This is a test rich text content'
       );
     });
   });

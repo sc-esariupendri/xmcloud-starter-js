@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as MediaSection } from '@/components/media-section/MediaSection.dev';
+import type { ImageField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithOnlyVideo,
@@ -16,6 +17,13 @@ import {
   mockSitecoreContextEditing,
 } from './MediaSection.mockProps';
 
+// Type definitions for mock components
+interface MockImageWrapperProps {
+  image?: ImageField;
+  className?: string;
+  alt?: string;
+}
+
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: jest.fn(),
@@ -23,10 +31,11 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 
 // Mock ImageWrapper component
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: ({ image, className, alt }: any) => (
+  Default: ({ image, className, alt }: MockImageWrapperProps) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={image?.value?.src}
-      alt={alt || image?.value?.alt}
+      src={image?.value?.src as string | undefined}
+      alt={alt || (image?.value?.alt as string | undefined)}
       className={className}
       data-testid="image-wrapper"
     />
@@ -52,7 +61,7 @@ jest.mock('next/image', () => ({
 
 // Mock cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => args.filter(Boolean).join(' '),
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => args.filter(Boolean).join(' '),
 }));
 
 import { useSitecore } from '@sitecore-content-sdk/nextjs';
@@ -66,8 +75,8 @@ const mockUseIntersectionObserver = useIntersectionObserver as jest.MockedFuncti
 describe('MediaSection Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
-    mockUseIntersectionObserver.mockReturnValue([true, { current: null } as any]);
+    mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
+    mockUseIntersectionObserver.mockReturnValue([true, { current: null } as unknown as React.RefObject<HTMLDivElement | null>]);
 
     // Mock HTMLMediaElement play and pause methods
     window.HTMLMediaElement.prototype.play = jest.fn(() => Promise.resolve());
@@ -204,7 +213,7 @@ describe('MediaSection Component', () => {
 
   describe('Intersection observer', () => {
     it('should handle video when not intersecting', () => {
-      mockUseIntersectionObserver.mockReturnValue([false, { current: null } as any]);
+      mockUseIntersectionObserver.mockReturnValue([false, { current: null } as unknown as React.RefObject<HTMLDivElement | null>]);
 
       const { container } = render(<MediaSection {...defaultProps} />);
 
@@ -213,7 +222,7 @@ describe('MediaSection Component', () => {
     });
 
     it('should handle video when intersecting', () => {
-      mockUseIntersectionObserver.mockReturnValue([true, { current: null } as any]);
+      mockUseIntersectionObserver.mockReturnValue([true, { current: null } as unknown as React.RefObject<HTMLDivElement | null>]);
 
       const { container } = render(<MediaSection {...defaultProps} />);
 
@@ -254,7 +263,7 @@ describe('MediaSection Component', () => {
     });
 
     it('should handle undefined image gracefully', () => {
-      const { container } = render(<MediaSection {...propsWithOnlyVideo} />);
+      render(<MediaSection {...propsWithOnlyVideo} />);
 
       const imageWrapper = screen.queryByTestId('image-wrapper');
       expect(imageWrapper).not.toBeInTheDocument();
@@ -270,7 +279,7 @@ describe('MediaSection Component', () => {
 
   describe('Editing mode', () => {
     it('should handle editing mode with relative URLs', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContextEditing as any);
+      mockUseSitecore.mockReturnValue(mockSitecoreContextEditing as ReturnType<typeof useSitecore>);
 
       const { container } = render(<MediaSection {...defaultProps} />);
 

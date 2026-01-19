@@ -1,5 +1,10 @@
 import { Field } from '@sitecore-content-sdk/nextjs';
 
+// Type for RichText fields
+interface RichTextFields {
+  Text: Field<string>;
+}
+
 // Mock text field with HTML content
 export const mockTextField: Field<string> = {
   value: '<p>This is rich text content</p><h2>Heading</h2><ul><li>Item 1</li><li>Item 2</li></ul>',
@@ -85,7 +90,7 @@ export const propsWithoutFields = {
     styles: 'no-fields-style',
     RenderingIdentifier: 'no-fields-id',
   },
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
 };
 
 // Props without Text field
@@ -94,7 +99,7 @@ export const propsWithoutTextField = {
     styles: 'no-text-field',
     RenderingIdentifier: 'no-text-field-id',
   },
-  fields: {} as any,
+  fields: {} as unknown as RichTextFields,
 };
 
 // Props with null fields
@@ -103,7 +108,7 @@ export const propsWithNullFields = {
     styles: 'null-fields',
     RenderingIdentifier: 'null-fields-id',
   },
-  fields: null as any,
+  fields: null as unknown as typeof defaultProps.fields,
 };
 
 // Props with null Text field
@@ -113,13 +118,13 @@ export const propsWithNullTextField = {
     RenderingIdentifier: 'null-text-id',
   },
   fields: {
-    Text: null as any,
+    Text: null as unknown as Field<string>,
   },
 };
 
 // Props with undefined params
 export const propsWithUndefinedParams = {
-  params: {} as any,
+  params: {} as typeof defaultProps.params,
   fields: {
     Text: mockTextField,
   },
@@ -130,7 +135,7 @@ export const propsWithUndefinedId = {
   params: {
     styles: 'custom-style',
     RenderingIdentifier: undefined,
-  } as any,
+  } as unknown as typeof defaultProps.params,
   fields: {
     Text: mockTextField,
   },

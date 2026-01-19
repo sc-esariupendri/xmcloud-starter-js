@@ -1,4 +1,4 @@
-import { Field, ImageField, LinkField, Page } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { GlobalFooterProps, FooterSocialLink } from '@/components/global-footer/global-footer.props';
 
 // Mock page object with all required Page properties
@@ -7,8 +7,8 @@ const mockPageBase: Page = {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal' as const,
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -25,8 +25,8 @@ const mockPageEditing: Page = {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit' as const,
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -193,7 +193,7 @@ export const mockFieldsWithoutPromoLink = {
         jsonValue: mockFooterPromoDescription,
       },
       footerPromoLink: {
-        jsonValue: undefined as any,
+        jsonValue: undefined as unknown as LinkField,
       },
       footerSocialLinks: {
         results: [mockSocialLink1, mockSocialLink2],
@@ -280,7 +280,7 @@ export const propsWithoutFields: GlobalFooterProps = {
   params: {
     RenderingIdentifier: 'footer-rendering-id',
   },
-  fields: undefined as GlobalFooterProps['fields'],
+  fields: undefined as unknown as GlobalFooterProps['fields'],
   rendering: { componentName: 'GlobalFooter' } as GlobalFooterProps['rendering'],
   page: mockPageBase,
 };

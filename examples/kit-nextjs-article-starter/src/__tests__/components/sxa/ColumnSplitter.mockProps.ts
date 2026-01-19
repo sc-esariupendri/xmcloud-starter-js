@@ -1,7 +1,27 @@
-import { ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
 
 // Default props with all columns enabled
 export const defaultProps = {
+  page: mockPage,
   params: {
     EnabledPlaceholders: '1,2,3',
     ColumnWidth1: 'col-4',
@@ -32,6 +52,7 @@ export const defaultProps = {
 
 // Props with two columns
 export const propsWithTwoColumns = {
+  page: mockPage,
   params: {
     EnabledPlaceholders: '1,2',
     ColumnWidth1: 'col-6',
@@ -58,6 +79,7 @@ export const propsWithTwoColumns = {
 
 // Props with single column
 export const propsWithOneColumn = {
+  page: mockPage,
   params: {
     EnabledPlaceholders: '1',
     ColumnWidth1: 'col-12',
@@ -80,6 +102,7 @@ export const propsWithOneColumn = {
 
 // Props without column widths
 export const propsWithoutColumnWidths = {
+  page: mockPage,
   params: {
     EnabledPlaceholders: '1,2',
     RenderingIdentifier: 'no-width-splitter',
@@ -98,6 +121,7 @@ export const propsWithoutColumnWidths = {
 
 // Props without column styles
 export const propsWithoutColumnStyles = {
+  page: mockPage,
   params: {
     EnabledPlaceholders: '1,2',
     ColumnWidth1: 'col-6',
@@ -120,6 +144,7 @@ export const propsWithoutColumnStyles = {
 
 // Props with empty enabled placeholders
 export const propsWithNoColumns = {
+  page: mockPage,
   params: {
     EnabledPlaceholders: '',
     RenderingIdentifier: 'empty-splitter',
@@ -138,6 +163,7 @@ export const propsWithNoColumns = {
 
 // Props with maximum columns (8)
 export const propsWithMaxColumns = {
+  page: mockPage,
   params: {
     EnabledPlaceholders: '1,2,3,4,5,6,7,8',
     ColumnWidth1: 'col-3',

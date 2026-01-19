@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as Logo } from '@/components/logo/Logo.dev';
+import type { LogoProps } from '@/components/logo/logo.props';
+import type { ImageField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutClassName,
@@ -13,9 +15,17 @@ import {
   propsWithEmptyClassName,
 } from './Logo.mockProps';
 
+// Type definitions for mock components
+interface MockImageWrapperProps {
+  image?: ImageField;
+  className?: string;
+  sizes?: string;
+  alt?: string;
+}
+
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat()
       .filter(Boolean)
@@ -35,9 +45,10 @@ jest.mock('@/lib/utils', () => ({
 
 // Mock ImageWrapper component
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: ({ image, className, sizes, alt }: any) => (
+  Default: ({ image, className, sizes, alt }: MockImageWrapperProps) => (
     <div data-testid="image-wrapper" className={className} data-sizes={sizes} data-alt={alt}>
-      <img src={image?.value?.src} alt={alt || image?.value?.alt} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={image?.value?.src as string | undefined} alt={alt || (image?.value?.alt as string | undefined)} />
     </div>
   ),
 }));
@@ -193,11 +204,11 @@ describe('Logo Component', () => {
     });
 
     it('should handle missing logo.value.src gracefully', () => {
-      const propsWithMissingSrc = {
+      const propsWithMissingSrc: LogoProps = {
         ...defaultProps,
         logo: {
           value: {
-            src: null as any,
+            src: null as unknown as string,
             alt: 'Logo',
             width: 164,
             height: 40,

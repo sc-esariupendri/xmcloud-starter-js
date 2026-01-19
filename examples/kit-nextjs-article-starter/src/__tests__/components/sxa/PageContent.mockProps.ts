@@ -96,7 +96,7 @@ export const propsWithoutFields = {
     Styles: 'no-fields-style',
     RenderingIdentifier: 'no-fields-id',
   },
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
 };
 
 // Props without Content field
@@ -105,12 +105,12 @@ export const propsWithoutContentField = {
     Styles: 'no-content-field',
     RenderingIdentifier: 'no-content-field-id',
   },
-  fields: {} as any,
+  fields: {} as unknown as typeof defaultProps.fields,
 };
 
 // Props with undefined params
 export const propsWithUndefinedParams = {
-  params: {} as any,
+  params: {} as typeof defaultProps.params,
   fields: {
     Content: mockContentField,
   },
@@ -123,7 +123,7 @@ export const propsWithNullContent = {
     RenderingIdentifier: 'null-content-id',
   },
   fields: {
-    Content: null as any,
+    Content: null as unknown as RichTextField,
   },
 };
 

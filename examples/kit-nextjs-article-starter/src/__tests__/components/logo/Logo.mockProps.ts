@@ -39,7 +39,7 @@ export const mockLogoFieldWithoutAlt: ImageField = {
 };
 
 export const mockLogoFieldWithoutValue: ImageField = {
-  value: undefined as any,
+  value: undefined as unknown as ImageField['value'],
 };
 
 export const mockLogoFieldWithoutSrc: ImageField = {
@@ -48,7 +48,7 @@ export const mockLogoFieldWithoutSrc: ImageField = {
     alt: 'Logo',
     width: 164,
     height: 40,
-  } as any,
+  },
 };
 
 // Complete props combinations

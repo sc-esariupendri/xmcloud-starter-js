@@ -1,5 +1,30 @@
-import { Field, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, LinkField, ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { TopicListingProps, TopicItemProps } from '@/components/topic-listing/topic-listing.props';
+
+// Mock rendering object
+const mockRendering: ComponentRendering = {
+  componentName: 'TopicListing',
+  dataSource: '',
+  params: {},
+};
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    name: 'normal' as PageMode['name'],
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
+};
 
 // Mock topic items
 export const mockTopicItem1: TopicItemProps = {
@@ -78,7 +103,8 @@ export const defaultProps: TopicListingProps = {
   params: {
     backgroundTheme: 'shooting-star',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without shooting star theme
@@ -98,7 +124,8 @@ export const propsWithoutShootingStar: TopicListingProps = {
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with shooting star theme
@@ -118,7 +145,8 @@ export const propsWithShootingStar: TopicListingProps = {
   params: {
     backgroundTheme: 'shooting-star',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with single topic
@@ -138,7 +166,8 @@ export const propsWithSingleTopic: TopicListingProps = {
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without title
@@ -158,7 +187,8 @@ export const propsWithoutTitle: TopicListingProps = {
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with empty topics array
@@ -178,7 +208,8 @@ export const propsWithEmptyTopics: TopicListingProps = {
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without children
@@ -195,25 +226,28 @@ export const propsWithoutChildren: TopicListingProps = {
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without fields (null scenario)
 export const propsWithoutFields: TopicListingProps = {
-  fields: null as any,
+  fields: null as unknown as typeof defaultProps.fields,
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with undefined fields
 export const propsWithUndefinedFields: TopicListingProps = {
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with topics including one without link
@@ -233,6 +267,7 @@ export const propsWithMixedTopics: TopicListingProps = {
   params: {
     backgroundTheme: 'default',
   },
-  rendering: { componentName: 'TopicListing' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 

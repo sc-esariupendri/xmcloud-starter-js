@@ -29,8 +29,10 @@ jest.mock('next/router', () => ({
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props) => {
+    // Filter out fill and other Next.js Image specific props that aren't valid HTML attributes
+    const { fill, priority, quality, placeholder, blurDataURL, unoptimized, loader, ...imgProps } = props || {};
     // eslint-disable-next-line @next/next/no-img-element
-    return React.createElement('img', props);
+    return React.createElement('img', imgProps);
   },
 }));
 
@@ -74,7 +76,10 @@ beforeAll(() => {
       message.includes('was not wrapped in act') ||
       message.includes('Each child in a list should have a unique') ||
       message.includes('Not implemented: navigation') ||
-      message.includes('Warning: ReactDOM.render')
+      message.includes('Warning: ReactDOM.render') ||
+      message.includes('React does not recognize the `fill` prop') ||
+      message.includes('fill="true"') ||
+      message.includes('Received `true` for a non-boolean attribute `fill`')
     ) {
       return;
     }

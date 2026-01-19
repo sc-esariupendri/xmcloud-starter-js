@@ -2,12 +2,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { AccordionBlockItem } from '@/components/accordion-block/AccordionBlockItem.dev';
 import { mockAccordionItem1, mockAccordionItem2 } from './AccordionBlock.mockProps';
+import type { Field, RichTextField } from '@sitecore-content-sdk/nextjs';
 
 // Mock the Sitecore Content SDK components
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field }: any) => <span data-testid="accordion-item-heading">{field?.value || ''}</span>,
-  RichText: ({ field, tag }: any) => {
-    const Tag = tag || 'div';
+  Text: ({ field }: { field?: Field<string> }) => <span data-testid="accordion-item-heading">{field?.value || ''}</span>,
+  RichText: ({ field, tag }: { field?: RichTextField; tag?: string }) => {
+    const Tag = (tag || 'div') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, {
       'data-testid': 'accordion-item-description',
       dangerouslySetInnerHTML: { __html: field?.value || '' },
@@ -17,17 +18,17 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 
 // Mock the Accordion UI components
 jest.mock('@/components/ui/accordion', () => ({
-  AccordionItem: ({ children, value, className }: any) => (
+  AccordionItem: ({ children, value, className }: { children?: React.ReactNode; value?: string; className?: string }) => (
     <div className={className} data-testid="accordion-item" data-value={value}>
       {children}
     </div>
   ),
-  AccordionTrigger: ({ children, className }: any) => (
+  AccordionTrigger: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <button className={className} data-testid="accordion-trigger">
       {children}
     </button>
   ),
-  AccordionContent: ({ children, className }: any) => (
+  AccordionContent: ({ children, className }: { children?: React.ReactNode; className?: string }) => (
     <div className={className} data-testid="accordion-content">
       {children}
     </div>
@@ -174,7 +175,7 @@ describe('AccordionBlockItem Component', () => {
     it('should handle missing heading gracefully', () => {
       const itemWithoutHeading = {
         heading: {
-          jsonValue: null as any,
+          jsonValue: undefined as Field<string> | undefined,
         },
         description: mockAccordionItem1.description,
       };
@@ -182,19 +183,23 @@ describe('AccordionBlockItem Component', () => {
       render(<AccordionBlockItem index={0} child={itemWithoutHeading} />);
 
       expect(screen.getByTestId('accordion-trigger')).toBeInTheDocument();
+      // Verify that heading text is not rendered when jsonValue is undefined
+      expect(screen.queryByTestId('accordion-item-heading')).not.toBeInTheDocument();
     });
 
     it('should handle missing description gracefully', () => {
       const itemWithoutDescription = {
         heading: mockAccordionItem1.heading,
         description: {
-          jsonValue: null as any,
+          jsonValue: undefined as RichTextField | undefined,
         },
       };
 
       render(<AccordionBlockItem index={0} child={itemWithoutDescription} />);
 
       expect(screen.getByTestId('accordion-content')).toBeInTheDocument();
+      // Verify that description is not rendered when jsonValue is undefined
+      expect(screen.queryByTestId('accordion-item-description')).not.toBeInTheDocument();
     });
 
     it('should handle empty heading value', () => {

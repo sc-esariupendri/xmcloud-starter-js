@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as Container } from '@/components/sxa/Container';
+import type { ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithContainer,
@@ -10,10 +11,16 @@ import {
   propsWithoutId,
 } from './Container.mockProps';
 
+// Type definition for AppPlaceholder mock
+interface MockAppPlaceholderProps {
+  name?: string;
+  rendering?: ComponentRendering;
+}
+
 // Mock the Placeholder component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  AppPlaceholder: ({ name, rendering }: any) => (
-    <div data-testid={`placeholder-${name}`} data-rendering={rendering.componentName}>
+  AppPlaceholder: ({ name, rendering }: MockAppPlaceholderProps) => (
+    <div data-testid={`placeholder-${name || 'undefined'}`} data-rendering={rendering?.componentName}>
       Placeholder Content
     </div>
   ),
@@ -162,13 +169,14 @@ describe('Container Component', () => {
 
   describe('Edge cases', () => {
     it('should handle missing params gracefully', () => {
-      const emptyParams = {} as any;
+      const emptyParams = {} as typeof defaultProps.params;
       const propsWithoutParams = {
         rendering: {
           ...defaultProps.rendering,
           params: emptyParams,
         },
         params: emptyParams,
+        page: defaultProps.page,
       };
 
       render(<Container {...propsWithoutParams} />);
@@ -180,8 +188,8 @@ describe('Container Component', () => {
     it('should handle undefined DynamicPlaceholderId', () => {
       const undefinedPlaceholderParams = {
         ...defaultProps.params,
-        DynamicPlaceholderId: undefined as any,
-      };
+        DynamicPlaceholderId: undefined,
+      } as unknown as typeof defaultProps.params;
       
       const propsWithUndefinedPlaceholder = {
         ...defaultProps,

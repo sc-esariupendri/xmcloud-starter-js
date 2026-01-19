@@ -1,5 +1,12 @@
 import { LinkField, TextField } from '@sitecore-content-sdk/nextjs';
 
+// Type for link list item
+interface LinkListItem {
+  field?: {
+    link?: LinkField;
+  };
+}
+
 // Mock link fields
 export const mockLink1: LinkField = {
   value: {
@@ -189,9 +196,9 @@ export const propsWithInvalidLinks = {
         children: {
           results: [
             { field: { link: mockLink1 } },
-            { field: { link: undefined } } as any,
+            { field: { link: undefined } } as unknown as LinkListItem,
             { field: { link: mockLink2 } },
-            { field: undefined } as any,
+            { field: undefined } as unknown as LinkListItem,
           ],
         },
         field: {
@@ -210,7 +217,7 @@ export const propsWithoutDatasource = {
   },
   fields: {
     data: undefined,
-  } as any,
+  } as unknown as typeof defaultProps.fields,
 };
 
 // Props with empty fields
@@ -219,7 +226,7 @@ export const propsWithEmptyFields = {
     styles: 'empty-fields',
     RenderingIdentifier: 'empty-fields-id',
   },
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
 };
 
 // Props with empty results

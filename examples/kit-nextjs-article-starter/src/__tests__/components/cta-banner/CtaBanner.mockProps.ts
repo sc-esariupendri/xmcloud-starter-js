@@ -1,5 +1,6 @@
-import { Field, LinkField, ComponentRendering, Page } from '@sitecore-content-sdk/nextjs';
+import { Field, LinkField, ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { ColorSchemeLimited as ColorScheme } from '@/enumerations/ColorSchemeLimited.enum';
+import { EnumValues } from '@/enumerations/generic.enum';
 
 // Mock page object with all required Page properties
 const mockPageBase: Page = {
@@ -7,8 +8,8 @@ const mockPageBase: Page = {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal' as const,
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -25,8 +26,8 @@ export const mockPageEditing: Page = {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit' as const,
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -124,7 +125,7 @@ export const mockFieldsWithEmptyValues = {
 
 // Mock params
 export const mockParamsDefault = {
-  colorScheme: 'default' as ColorScheme,
+  colorScheme: 'default' as EnumValues<typeof ColorScheme>,
 };
 
 export const mockParamsPrimary = {

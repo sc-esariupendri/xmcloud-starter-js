@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as TopicListing } from '@/components/topic-listing/TopicListing';
+import type { Field, LinkField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutShootingStar,
@@ -14,26 +15,53 @@ import {
   propsWithMixedTopics,
 } from './TopicListing.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: Field<string>;
+  tag?: keyof JSX.IntrinsicElements;
+  className?: string;
+}
+
+interface MockMeteorsProps {
+  number?: number;
+  minDelay?: number;
+  maxDelay?: number;
+  minDuration?: number;
+  maxDuration?: number;
+  angle?: number;
+  size?: number;
+}
+
+interface MockTopicItemProps {
+  link?: {
+    jsonValue?: LinkField;
+  };
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field, tag, className }: any) => {
-    const Tag = tag || 'span';
+  Text: ({ field, tag, className }: MockTextProps) => {
+    const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, { className, 'data-testid': 'text-field' }, field?.value || '');
   },
 }));
 
 // Mock Meteors component
 jest.mock('@/components/magicui/meteors', () => ({
-  Meteors: ({ number, minDelay, maxDelay, minDuration, maxDuration, angle, size }: any) => (
+  Meteors: ({ number, minDelay, maxDelay, minDuration, maxDuration, angle, size }: MockMeteorsProps) => (
     <div
       data-testid="meteors"
-      data-number={number}
-      data-min-delay={minDelay}
-      data-max-delay={maxDelay}
-      data-min-duration={minDuration}
-      data-max-duration={maxDuration}
-      data-angle={angle}
-      data-size={size}
+      data-number={number?.toString()}
+      data-min-delay={minDelay?.toString()}
+      data-max-delay={maxDelay?.toString()}
+      data-min-duration={minDuration?.toString()}
+      data-max-duration={maxDuration?.toString()}
+      data-angle={angle?.toString()}
+      data-size={size?.toString()}
     >
       Meteors Effect
     </div>
@@ -42,16 +70,16 @@ jest.mock('@/components/magicui/meteors', () => ({
 
 // Mock TopicItem component
 jest.mock('@/components/topic-listing/TopicItem.dev', () => ({
-  TopicItem: ({ link }: any) => (
+  TopicItem: ({ link }: MockTopicItemProps) => (
     <div data-testid="topic-item">
-      {link?.jsonValue?.value?.text || 'No Link'}
+      {link?.jsonValue?.value?.text as string | undefined || 'No Link'}
     </div>
   ),
 }));
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));

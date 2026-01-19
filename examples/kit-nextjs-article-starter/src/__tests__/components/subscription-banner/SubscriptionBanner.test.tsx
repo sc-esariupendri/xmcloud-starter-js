@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as SubscriptionBanner } from '@/components/subscription-banner/SubscriptionBanner';
+import type { Field } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutDescription,
@@ -9,6 +10,58 @@ import {
   propsWithoutFields,
   propsWithUndefinedFields,
 } from './SubscriptionBanner.mockProps';
+
+// Type definitions for mock components
+interface MockTextProps {
+  field?: Field<string>;
+  tag?: string;
+  className?: string;
+}
+
+interface MockFormProps {
+  children?: React.ReactNode;
+}
+
+interface MockFormFieldProps {
+  render?: (props: {
+    field: {
+      value: string;
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+      onBlur: () => void;
+      name: string;
+      ref: React.Ref<HTMLInputElement>;
+    };
+  }) => React.ReactNode;
+}
+
+interface MockFormItemProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockFormControlProps {
+  children?: React.ReactNode;
+}
+
+interface MockFormMessageProps {
+  children?: React.ReactNode;
+  className?: string;
+}
+
+interface MockInputProps {
+  type?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  className?: string;
+  [key: string]: unknown;
+}
+
+interface MockButtonProps {
+  children?: React.ReactNode;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  className?: string;
+}
 
 // Mock next-intl
 jest.mock('next-intl', () => ({
@@ -25,8 +78,8 @@ jest.mock('next-intl', () => ({
 
 // Mock Sitecore Content SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field, tag, className }: any) => {
-    const Tag = tag || 'span';
+  Text: ({ field, tag, className }: MockTextProps) => {
+    const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, { className, 'data-testid': 'text-field' }, field?.value || '');
   },
 }));
@@ -34,7 +87,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 // Mock react-hook-form
 jest.mock('react-hook-form', () => ({
   useForm: () => ({
-    handleSubmit: (fn: any) => (e: any) => {
+    handleSubmit: (fn: (data: { email: string }) => void) => (e: React.FormEvent) => {
       e.preventDefault();
       fn({ email: 'test@example.com' });
     },
@@ -46,9 +99,9 @@ jest.mock('react-hook-form', () => ({
 
 // Mock UI components
 jest.mock('@/components/ui/form', () => ({
-  Form: ({ children }: any) => <div data-testid="form">{children}</div>,
-  FormField: ({ render }: any) =>
-    render({
+  Form: ({ children }: MockFormProps) => <div data-testid="form">{children}</div>,
+  FormField: ({ render }: MockFormFieldProps) =>
+    render?.({
       field: {
         value: '',
         onChange: jest.fn(),
@@ -56,14 +109,14 @@ jest.mock('@/components/ui/form', () => ({
         name: 'email',
         ref: jest.fn(),
       },
-    }),
-  FormItem: ({ children, className }: any) => (
+    }) || null,
+  FormItem: ({ children, className }: MockFormItemProps) => (
     <div className={className} data-testid="form-item">
       {children}
     </div>
   ),
-  FormControl: ({ children }: any) => <div data-testid="form-control">{children}</div>,
-  FormMessage: ({ children, className }: any) => (
+  FormControl: ({ children }: MockFormControlProps) => <div data-testid="form-control">{children}</div>,
+  FormMessage: ({ children, className }: MockFormMessageProps) => (
     <div className={className} data-testid="form-message">
       {children}
     </div>
@@ -71,7 +124,7 @@ jest.mock('@/components/ui/form', () => ({
 }));
 
 jest.mock('@/components/ui/input', () => ({
-  Input: ({ type, placeholder, disabled, className, ...props }: any) => (
+  Input: ({ type, placeholder, disabled, className, ...props }: MockInputProps) => (
     <input
       type={type}
       placeholder={placeholder}
@@ -84,7 +137,7 @@ jest.mock('@/components/ui/input', () => ({
 }));
 
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, type, disabled, className }: any) => (
+  Button: ({ children, type, disabled, className }: MockButtonProps) => (
     <button
       type={type}
       disabled={disabled}

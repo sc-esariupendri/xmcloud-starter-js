@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Default as VerticalImageAccordion } from '@/components/vertical-image-accordion/VerticalImageAccordion';
+import type { Field, LinkField, ImageField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsInEditingMode,
@@ -15,6 +16,20 @@ import {
   propsWithUndefinedFields,
 } from './VerticalImageAccordion.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: Field<string>;
+  tag?: keyof JSX.IntrinsicElements;
+  className?: string;
+  id?: string;
+}
+
+interface MockLinkProps {
+  field?: LinkField;
+  editable?: boolean;
+  className?: string;
+}
+
 // Mock useSitecore
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: () => ({
@@ -24,29 +39,32 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
       },
     },
   }),
-  Text: ({ field, tag, className, id }: any) => {
-    const Tag = tag || 'span';
+  Text: ({ field, tag, className, id }: MockTextProps) => {
+    const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
     return React.createElement(
       Tag,
       { className, 'data-testid': 'text-field', id },
       field?.value || ''
     );
   },
-  Link: ({ field, editable, className }: any) => (
+  Link: ({ field, editable, className }: MockLinkProps) => (
     <a
-      href={field?.value?.href}
+      href={field?.value?.href as string | undefined}
       className={className}
       data-testid="link-field"
-      data-editable={editable}
+      data-editable={editable?.toString()}
     >
-      {field?.value?.text}
+      {field?.value?.text as string | undefined}
     </a>
   ),
 }));
 
+// Type definitions for cn utility
+type CnArgs = Array<string | boolean | Record<string, boolean> | undefined>;
+
 // Mock cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: CnArgs) => {
     return args
       .flat(2)
       .filter(Boolean)
@@ -66,37 +84,66 @@ jest.mock('@/lib/utils', () => ({
   },
 }));
 
+// Type definitions for ImageWrapper
+interface MockImageWrapperProps {
+  image?: ImageField;
+  className?: string;
+  wrapperClass?: string;
+}
+
 // Mock ImageWrapper
-jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: React.forwardRef(({ image, className, wrapperClass }: any, ref: any) => (
-    <div className={wrapperClass} data-testid="image-wrapper-container">
-      <img
-        ref={ref}
-        src={image?.value?.src}
-        alt={image?.value?.alt}
-        className={className}
-        data-testid="image-wrapper"
-      />
-    </div>
-  )),
-}));
+jest.mock('@/components/image/ImageWrapper.dev', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const React = require('react');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const ImageWrapperMock = (React.forwardRef as any)(
+    ({ image, className, wrapperClass }: MockImageWrapperProps, ref: React.Ref<HTMLImageElement>) => (
+      <div className={wrapperClass} data-testid="image-wrapper-container">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          ref={ref}
+          src={image?.value?.src as string | undefined}
+          alt={image?.value?.alt as string | undefined}
+          className={className}
+          data-testid="image-wrapper"
+        />
+      </div>
+    )
+  );
+  ImageWrapperMock.displayName = 'ImageWrapper';
+  return {
+    Default: ImageWrapperMock,
+  };
+});
+
+// Type definitions for EditableButton
+interface MockEditableButtonProps {
+  buttonLink?: LinkField;
+  variant?: string;
+  className?: string;
+}
 
 // Mock EditableButton
 jest.mock('@/components/button-component/ButtonComponent', () => ({
-  EditableButton: ({ buttonLink, variant, className }: any) => (
+  EditableButton: ({ buttonLink, variant, className }: MockEditableButtonProps) => (
     <button
       data-testid="editable-button"
       data-variant={variant}
       className={className}
     >
-      {buttonLink?.value?.text}
+      {buttonLink?.value?.text as string | undefined}
     </button>
   ),
 }));
 
+// Type definitions for NoDataFallback
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));

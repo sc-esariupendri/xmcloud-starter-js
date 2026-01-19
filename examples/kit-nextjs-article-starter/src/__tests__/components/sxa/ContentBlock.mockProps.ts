@@ -1,11 +1,28 @@
-import { Field } from '@sitecore-content-sdk/nextjs';
+import { Field, Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { ComponentProps } from '@/lib/component-props';
 
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
 // Mock rendering data
-export const mockRendering = {
+const mockRendering: ComponentRendering = {
   componentName: 'ContentBlock',
-  dataSource: 'test-datasource',
-  uid: 'test-uid',
 };
 
 // Mock params data
@@ -80,23 +97,27 @@ export const defaultProps: ComponentProps & { fields: typeof mockFields } = {
   rendering: mockRendering,
   params: mockParams,
   fields: mockFields,
+  page: mockPage,
 };
 
 export const propsWithEmptyHeading: ComponentProps & { fields: typeof mockFieldsWithEmptyHeading } = {
   rendering: mockRendering,
   params: mockParams,
   fields: mockFieldsWithEmptyHeading,
+  page: mockPage,
 };
 
 export const propsWithEmptyContent: ComponentProps & { fields: typeof mockFieldsWithEmptyContent } = {
   rendering: mockRendering,
   params: mockParams,
   fields: mockFieldsWithEmptyContent,
+  page: mockPage,
 };
 
 export const propsWithComplexContent: ComponentProps & { fields: typeof mockFieldsWithComplexContent } = {
   rendering: mockRendering,
   params: mockParams,
   fields: mockFieldsWithComplexContent,
+  page: mockPage,
 };
 

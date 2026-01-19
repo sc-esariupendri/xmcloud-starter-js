@@ -1,4 +1,4 @@
-import { ImageField, LinkField, Page } from '@sitecore-content-sdk/nextjs';
+import { ImageField, LinkField, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { GlobalHeaderProps } from '@/components/global-header/global-header.props';
 
 // Mock page object with all required Page properties
@@ -7,8 +7,8 @@ const mockPageBase: Page = {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal' as const,
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -25,8 +25,8 @@ const mockPageEditing: Page = {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit' as const,
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -135,7 +135,7 @@ export const mockFieldsWithoutLogo = {
   data: {
     item: {
       logo: {
-        jsonValue: { value: undefined } as any,
+        jsonValue: { value: undefined } as unknown as ImageField,
       },
       children: {
         results: [
@@ -157,7 +157,7 @@ export const mockFieldsWithoutLinks = {
         jsonValue: mockLogo,
       },
       children: {
-        results: [],
+        results: [] as Array<{ link: { jsonValue: LinkField } }>,
       },
       headerContact: {
         jsonValue: mockHeaderContact,
@@ -179,7 +179,7 @@ export const mockFieldsWithoutContact = {
         ],
       },
       headerContact: {
-        jsonValue: { value: undefined } as any,
+        jsonValue: { value: undefined } as unknown as LinkField,
       },
     },
   },
@@ -189,17 +189,17 @@ export const mockFieldsWithEmptyItem = {
   data: {
     item: {
       logo: {
-        jsonValue: undefined as any,
+        jsonValue: undefined as unknown as ImageField,
       },
       children: {
-        results: [] as any,
+        results: [] as Array<{ link: { jsonValue: LinkField } }>,
       },
       headerContact: {
-        jsonValue: undefined as any,
+        jsonValue: undefined as unknown as LinkField,
       },
     },
   },
-};
+} as unknown as GlobalHeaderProps['fields'];
 
 // Complete props combinations
 export const defaultProps: GlobalHeaderProps = {
@@ -255,7 +255,7 @@ export const propsWithoutFields: GlobalHeaderProps = {
   params: {
     RenderingIdentifier: 'header-rendering-id',
   },
-  fields: undefined as GlobalHeaderProps['fields'],
+  fields: undefined as unknown as GlobalHeaderProps['fields'],
   rendering: { componentName: 'GlobalHeader' } as GlobalHeaderProps['rendering'],
   page: mockPageBase,
 };

@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as ImageBlock } from '@/components/image/ImageBlock';
+import type { ImageProps } from '@/components/image/image.props';
+import type { ImageField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithoutCaption,
@@ -11,9 +13,23 @@ import {
   propsWithoutFields,
 } from './ImageBlock.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: { value?: string };
+}
+
+interface MockImageWrapperProps {
+  image?: ImageField;
+  className?: string;
+}
+
+interface MockNoDataFallbackProps {
+  componentName?: string;
+}
+
 // Mock the cn utility
 jest.mock('@/lib/utils', () => ({
-  cn: (...args: any[]) => {
+  cn: (...args: Array<string | boolean | Record<string, boolean> | undefined>) => {
     return args
       .flat()
       .filter(Boolean)
@@ -33,20 +49,21 @@ jest.mock('@/lib/utils', () => ({
 
 // Mock Sitecore Text component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field }: any) => {
+  Text: ({ field }: MockTextProps) => {
     return React.createElement('span', {}, field?.value || '');
   },
 }));
 
 // Mock ImageWrapper component
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
-  Default: ({ image, className }: any) => (
+  Default: ({ image, className }: MockImageWrapperProps) => (
     <div data-testid="image-wrapper" className={className}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={image?.value?.src}
-        alt={image?.value?.alt}
-        width={image?.value?.width}
-        height={image?.value?.height}
+        src={image?.value?.src as string | undefined}
+        alt={image?.value?.alt as string | undefined}
+        width={image?.value?.width as number | undefined}
+        height={image?.value?.height as number | undefined}
       />
     </div>
   ),
@@ -54,7 +71,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => ({
 
 // Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
-  NoDataFallback: ({ componentName }: any) => (
+  NoDataFallback: ({ componentName }: MockNoDataFallbackProps) => (
     <div data-testid="no-data-fallback">{componentName}</div>
   ),
 }));
@@ -197,7 +214,7 @@ describe('ImageBlock Component', () => {
     it('should render NoDataFallback when fields is null', () => {
       const propsWithNullFields = {
         ...defaultProps,
-        fields: null as any,
+        fields: null as unknown as ImageProps['fields'],
       };
 
       // Component checks for fields !== undefined, not fields !== null
@@ -212,7 +229,7 @@ describe('ImageBlock Component', () => {
       const propsWithoutImageValue = {
         ...defaultProps,
         fields: {
-          image: { value: undefined } as any,
+          image: { value: undefined } as unknown as ImageField,
           caption: defaultProps.fields.caption,
         },
       };

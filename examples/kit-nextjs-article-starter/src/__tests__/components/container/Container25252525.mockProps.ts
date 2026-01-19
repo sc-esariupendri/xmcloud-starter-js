@@ -1,11 +1,41 @@
-import { ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
+
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
+const mockPageEditing: Page = {
+  ...mockPage,
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+};
 
 export const mockSitecoreContext = {
-  page: { mode: { isEditing: false } },
+  page: mockPage,
 };
 
 export const mockSitecoreContextEditing = {
-  page: { mode: { isEditing: true } },
+  page: mockPageEditing,
 };
 
 export const defaultProps = {
@@ -24,7 +54,7 @@ export const defaultProps = {
       'container-25-four-main-25': [{ componentName: 'Col4' }],
     },
   } as ComponentRendering,
-  children: undefined as React.ReactNode,
+  children: document.createElement('div') as Element,
   page: mockSitecoreContext.page,
 };
 
@@ -44,7 +74,7 @@ export const propsWithExcludeTopMargin = {
       'container-25-four-no-margin': [{ componentName: 'Col4' }],
     },
   } as ComponentRendering,
-  children: undefined as React.ReactNode,
+  children: document.createElement('div') as Element,
   page: mockSitecoreContext.page,
 };
 
@@ -59,7 +89,7 @@ export const propsWithEmptyPlaceholders = {
     dataSource: '',
     placeholders: {},
   } as ComponentRendering,
-  children: undefined as React.ReactNode,
+  children: document.createElement('div') as Element,
   page: mockSitecoreContext.page,
 };
 

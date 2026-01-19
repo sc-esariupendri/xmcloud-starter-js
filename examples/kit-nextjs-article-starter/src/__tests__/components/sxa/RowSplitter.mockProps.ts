@@ -1,4 +1,22 @@
-import { ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    name: 'normal' as PageMode['name'],
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
+};
 
 // Default props with all rows enabled
 export const defaultProps = {
@@ -22,6 +40,7 @@ export const defaultProps = {
       styles: 'custom-row-splitter-style',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props with two rows
@@ -44,6 +63,7 @@ export const propsWithTwoRows = {
       styles: 'two-row-layout',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props with single row
@@ -64,6 +84,7 @@ export const propsWithOneRow = {
       styles: '',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props without row styles
@@ -82,6 +103,7 @@ export const propsWithoutRowStyles = {
       styles: 'default-style',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props with empty enabled placeholders
@@ -100,6 +122,7 @@ export const propsWithNoRows = {
       styles: 'empty-layout',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props with maximum rows (8)
@@ -134,6 +157,7 @@ export const propsWithMaxRows = {
       styles: 'eight-rows',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props with non-sequential row numbers
@@ -158,6 +182,7 @@ export const propsWithNonSequentialRows = {
       styles: 'custom-layout',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props without styles
@@ -180,6 +205,7 @@ export const propsWithoutStyles = {
       styles: '',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props without RenderingIdentifier
@@ -200,15 +226,17 @@ export const propsWithoutId = {
       styles: 'custom-style',
     },
   } as ComponentRendering,
+  page: mockPage,
 };
 
 // Props with undefined params
 export const propsWithUndefinedParams = {
-  params: {} as any,
+  params: {} as typeof defaultProps.params,
   rendering: {
     componentName: 'RowSplitter',
     dataSource: '',
-    params: {} as any,
+    params: {} as typeof defaultProps.rendering.params,
   } as ComponentRendering,
+  page: mockPage,
 };
 

@@ -106,11 +106,12 @@ export const mockIconWithoutClassName: IconProps = {
   isAriaHidden: true,
 };
 
+// IconProps extends React.HTMLAttributes<SVGElement>, so data attributes are allowed
 export const mockIconWithCustomAttributes: IconProps = {
   iconName: IconName.EMAIL,
   className: 'custom-icon-class',
   isAriaHidden: false,
   altText: 'Email us',
   'data-custom': 'custom-value',
-} as any;
+} as IconProps;
 

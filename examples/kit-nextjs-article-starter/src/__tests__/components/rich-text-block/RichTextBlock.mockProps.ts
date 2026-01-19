@@ -1,28 +1,47 @@
+import { Page, PageMode, ComponentRendering } from '@sitecore-content-sdk/nextjs';
 import { RichTextBlockProps } from '@/components/rich-text-block/rich-text-block.props';
 
+// Mock page object
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
 // Mock rendering data
-export const mockRendering = {
+const mockRendering: ComponentRendering = {
   componentName: 'RichTextBlock',
-  dataSource: 'test-datasource',
 };
 
 // Mock params data
-export const mockParams = {
+export const mockParams: RichTextBlockProps['params'] = {
   RenderingIdentifier: 'test-rendering-id',
   styles: 'custom-styles',
 };
 
 // Mock params without styles
-export const mockParamsWithoutStyles = {
+export const mockParamsWithoutStyles: RichTextBlockProps['params'] = {
   RenderingIdentifier: 'test-rendering-id',
-  styles: undefined as any,
-};
+  // styles is optional, so we can omit it
+} as RichTextBlockProps['params'];
 
 // Mock params without ID
-export const mockParamsWithoutId = {
-  RenderingIdentifier: undefined as any,
+export const mockParamsWithoutId: RichTextBlockProps['params'] = {
   styles: 'custom-styles',
-};
+  // RenderingIdentifier is optional, so we can omit it
+} as RichTextBlockProps['params'];
 
 // Mock params with multiple styles
 export const mockParamsWithMultipleStyles = {
@@ -45,14 +64,14 @@ export const mockFieldsWithEmptyText = {
 };
 
 // Mock fields with undefined text
-export const mockFieldsWithUndefinedText = {
+export const mockFieldsWithUndefinedText: RichTextBlockProps['fields'] = {
   text: {
-    value: undefined as any,
+    value: undefined as unknown as string,
   },
 };
 
 // Mock fields with complex HTML content
-export const mockFieldsWithComplexHtml = {
+export const mockFieldsWithComplexHtml: RichTextBlockProps['fields'] = {
   text: {
     value: `
       <h1>Title</h1>
@@ -70,53 +89,62 @@ export const defaultProps: RichTextBlockProps = {
   fields: mockFields,
   rendering: mockRendering,
   params: mockParams,
+  page: mockPage,
 };
 
 export const propsWithoutFields: RichTextBlockProps = {
-  fields: undefined as any,
+  fields: undefined as unknown as RichTextBlockProps['fields'],
   rendering: mockRendering,
   params: mockParams,
+  page: mockPage,
 };
 
 export const propsWithNullFields: RichTextBlockProps = {
-  fields: null as any,
+  fields: null as unknown as RichTextBlockProps['fields'],
   rendering: mockRendering,
   params: mockParams,
+  page: mockPage,
 };
 
 export const propsWithoutStyles: RichTextBlockProps = {
   fields: mockFields,
   rendering: mockRendering,
   params: mockParamsWithoutStyles,
+  page: mockPage,
 };
 
 export const propsWithoutId: RichTextBlockProps = {
   fields: mockFields,
   rendering: mockRendering,
   params: mockParamsWithoutId,
+  page: mockPage,
 };
 
 export const propsWithEmptyText: RichTextBlockProps = {
   fields: mockFieldsWithEmptyText,
   rendering: mockRendering,
   params: mockParams,
+  page: mockPage,
 };
 
 export const propsWithUndefinedText: RichTextBlockProps = {
   fields: mockFieldsWithUndefinedText,
   rendering: mockRendering,
   params: mockParams,
+  page: mockPage,
 };
 
 export const propsWithComplexHtml: RichTextBlockProps = {
   fields: mockFieldsWithComplexHtml,
   rendering: mockRendering,
   params: mockParams,
+  page: mockPage,
 };
 
 export const propsWithMultipleStyles: RichTextBlockProps = {
   fields: mockFields,
   rendering: mockRendering,
   params: mockParamsWithMultipleStyles,
+  page: mockPage,
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Default as RichText } from '@/components/sxa/RichText';
+import type { Field } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithSimpleText,
@@ -12,13 +13,17 @@ import {
   propsWithoutTextField,
   propsWithNullFields,
   propsWithNullTextField,
-  propsWithUndefinedParams,
   propsWithUndefinedId,
 } from './RichText.mockProps';
 
+// Type definitions for mock components
+interface MockRichTextProps {
+  field?: Field<string>;
+}
+
 // Mock Sitecore SDK RichText component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  RichText: ({ field }: any) => (
+  RichText: ({ field }: MockRichTextProps) => (
     <div data-testid="rich-text-content">
       {field?.value || ''}
     </div>

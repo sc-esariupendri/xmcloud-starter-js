@@ -1,5 +1,14 @@
-import { Field } from '@sitecore-content-sdk/nextjs';
+import { Field, ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import { GqlFieldString } from '@/types/gql.props';
+import type { LinkFieldValue } from '@sitecore-content-sdk/nextjs';
+
+// Type definition matching Breadcrumbs component
+type BreadcrumbsPage = {
+  name: string;
+  title: GqlFieldString;
+  navigationTitle: GqlFieldString;
+  url?: LinkFieldValue;
+};
 
 // Mock breadcrumb pages
 export const mockAncestorHome = {
@@ -119,7 +128,7 @@ export const mockFieldsWithLongName = {
 export const mockFieldsWithoutAncestors = {
   data: {
     datasource: {
-      ancestors: undefined as any, // undefined instead of empty array
+      ancestors: undefined as BreadcrumbsPage[] | undefined, // undefined instead of empty array
       name: 'Current Page',
     },
   },
@@ -150,52 +159,93 @@ export const mockFieldsWithMixedTitles = {
 export const mockFieldsEmptyAncestors = {
   data: {
     datasource: {
-      ancestors: undefined as any, // undefined instead of empty array
+      ancestors: undefined as BreadcrumbsPage[] | undefined, // undefined instead of empty array
       name: 'Current Page',
     },
   },
+};
+
+// Mock page
+const mockPage: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+};
+
+// Mock rendering
+const mockRendering: ComponentRendering = {
+  componentName: 'Breadcrumbs',
+} as ComponentRendering;
+
+// Type for Breadcrumbs fields
+type BreadcrumbsFieldsType = {
+  data: {
+    datasource: {
+      ancestors?: BreadcrumbsPage[];
+      name: string;
+    };
+  };
 };
 
 // Complete props combinations
 export const defaultProps = {
   params: {},
   fields: mockFieldsDefault,
-  rendering: { componentName: 'Breadcrumbs' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithLongName = {
   params: {},
   fields: mockFieldsWithLongName,
-  rendering: { componentName: 'Breadcrumbs' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutAncestors = {
   params: {},
   fields: mockFieldsWithoutAncestors,
-  rendering: { componentName: 'Breadcrumbs' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithSingleAncestor = {
   params: {},
   fields: mockFieldsWithSingleAncestor,
-  rendering: { componentName: 'Breadcrumbs' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithMixedTitles = {
   params: {},
   fields: mockFieldsWithMixedTitles,
-  rendering: { componentName: 'Breadcrumbs' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsEmptyAncestors = {
   params: {},
   fields: mockFieldsEmptyAncestors,
-  rendering: { componentName: 'Breadcrumbs' } as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 export const propsWithoutFields = {
   params: {},
-  fields: null as any,
-  rendering: { componentName: 'Breadcrumbs' } as any,
+  fields: null as BreadcrumbsFieldsType | null,
+  rendering: mockRendering,
+  page: mockPage,
 };
 

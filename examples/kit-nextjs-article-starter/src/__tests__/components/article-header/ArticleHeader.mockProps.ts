@@ -1,20 +1,48 @@
-import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, Page, ComponentRendering, PageMode } from '@sitecore-content-sdk/nextjs';
 
 // Mock page data
-export const mockPage = {
-  page: {
-    mode: {
-      isEditing: false,
+const mockPageBase: Page = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
     },
   },
+  locale: 'en',
 };
 
-export const mockPageEditing = {
-  page: {
-    mode: {
-      isEditing: true,
+const mockPageEditing: Page = {
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
     },
   },
+  locale: 'en',
+};
+
+export const mockPage = {
+  page: mockPageBase,
+};
+
+export const mockPageEditingData = {
+  page: mockPageEditing,
 };
 
 // Mock images
@@ -44,8 +72,27 @@ export const mockDisplayDateField: Field<string> = {
   value: '2024-01-15',
 };
 
+// Type definitions for author
+// Note: These types are simplified for test mocks and may not exactly match the component's internal types
+type PersonItem = {
+  personProfileImage?: ImageField;
+  personFirstName: Field<string>;
+  personLastName: Field<string>;
+  personJobTitle?: Field<string>;
+  personBio?: Field<string>;
+  personLinkedIn?: LinkField;
+};
+
+type AuthorReferenceField = {
+  id: string;
+  name: string;
+  url?: string;
+  displayName?: string;
+  fields: PersonItem;
+};
+
 // Mock author
-export const mockAuthor = {
+export const mockAuthor: AuthorReferenceField = {
   id: 'author-1',
   name: 'John Doe',
   url: '/authors/john-doe',
@@ -74,27 +121,29 @@ export const mockAuthor = {
       value: {
         href: 'https://linkedin.com/in/johndoe',
         text: 'LinkedIn',
+        title: 'LinkedIn',
+        target: '',
         linktype: 'external',
       },
     },
   },
-} as any;
+};
 
-export const mockAuthorWithoutImage = {
+export const mockAuthorWithoutImage: AuthorReferenceField = {
   ...mockAuthor,
   fields: {
     ...mockAuthor.fields,
     personProfileImage: undefined,
   },
-} as any;
+};
 
-export const mockAuthorWithoutJobTitle = {
+export const mockAuthorWithoutJobTitle: AuthorReferenceField = {
   ...mockAuthor,
   fields: {
     ...mockAuthor.fields,
     personJobTitle: undefined,
   },
-} as any;
+};
 
 // Mock fields
 export const mockFields = {
@@ -218,65 +267,81 @@ export const mockParams = {
 };
 
 // Mock rendering
-export const mockRendering = {
+export const mockRendering: ComponentRendering = {
   componentName: 'ArticleHeader',
-} as any;
+} as ComponentRendering;
+
+// Type for ArticleHeader fields
+type ArticleHeaderFieldsType = {
+  data: {
+    datasource: {
+      imageRequired?: { jsonValue: ImageField };
+      eyebrowOptional?: { jsonValue: Field<string> };
+    };
+    externalFields: {
+      pageHeaderTitle: { jsonValue: Field<string> };
+      pageReadTime?: { jsonValue: Field<string> };
+      pageDisplayDate?: { jsonValue: Field<string> };
+      pageAuthor?: { jsonValue: AuthorReferenceField };
+    };
+  };
+};
 
 // Complete props combinations
 export const defaultProps = {
   params: mockParams,
   fields: mockFields,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutEyebrow = {
   params: mockParams,
   fields: mockFieldsWithoutEyebrow,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutAuthor = {
   params: mockParams,
   fields: mockFieldsWithoutAuthor,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutReadTime = {
   params: mockParams,
   fields: mockFieldsWithoutReadTime,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutDate = {
   params: mockParams,
   fields: mockFieldsWithoutDate,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutImage = {
   params: mockParams,
   fields: mockFieldsWithoutImage,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsMinimal = {
   params: mockParams,
   fields: mockFieldsMinimal,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithoutFields = {
   params: mockParams,
-  fields: null as any,
+  fields: null as ArticleHeaderFieldsType | null,
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithAuthorNoImage = {
@@ -293,7 +358,7 @@ export const propsWithAuthorNoImage = {
     },
   },
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 export const propsWithAuthorNoJobTitle = {
@@ -310,7 +375,7 @@ export const propsWithAuthorNoJobTitle = {
     },
   },
   rendering: mockRendering,
-  page: mockPage.page as any,
+  page: mockPageBase,
 };
 
 

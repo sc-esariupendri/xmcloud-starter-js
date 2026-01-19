@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ContentBlock from '@/components/sxa/ContentBlock';
+import type { Field, RichTextField } from '@sitecore-content-sdk/nextjs';
 import {
   defaultProps,
   propsWithEmptyHeading,
@@ -8,23 +9,45 @@ import {
   propsWithComplexContent,
 } from './ContentBlock.mockProps';
 
+// Type definitions for mock components
+interface MockTextProps {
+  field?: Field<string>;
+  tag?: string;
+  className?: string;
+}
+
+interface MockRichTextProps {
+  field?: RichTextField;
+  className?: string;
+}
+
+interface MockComponentProps {
+  fields?: unknown;
+  [key: string]: unknown;
+}
+
 // Mock the Sitecore Content SDK components
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Text: ({ field, tag, className }: any) => {
-    const Tag = tag || 'span';
+  Text: ({ field, tag, className }: MockTextProps) => {
+    const Tag = (tag || 'span') as keyof JSX.IntrinsicElements;
     return React.createElement(Tag, { className }, field?.value || '');
   },
-  RichText: ({ field, className }: any) => (
+  RichText: ({ field, className }: MockRichTextProps) => (
     <div className={className} dangerouslySetInnerHTML={{ __html: field?.value || '' }} />
   ),
-  withDatasourceCheck: () => (Component: any) => {
-    return (props: any) => {
-      // Check if fields exist, if not return null (mimics withDatasourceCheck behavior)
-      if (!props.fields) {
-        return null;
-      }
-      return <Component {...props} />;
+  withDatasourceCheck: () => {
+    const WithDatasourceCheckComponent = (Component: React.ComponentType<MockComponentProps>) => {
+      const WrappedComponent = (props: MockComponentProps) => {
+        // Check if fields exist, if not return null (mimics withDatasourceCheck behavior)
+        if (!props.fields) {
+          return null;
+        }
+        return <Component {...props} />;
+      };
+      WrappedComponent.displayName = `withDatasourceCheck(${Component.displayName || Component.name || 'Component'})`;
+      return WrappedComponent;
     };
+    return WithDatasourceCheckComponent;
   },
 }));
 
@@ -155,7 +178,7 @@ describe('ContentBlock Component', () => {
     it('should handle missing fields gracefully', () => {
       const propsWithoutFields = {
         ...defaultProps,
-        fields: null as any,
+        fields: null as unknown as typeof defaultProps.fields,
       };
 
       // withDatasourceCheck HOC should handle null fields
@@ -171,8 +194,8 @@ describe('ContentBlock Component', () => {
       const propsWithUndefinedFields = {
         ...defaultProps,
         fields: {
-          heading: { value: undefined } as any,
-          content: { value: undefined } as any,
+          heading: { value: undefined as unknown as string },
+          content: { value: undefined as unknown as string },
         },
       };
 

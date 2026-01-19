@@ -1,19 +1,50 @@
-import { Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, LinkField, ComponentRendering, Page, PageMode } from '@sitecore-content-sdk/nextjs';
 import {
   VerticalImageAccordionProps,
   AccordionItem,
 } from '@/components/vertical-image-accordion/vertical-image-accordion.props';
 
-const mockPage = {
-  mode: {
-    isEditing: false,
-  },
+// Mock rendering object
+const mockRendering: ComponentRendering = {
+  componentName: 'VerticalImageAccordion',
+  dataSource: '',
+  params: {},
 };
 
-const mockPageEditing = {
+// Mock page object
+const mockPage: Page = {
   mode: {
-    isEditing: true,
+    name: 'normal' as PageMode['name'],
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
   },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
+};
+
+// Mock page object for editing mode
+const mockPageEditing: Page = {
+  mode: {
+    name: 'edit' as PageMode['name'],
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    isDesignLibrary: false,
+    designLibrary: { isVariantGeneration: false },
+  },
+  layout: {
+    sitecore: {
+      route: null,
+    },
+  } as Page['layout'],
+  locale: 'en',
 };
 
 // Mock accordion items
@@ -193,8 +224,8 @@ export const defaultProps: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props in editing mode
@@ -213,8 +244,8 @@ export const propsInEditingMode: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: true,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPageEditing as any,
+  rendering: mockRendering,
+  page: mockPageEditing,
 };
 
 // Props with single item
@@ -233,8 +264,8 @@ export const propsWithSingleItem: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with two items
@@ -253,8 +284,8 @@ export const propsWithTwoItems: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without title
@@ -270,8 +301,8 @@ export const propsWithoutTitle: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with item without link
@@ -290,8 +321,8 @@ export const propsWithItemWithoutLink: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with item without image
@@ -310,8 +341,8 @@ export const propsWithItemWithoutImage: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with empty items array
@@ -330,8 +361,8 @@ export const propsWithEmptyItems: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without items
@@ -347,25 +378,25 @@ export const propsWithoutItems: VerticalImageAccordionProps = {
   },
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props without fields (null scenario)
 export const propsWithoutFields: VerticalImageAccordionProps = {
-  fields: null as any,
+  fields: null as unknown as typeof defaultProps.fields,
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 
 // Props with undefined fields
 export const propsWithUndefinedFields: VerticalImageAccordionProps = {
-  fields: undefined as any,
+  fields: undefined as unknown as typeof defaultProps.fields,
   params: {},
   isPageEditing: false,
-  rendering: { componentName: 'VerticalImageAccordion' } as any,
-  page: mockPage as any,
+  rendering: mockRendering,
+  page: mockPage,
 };
 

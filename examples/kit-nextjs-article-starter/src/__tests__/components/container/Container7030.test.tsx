@@ -75,7 +75,7 @@ const mockUseSitecore = useSitecore as jest.MockedFunction<typeof useSitecore>;
 describe('Container7030 Component', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+    mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
   });
 
   describe('Basic rendering', () => {
@@ -142,7 +142,7 @@ describe('Container7030 Component', () => {
 
   describe('Empty placeholder handling', () => {
     it('should not render when placeholders are empty and not editing', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+      mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
       const { container } = render(<Container7030 {...propsWithEmptyPlaceholders} />);
 
       expect(container.firstChild).toBeNull();
@@ -160,14 +160,14 @@ describe('Container7030 Component', () => {
     });
 
     it('should render when only left placeholder is populated', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+      mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
       const { container } = render(<Container7030 {...propsWithOnlyLeftPlaceholder} />);
 
       expect(container.querySelector('section')).toBeInTheDocument();
     });
 
     it('should render when only right placeholder is populated', () => {
-      mockUseSitecore.mockReturnValue(mockSitecoreContext as any);
+      mockUseSitecore.mockReturnValue(mockSitecoreContext as ReturnType<typeof useSitecore>);
       const { container } = render(<Container7030 {...propsWithOnlyRightPlaceholder} />);
 
       expect(container.querySelector('section')).toBeInTheDocument();

@@ -1,5 +1,5 @@
-import { Field, LinkField, RichTextField, Page, PageModeName } from '@sitecore-content-sdk/nextjs';
-import { AccordionItemProps } from '@/components/accordion-block/accordion-block.props';
+import { Field, LinkField, RichTextField, Page, ComponentRendering, PageMode } from '@sitecore-content-sdk/nextjs';
+import { AccordionItemProps, AccordionFields } from '@/components/accordion-block/accordion-block.props';
 
 // Mock page objects with full Page type
 const mockPageBase: Page = {
@@ -7,8 +7,8 @@ const mockPageBase: Page = {
     isEditing: false,
     isPreview: false,
     isNormal: true,
-    name: 'normal' as PageModeName,
-    designLibrary: false,
+    name: 'normal' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -25,8 +25,8 @@ const mockPageEditing: Page = {
     isEditing: true,
     isPreview: false,
     isNormal: false,
-    name: 'edit' as PageModeName,
-    designLibrary: false,
+    name: 'edit' as PageMode['name'],
+    designLibrary: { isVariantGeneration: false },
     isDesignLibrary: false,
   },
   layout: {
@@ -149,9 +149,6 @@ export const mockFieldsWithoutLink = {
       description: {
         jsonValue: mockDescriptionField,
       },
-      link: {
-        jsonValue: undefined as any,
-      },
       children: {
         results: [mockAccordionItem1],
       },
@@ -197,7 +194,7 @@ export const defaultProps = {
   params: mockParams,
   fields: mockFields,
   isPageEditing: false,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageBase,
 };
 
@@ -205,7 +202,7 @@ export const propsWithoutDescription = {
   params: mockParams,
   fields: mockFieldsWithoutDescription,
   isPageEditing: false,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageBase,
 };
 
@@ -213,7 +210,7 @@ export const propsWithoutLink = {
   params: mockParams,
   fields: mockFieldsWithoutLink,
   isPageEditing: false,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageBase,
 };
 
@@ -221,7 +218,7 @@ export const propsWithEmptyChildren = {
   params: mockParams,
   fields: mockFieldsWithEmptyChildren,
   isPageEditing: false,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageBase,
 };
 
@@ -229,7 +226,7 @@ export const propsWithoutStyles = {
   params: mockParamsWithoutStyles,
   fields: mockFields,
   isPageEditing: false,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageBase,
 };
 
@@ -237,7 +234,7 @@ export const propsEditing = {
   params: mockParams,
   fields: mockFields,
   isPageEditing: true,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageEditing,
 };
 
@@ -245,15 +242,15 @@ export const propsWithoutDatasource = {
   params: mockParams,
   fields: mockFieldsWithoutDatasource,
   isPageEditing: false,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageBase,
 };
 
 export const propsWithoutFields = {
   params: mockParams,
-  fields: null as any,
+  fields: undefined as AccordionFields['fields'] | undefined,
   isPageEditing: false,
-  rendering: { componentName: 'AccordionBlock' } as any,
+  rendering: { componentName: 'AccordionBlock' } as ComponentRendering,
   page: mockPageBase,
 };
 
