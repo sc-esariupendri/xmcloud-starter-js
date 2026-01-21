@@ -2,13 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import {
-  Link,
-  Text,
-  Field,
-  ImageField,
-  LinkField,
-} from '@sitecore-content-sdk/nextjs';
+import { Link, Text, Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
 import { cn } from '@/lib/utils';
 import { EditableButton as Button } from '@/components/button-component/ButtonComponent';
 import { ComponentProps } from '@/lib/component-props';
@@ -144,12 +138,7 @@ export const Default: React.FC<ArticleListingProps> = ({
               <div key={index} className="@md:mb-0 group/article mb-6">
                 {isPageEditing ? (
                   <div className="rounded-default @md:mb-0 relative mb-4 aspect-[3/2] w-full overflow-hidden">
-                    <Image
-                      src={article.image}
-                      alt={article.title}
-                      fill
-                      className="object-cover"
-                    />
+                    <Image src={article.image} alt={article.title} fill className="object-cover" />
                   </div>
                 ) : (
                   <div

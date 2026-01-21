@@ -69,10 +69,7 @@ export const generateStaticParams = async () => {
           .filter((site: SiteInfo) => site.name === defaultSite)
           .map((site: SiteInfo) => site.name)
       : sites.map((site: SiteInfo) => site.name);
-    return await client.getAppRouterStaticParams(
-      allowedSites,
-      routing.locales.slice(),
-    );
+    return await client.getAppRouterStaticParams(allowedSites, routing.locales.slice());
   }
   return [];
 };
@@ -88,28 +85,20 @@ export const generateMetadata = async ({ params }: PageProps) => {
   const page = await client.getPage(path ?? [], { site, locale });
   return {
     title:
-      (
-        page?.layout.sitecore.route?.fields as RouteFields
-      )?.ogTitle?.value?.toString() || 'Page',
+      (page?.layout.sitecore.route?.fields as RouteFields)?.ogTitle?.value?.toString() || 'Page',
     type: 'website',
     description:
-      (
-        page?.layout.sitecore.route?.fields as RouteFields
-      )?.ogDescription?.value?.toString() || 'Sitecore Next.js Alaris Example',
+      (page?.layout.sitecore.route?.fields as RouteFields)?.ogDescription?.value?.toString() ||
+      'Sitecore Next.js Alaris Example',
     openGraph: {
       title:
-        (
-          page?.layout.sitecore.route?.fields as RouteFields
-        )?.Title?.value?.toString() || 'Page',
+        (page?.layout.sitecore.route?.fields as RouteFields)?.Title?.value?.toString() || 'Page',
       description:
-        (
-          page?.layout.sitecore.route?.fields as RouteFields
-        )?.ogDescription?.value?.toString() ||
+        (page?.layout.sitecore.route?.fields as RouteFields)?.ogDescription?.value?.toString() ||
         'Sitecore Next.js Alaris Example',
       url: url,
       images:
-        (page?.layout.sitecore.route?.fields as RouteFields)?.ogImage?.value
-          ?.src || undefined,
+        (page?.layout.sitecore.route?.fields as RouteFields)?.ogImage?.value?.src || undefined,
     },
   };
 };

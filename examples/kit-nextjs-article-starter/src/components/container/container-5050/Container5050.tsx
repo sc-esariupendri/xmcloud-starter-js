@@ -47,12 +47,20 @@ export const Default: React.FC<Container5050Props> = (props) => {
     >
       <Flex wrap="nowrap">
         <FlexItem as="div" basis="1/2">
-          <AppPlaceholder name={leftPlaceholders.dynamicKey} rendering={rendering} page={page}
-            componentMap={componentMap}/>
+          <AppPlaceholder
+            name={leftPlaceholders.dynamicKey}
+            rendering={rendering}
+            page={page}
+            componentMap={componentMap}
+          />
         </FlexItem>
         <FlexItem as="div" basis="1/2">
-          <AppPlaceholder name={rightPlaceholders.dynamicKey} rendering={rendering} page={page}
-            componentMap={componentMap}/>
+          <AppPlaceholder
+            name={rightPlaceholders.dynamicKey}
+            rendering={rendering}
+            page={page}
+            componentMap={componentMap}
+          />
         </FlexItem>
       </Flex>
     </section>

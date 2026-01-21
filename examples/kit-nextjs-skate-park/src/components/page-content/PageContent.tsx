@@ -1,8 +1,5 @@
 import React, { JSX } from 'react';
-import {
-  RichText as ContentSdkRichText,
-  RichTextField,
-} from '@sitecore-content-sdk/nextjs';
+import { RichText as ContentSdkRichText, RichTextField } from '@sitecore-content-sdk/nextjs';
 import { ComponentProps } from 'lib/component-props';
 
 interface Fields {

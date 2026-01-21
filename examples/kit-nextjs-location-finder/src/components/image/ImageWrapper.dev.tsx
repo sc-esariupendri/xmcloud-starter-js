@@ -1,9 +1,5 @@
 import { cn } from '@/lib/utils';
-import {
-  ImageField,
-  Image as ContentSdkImage,
-  Page,
-} from '@sitecore-content-sdk/nextjs';
+import { ImageField, Image as ContentSdkImage, Page } from '@sitecore-content-sdk/nextjs';
 import NextImage, { ImageProps } from 'next/image';
 import placeholderImageLoader from '@/utils/placeholderImageLoader';
 import { IMAGE_REMOTE_PATTERNS } from '@/config/image-config';
@@ -69,13 +65,10 @@ export const Default: React.FC<ImageWrapperProps> = (props) => {
       };
 
       return IMAGE_REMOTE_PATTERNS.some((pattern) => {
-        const protocolMatch =
-          !pattern.protocol || pattern.protocol === url.protocol.slice(0, -1);
+        const protocolMatch = !pattern.protocol || pattern.protocol === url.protocol.slice(0, -1);
         if (!protocolMatch) return false;
 
-        const hostnameRegex = new RegExp(
-          '^' + convertToRegex(pattern.hostname) + '$'
-        );
+        const hostnameRegex = new RegExp('^' + convertToRegex(pattern.hostname) + '$');
         return hostnameRegex.test(url.hostname);
       });
     } catch {
@@ -89,9 +82,7 @@ export const Default: React.FC<ImageWrapperProps> = (props) => {
   // - SVG files (can't be optimized)
   // - External images that don't match remotePatterns
   const isUnoptimized =
-    unoptimized ||
-    isSvg ||
-    (imageSrc.startsWith('http') && !shouldOptimize(imageSrc));
+    unoptimized || isSvg || (imageSrc.startsWith('http') && !shouldOptimize(imageSrc));
 
   return (
     <div className={cn('image-container', wrapperClass)}>

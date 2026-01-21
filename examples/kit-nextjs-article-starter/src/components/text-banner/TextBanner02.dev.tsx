@@ -65,9 +65,7 @@ export const Default: React.FC<TextBannerProps> = (props) => {
     },
   });
 
-  const backgroundImageStyle = image?.value?.src
-    ? { '--bg-img': `url(${image?.value.src})` }
-    : {};
+  const backgroundImageStyle = image?.value?.src ? { '--bg-img': `url(${image?.value.src})` } : {};
   type BackgroundType = 'image' | 'color';
   const backgroundType: BackgroundType = image?.value?.src ? 'image' : 'color';
   if (fields) {
@@ -82,7 +80,7 @@ export const Default: React.FC<TextBannerProps> = (props) => {
           {
             'mt-0': excludeTopMargin,
             [props?.params?.styles]: props?.params?.styles,
-          },
+          }
         )}
         style={backgroundImageStyle as React.CSSProperties}
       >

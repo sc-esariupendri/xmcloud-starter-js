@@ -41,7 +41,11 @@ const Default = (props: MultiPromoTabsFields) => {
         }
       >
         <div className="flex h-full w-full overflow-hidden">
-          <ImageWrapper image={image1?.jsonValue} className="h-full w-full object-cover" page={page} />
+          <ImageWrapper
+            image={image1?.jsonValue}
+            className="h-full w-full object-cover"
+            page={page}
+          />
         </div>
         {link1?.jsonValue && (
           <Button

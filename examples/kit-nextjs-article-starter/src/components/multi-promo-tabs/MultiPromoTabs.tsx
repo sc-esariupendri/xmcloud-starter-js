@@ -26,12 +26,10 @@ export const Default: React.FC<MultiPromoTabsProps> = (props) => {
   if (fields) {
     const tabItems = fields.data?.datasource?.children?.results ?? [];
     // Get the initially selected tab title for the dropdown display
-    const initialTabTitle =
-      tabItems[0]?.title?.jsonValue?.value || 'Select an option';
+    const initialTabTitle = tabItems[0]?.title?.jsonValue?.value || 'Select an option';
     // Get dropdown label text or use default
     const droplistLabelText =
-      fields.data?.datasource?.droplistLabel?.jsonValue?.value ||
-      'Select a value';
+      fields.data?.datasource?.droplistLabel?.jsonValue?.value || 'Select a value';
 
     // When in editor mode, render all tabs stacked
     if (isEditMode) {
@@ -78,19 +76,12 @@ export const Default: React.FC<MultiPromoTabsProps> = (props) => {
             onValueChange={(value) => setActiveTab(Number(value))}
             defaultValue={activeTab.toString()}
           >
-            <SelectTrigger
-              id={id}
-              className="text-primary-foreground w-full border-0 bg-black/20"
-            >
+            <SelectTrigger id={id} className="text-primary-foreground w-full border-0 bg-black/20">
               <SelectValue placeholder={initialTabTitle} />
             </SelectTrigger>
             <SelectContent>
               {tabItems.map((item, index) => (
-                <SelectItem
-                  key={index}
-                  value={index.toString()}
-                  className="capitalize"
-                >
+                <SelectItem key={index} value={index.toString()} className="capitalize">
                   {item.title?.jsonValue.value || `Tab ${index + 1}`}
                 </SelectItem>
               ))}

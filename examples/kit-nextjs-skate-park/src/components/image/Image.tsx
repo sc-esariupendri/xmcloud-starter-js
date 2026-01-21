@@ -5,9 +5,9 @@ import {
   Link as ContentSdkLink,
   LinkField,
   Text,
-} from "@sitecore-content-sdk/nextjs";
-import React from "react";
-import { ComponentProps } from "lib/component-props";
+} from '@sitecore-content-sdk/nextjs';
+import React from 'react';
+import { ComponentProps } from 'lib/component-props';
 
 interface ImageFields {
   Image: ImageField;
@@ -41,18 +41,14 @@ export const Banner: React.FC<ImageProps> = ({ params, fields }) => {
     ...fields.Image,
     value: {
       ...fields.Image.value,
-      style: { objectFit: "cover", width: "100%", height: "100%" },
+      style: { objectFit: 'cover', width: '100%', height: '100%' },
     },
   };
 
   return (
     <div className={`component hero-banner ${styles}`.trim()} id={id}>
       <div className="component-content sc-sxa-image-hero-banner">
-        <ContentSdkImage
-          field={imageField}
-          loading="eager"
-          fetchPriority="high"
-        />
+        <ContentSdkImage field={imageField} loading="eager" fetchPriority="high" />
       </div>
     </div>
   );
@@ -67,8 +63,7 @@ export const Default: React.FC<ImageProps> = (props) => {
   }
 
   const Image = () => <ContentSdkImage field={fields.Image} />;
-  const shouldWrapWithLink =
-    !page.mode.isEditing && fields.TargetUrl?.value?.href;
+  const shouldWrapWithLink = !page.mode.isEditing && fields.TargetUrl?.value?.href;
 
   return (
     <ImageWrapper className={`component image ${styles}`} id={id}>
@@ -79,11 +74,7 @@ export const Default: React.FC<ImageProps> = (props) => {
       ) : (
         <Image />
       )}
-      <Text
-        tag="span"
-        className="image-caption field-imagecaption"
-        field={fields.ImageCaption}
-      />
+      <Text tag="span" className="image-caption field-imagecaption" field={fields.ImageCaption} />
     </ImageWrapper>
   );
 };

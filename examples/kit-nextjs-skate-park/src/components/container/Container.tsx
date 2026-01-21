@@ -1,20 +1,16 @@
 import React, { JSX } from 'react';
 import { ComponentProps } from 'lib/component-props';
 import componentMap from '.sitecore/component-map';
-import { AppPlaceholder } from "@sitecore-content-sdk/nextjs";
+import { AppPlaceholder } from '@sitecore-content-sdk/nextjs';
 
 interface ContainerProps extends ComponentProps {
-  params: ComponentProps["params"] & {
+  params: ComponentProps['params'] & {
     BackgroundImage?: string;
     DynamicPlaceholderId: string;
   };
 }
 
-const Container = ({
-  params,
-  rendering,
-  page,
-}: ContainerProps): JSX.Element => {
+const Container = ({ params, rendering, page }: ContainerProps): JSX.Element => {
   const {
     styles,
     RenderingIdentifier: id,
@@ -24,12 +20,12 @@ const Container = ({
   const phKey = `container-${DynamicPlaceholderId}`;
 
   // Extract the mediaurl from rendering parameters
-  const mediaUrlPattern = new RegExp(/mediaurl=\"([^"]*)\"/, "i");
+  const mediaUrlPattern = new RegExp(/mediaurl=\"([^"]*)\"/, 'i');
 
   let backgroundStyle: { [key: string]: string } = {};
 
   if (backgroundImage && backgroundImage.match(mediaUrlPattern)) {
-    const mediaUrl = backgroundImage.match(mediaUrlPattern)?.[1] || "";
+    const mediaUrl = backgroundImage.match(mediaUrlPattern)?.[1] || '';
 
     backgroundStyle = {
       backgroundImage: `url('${mediaUrl}')`,

@@ -21,7 +21,12 @@ interface RowSplitterProps extends ComponentProps {
   params: ComponentProps['params'] & RowStyles;
 }
 
-export const Default = ({ params, rendering, page, componentMap }: RowSplitterProps): JSX.Element => {
+export const Default = ({
+  params,
+  rendering,
+  page,
+  componentMap,
+}: RowSplitterProps): JSX.Element => {
   const enabledPlaceholders = params.EnabledPlaceholders?.split(',') ?? [];
   const id = params.RenderingIdentifier;
 
@@ -36,7 +41,12 @@ export const Default = ({ params, rendering, page, componentMap }: RowSplitterPr
           <div key={index} className={`container-fluid ${rowStyles}`.trimEnd()}>
             <div>
               <div className="row">
-                <AppPlaceholder page={page} componentMap={componentMap} name={placeholderKey} rendering={rendering} />
+                <AppPlaceholder
+                  page={page}
+                  componentMap={componentMap}
+                  name={placeholderKey}
+                  rendering={rendering}
+                />
               </div>
             </div>
           </div>

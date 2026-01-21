@@ -34,8 +34,7 @@ export const Default: React.FC<Container70Props> = (props) => {
     return null;
   }
 
-  const excludeTopMargin =
-    props?.params?.excludeTopMargin === '1' ? true : false;
+  const excludeTopMargin = props?.params?.excludeTopMargin === '1' ? true : false;
 
   return (
     <section

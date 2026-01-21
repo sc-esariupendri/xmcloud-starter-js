@@ -314,7 +314,13 @@ export const Testimonials1 = (props: TestimonialsProps): JSX.Element => {
             <CarouselContent>
               {datasource?.children?.results?.map((testimonial) => (
                 <CarouselItem key={testimonial.id}>
-                  <TestimonialCard testimonial={testimonial} type="centered" withLogo withRating page={props.page} />
+                  <TestimonialCard
+                    testimonial={testimonial}
+                    type="centered"
+                    withLogo
+                    withRating
+                    page={props.page}
+                  />
                 </CarouselItem>
               )) || []}
             </CarouselContent>
@@ -350,7 +356,13 @@ export const Testimonials2 = (props: TestimonialsProps): JSX.Element => {
           <CarouselContent>
             {datasource?.children?.results?.map((testimonial) => (
               <CarouselItem key={testimonial.id} className="pr-4 md:basis-1/2">
-                <TestimonialCard testimonial={testimonial} type="simple" withLogo withRating page={props.page} />
+                <TestimonialCard
+                  testimonial={testimonial}
+                  type="simple"
+                  withLogo
+                  withRating
+                  page={props.page}
+                />
               </CarouselItem>
             )) || []}
           </CarouselContent>
@@ -433,7 +445,12 @@ export const Testimonials4 = (props: TestimonialsProps): JSX.Element => {
             <CarouselContent>
               {datasource?.children?.results?.map((testimonial) => (
                 <CarouselItem key={testimonial.id}>
-                  <TestimonialCard testimonial={testimonial} type="boxed" withRating page={props.page} />
+                  <TestimonialCard
+                    testimonial={testimonial}
+                    type="boxed"
+                    withRating
+                    page={props.page}
+                  />
                 </CarouselItem>
               )) || []}
             </CarouselContent>
@@ -471,7 +488,13 @@ export const Testimonials5 = (props: TestimonialsProps): JSX.Element => {
           <CarouselContent>
             {datasource?.children?.results?.map((testimonial) => (
               <CarouselItem key={testimonial.id}>
-                <TestimonialCard testimonial={testimonial} type="large" withLogo withRating page={props.page} />
+                <TestimonialCard
+                  testimonial={testimonial}
+                  type="large"
+                  withLogo
+                  withRating
+                  page={props.page}
+                />
               </CarouselItem>
             )) || []}
           </CarouselContent>
@@ -634,7 +657,12 @@ export const Testimonials9 = (props: TestimonialsProps): JSX.Element => {
 
           {datasource?.children?.results?.map((testimonial) => (
             <TabsContent value={testimonial.id} key={testimonial.id} className="py-16">
-              <TestimonialCard testimonial={testimonial} type="centered" withRating page={props.page} />
+              <TestimonialCard
+                testimonial={testimonial}
+                type="centered"
+                withRating
+                page={props.page}
+              />
             </TabsContent>
           )) || []}
         </Tabs>

@@ -21,8 +21,7 @@ import { AnimatedHoverNav } from '@/components/ui/animated-hover-nav';
 
 export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
   const { fields, isPageEditing } = props ?? {};
-  const { logo, primaryNavigationLinks, headerContact } =
-    fields?.data?.item ?? {};
+  const { logo, primaryNavigationLinks, headerContact } = fields?.data?.item ?? {};
   const [isOpen, setIsOpen] = useState(false);
   const [sheetAnimationComplete, setSheetAnimationComplete] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -64,7 +63,7 @@ export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
         animate={{ opacity: visible ? 1 : 0 }}
         transition={{ duration: isReducedMotion ? 0 : 0.2 }}
         className={cn(
-          'bg-background/80 @container sticky top-0 z-50 flex h-[96px] w-full items-center justify-center border-b backdrop-blur-md',
+          'bg-background/80 @container sticky top-0 z-50 flex h-[96px] w-full items-center justify-center border-b backdrop-blur-md'
         )}
       >
         <div className="@xl:px-8 relative mx-auto flex h-16 w-full max-w-screen-2xl items-center justify-between px-4">
@@ -81,9 +80,7 @@ export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
                     {primaryNavigationLinks?.targetItems &&
                       primaryNavigationLinks.targetItems.length > 0 &&
                       primaryNavigationLinks?.targetItems.map((item, index) => (
-                        <NavigationMenuItem
-                          key={`${item.link?.jsonValue?.value?.text}-${index}`}
-                        >
+                        <NavigationMenuItem key={`${item.link?.jsonValue?.value?.text}-${index}`}>
                           {isPageEditing ? (
                             <Button
                               variant="ghost"
@@ -99,10 +96,7 @@ export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
                                 asChild
                                 className="font-body bg-transparent text-base font-medium hover:bg-transparent"
                               >
-                                <Link
-                                  href={item.link.jsonValue.value.href}
-                                  prefetch={false}
-                                >
+                                <Link href={item.link.jsonValue.value.href} prefetch={false}>
                                   {item.link.jsonValue.value.text}
                                 </Link>
                               </Button>
@@ -145,14 +139,8 @@ export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
                 </Button>
               ) : (
                 headerContact.jsonValue.value.href && (
-                  <Button
-                    asChild
-                    className="font-heading text-base font-medium"
-                  >
-                    <Link
-                      href={headerContact.jsonValue.value.href}
-                      prefetch={false}
-                    >
+                  <Button asChild className="font-heading text-base font-medium">
+                    <Link href={headerContact.jsonValue.value.href} prefetch={false}>
                       {headerContact.jsonValue.value.text}
                     </Link>
                   </Button>
@@ -175,11 +163,7 @@ export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
                 )}
               </AnimatePresence>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="hover:bg-transparent [&_svg]:size-8"
-                >
+                <Button variant="ghost" size="icon" className="hover:bg-transparent [&_svg]:size-8">
                   <Menu />
                   <span className="sr-only">Toggle menu</span>
                 </Button>
@@ -208,54 +192,39 @@ export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
                       >
                         {primaryNavigationLinks?.targetItems &&
                           primaryNavigationLinks.targetItems.length > 0 &&
-                          primaryNavigationLinks?.targetItems.map(
-                            (item, index) => (
-                              <motion.div
-                                key={`${item.link?.jsonValue?.value?.text}-mobile`}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{
-                                  delay: 0.05 * index,
-                                  duration: isReducedMotion ? 0 : 0.3,
-                                }}
-                                className="flex justify-center"
-                              >
-                                {isPageEditing ? (
-                                  <Button
-                                    variant="ghost"
-                                    asChild
-                                    onClick={() => setIsOpen(false)}
-                                  >
-                                    <ContentSdkLink
-                                      field={item.link?.jsonValue}
-                                    />
+                          primaryNavigationLinks?.targetItems.map((item, index) => (
+                            <motion.div
+                              key={`${item.link?.jsonValue?.value?.text}-mobile`}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{
+                                delay: 0.05 * index,
+                                duration: isReducedMotion ? 0 : 0.3,
+                              }}
+                              className="flex justify-center"
+                            >
+                              {isPageEditing ? (
+                                <Button variant="ghost" asChild onClick={() => setIsOpen(false)}>
+                                  <ContentSdkLink field={item.link?.jsonValue} />
+                                </Button>
+                              ) : (
+                                item.link?.jsonValue?.value?.href && (
+                                  <Button variant="ghost" asChild onClick={() => setIsOpen(false)}>
+                                    <Link href={item.link.jsonValue.value.href}>
+                                      {item.link.jsonValue.value.text}
+                                    </Link>
                                   </Button>
-                                ) : (
-                                  item.link?.jsonValue?.value?.href && (
-                                    <Button
-                                      variant="ghost"
-                                      asChild
-                                      onClick={() => setIsOpen(false)}
-                                    >
-                                      <Link
-                                        href={item.link.jsonValue.value.href}
-                                      >
-                                        {item.link.jsonValue.value.text}
-                                      </Link>
-                                    </Button>
-                                  )
-                                )}
-                              </motion.div>
-                            ),
-                          )}
+                                )
+                              )}
+                            </motion.div>
+                          ))}
                         {headerContact?.jsonValue?.value && (
                           <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{
                               delay: primaryNavigationLinks?.targetItems?.length
-                                ? 0.05 *
-                                  primaryNavigationLinks.targetItems.length
+                                ? 0.05 * primaryNavigationLinks.targetItems.length
                                 : 0,
                               duration: isReducedMotion ? 0 : 0.3,
                             }}
@@ -263,19 +232,12 @@ export const GlobalHeaderCentered: React.FC<GlobalHeaderProps> = (props) => {
                           >
                             {isPageEditing ? (
                               <Button asChild onClick={() => setIsOpen(false)}>
-                                <ContentSdkLink
-                                  field={headerContact.jsonValue}
-                                />
+                                <ContentSdkLink field={headerContact.jsonValue} />
                               </Button>
                             ) : (
                               headerContact.jsonValue.value.href && (
-                                <Button
-                                  asChild
-                                  onClick={() => setIsOpen(false)}
-                                >
-                                  <Link
-                                    href={headerContact.jsonValue.value.href}
-                                  >
+                                <Button asChild onClick={() => setIsOpen(false)}>
+                                  <Link href={headerContact.jsonValue.value.href}>
                                     {headerContact.jsonValue.value.text}
                                   </Link>
                                 </Button>

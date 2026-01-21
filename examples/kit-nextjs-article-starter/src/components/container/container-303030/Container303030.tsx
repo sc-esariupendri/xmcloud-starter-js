@@ -26,18 +26,9 @@ export const Default: React.FC<Container303030Props> = (props) => {
 
   const isPageEditing = page.mode.isEditing;
 
-  const leftPlaceholder = getContainerPlaceholderProps(
-    'container-thirty-left',
-    props.params,
-  );
-  const centerPlaceholder = getContainerPlaceholderProps(
-    'container-thirty-center',
-    props.params,
-  );
-  const rightPlaceholder = getContainerPlaceholderProps(
-    'container-thirty-right',
-    props.params,
-  );
+  const leftPlaceholder = getContainerPlaceholderProps('container-thirty-left', props.params);
+  const centerPlaceholder = getContainerPlaceholderProps('container-thirty-center', props.params);
+  const rightPlaceholder = getContainerPlaceholderProps('container-thirty-right', props.params);
 
   const isEmptyPlaceholder =
     isContainerPlaceholderEmpty(rendering, leftPlaceholder, left) &&
@@ -48,8 +39,7 @@ export const Default: React.FC<Container303030Props> = (props) => {
     return null;
   }
 
-  const excludeTopMargin =
-    props?.params?.excludeTopMargin === '1' ? true : false;
+  const excludeTopMargin = props?.params?.excludeTopMargin === '1' ? true : false;
 
   return (
     <section

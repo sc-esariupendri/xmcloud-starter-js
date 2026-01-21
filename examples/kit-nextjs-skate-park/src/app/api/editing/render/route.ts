@@ -1,4 +1,4 @@
-import { createEditingRenderRouteHandlers } from "@sitecore-content-sdk/nextjs/route-handler";
+import { createEditingRenderRouteHandlers } from '@sitecore-content-sdk/nextjs/route-handler';
 
 /**
  * API route to handler Sitecore Editor rendeing.

@@ -1,8 +1,5 @@
 import React, { JSX } from 'react';
-import {
-  ComponentRendering,
-  AppPlaceholder,
-} from '@sitecore-content-sdk/nextjs';
+import { ComponentRendering, AppPlaceholder } from '@sitecore-content-sdk/nextjs';
 import { ComponentProps } from 'lib/component-props';
 import componentMap from '.sitecore/component-map';
 
@@ -25,11 +22,7 @@ interface RowSplitterProps extends ComponentProps {
   params: ComponentProps['params'] & RowStyles;
 }
 
-export const Default = ({
-  params,
-  rendering,
-  page,
-}: RowSplitterProps): JSX.Element => {
+export const Default = ({ params, rendering, page }: RowSplitterProps): JSX.Element => {
   const enabledPlaceholders = params.EnabledPlaceholders?.split(',') ?? [];
   const id = params.RenderingIdentifier;
 

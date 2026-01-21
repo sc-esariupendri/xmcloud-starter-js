@@ -24,30 +24,15 @@ export const Default: React.FC<Container6321Props> = (props) => {
 
   const isPageEditing = page.mode.isEditing;
 
-  const col1Placeholder = getContainerPlaceholderProps(
-    'container-sixty-thirty-one',
-    props.params,
-  );
-  const col2Placeholder = getContainerPlaceholderProps(
-    'container-sixty-thirty-two',
-    props.params,
-  );
+  const col1Placeholder = getContainerPlaceholderProps('container-sixty-thirty-one', props.params);
+  const col2Placeholder = getContainerPlaceholderProps('container-sixty-thirty-two', props.params);
   const col3Placeholder = getContainerPlaceholderProps(
     'container-sixty-thirty-three',
-    props.params,
+    props.params
   );
-  const col4Placeholder = getContainerPlaceholderProps(
-    'container-sixty-thirty-four',
-    props.params,
-  );
-  const col5Placeholder = getContainerPlaceholderProps(
-    'container-sixty-thirty-five',
-    props.params,
-  );
-  const col6Placeholder = getContainerPlaceholderProps(
-    'container-sixty-thirty-six',
-    props.params,
-  );
+  const col4Placeholder = getContainerPlaceholderProps('container-sixty-thirty-four', props.params);
+  const col5Placeholder = getContainerPlaceholderProps('container-sixty-thirty-five', props.params);
+  const col6Placeholder = getContainerPlaceholderProps('container-sixty-thirty-six', props.params);
 
   const isEmptyPlaceholder =
     isContainerPlaceholderEmpty(rendering, col1Placeholder, col1) &&
@@ -61,8 +46,7 @@ export const Default: React.FC<Container6321Props> = (props) => {
     return null;
   }
 
-  const excludeTopMargin =
-    props?.params?.excludeTopMargin === '1' ? true : false;
+  const excludeTopMargin = props?.params?.excludeTopMargin === '1' ? true : false;
 
   return (
     <section
