@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PartialDesignDynamicPlaceholder from '@/components/sxa/PartialDesignDynamicPlaceholder';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock AppPlaceholder component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -16,10 +17,20 @@ describe('SXA PartialDesignDynamicPlaceholder', () => {
   const mockPage = {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-    layout: {},
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
     locale: 'en',
-  };
+  } as Page;
 
   const mockComponentMap = new Map();
   it('renders dynamic placeholder with signature', () => {

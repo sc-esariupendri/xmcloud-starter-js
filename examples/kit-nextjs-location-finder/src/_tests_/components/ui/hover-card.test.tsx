@@ -16,10 +16,20 @@ jest.mock('@radix-ui/react-hover-card', () => {
     <div>{children as React.ReactNode}</div>
   );
 
-  const Content = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(
-    ({ children, ...props }, ref) => (
+  const Content = React.forwardRef<
+    HTMLDivElement,
+    React.PropsWithChildren<{
+      sideOffset?: number;
+      align?: string;
+      alignOffset?: number;
+      side?: string;
+      [key: string]: unknown;
+    }>
+  >(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ children, sideOffset, align, alignOffset, side, ...props }, ref) => (
       <div ref={ref} data-testid="hover-card-content" {...props}>
-        {children}
+        {children as React.ReactNode}
       </div>
     )
   );

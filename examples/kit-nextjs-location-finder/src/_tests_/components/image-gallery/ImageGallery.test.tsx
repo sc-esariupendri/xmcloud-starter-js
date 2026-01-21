@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as ImageGallery, Grid } from '@/components/image-gallery/ImageGallery';
 import { mockImageGalleryProps } from './image-gallery.mock.props';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -62,17 +63,28 @@ describe('ImageGallery Component', () => {
   });
 
   it('passes isPageEditing prop correctly', () => {
+    const mockPageEditing = {
+      mode: {
+        isEditing: true,
+        isPreview: false,
+        isNormal: false,
+        name: 'edit' as const,
+        designLibrary: { isVariantGeneration: false },
+        isDesignLibrary: false,
+      },
+      layout: {
+        sitecore: {
+          context: {},
+          route: null,
+        },
+      },
+      locale: 'en',
+    } as Page;
+
     render(
       <ImageGallery
         {...mockImageGalleryProps}
-        page={{
-          ...mockImageGalleryProps.page,
-          mode: {
-            isEditing: true,
-            isPreview: false,
-            isNormal: false,
-          },
-        }}
+        page={mockPageEditing}
       />
     );
     expect(screen.getByText(/Editing/)).toBeInTheDocument();

@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ContentBlock from '@/components/sxa/ContentBlock';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -20,6 +21,24 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 }));
 
 describe('SXA ContentBlock', () => {
+  const mockPageBase = {
+    mode: {
+      isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
+    },
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
+    locale: 'en',
+  } as Page;
+
   const mockFields = {
     heading: {
       value: 'Alaris Advanced Life Support Ambulances',
@@ -36,6 +55,8 @@ describe('SXA ContentBlock', () => {
         fields={mockFields}
         rendering={{ componentName: 'ContentBlock', dataSource: '', uid: '123' }}
         params={{}}
+        page={mockPageBase}
+        componentMap={new Map()}
       />
     );
 
@@ -53,6 +74,8 @@ describe('SXA ContentBlock', () => {
         fields={mockFields}
         rendering={{ componentName: 'ContentBlock', dataSource: '', uid: '123' }}
         params={{}}
+        page={mockPageBase}
+        componentMap={new Map()}
       />
     );
 
@@ -68,6 +91,8 @@ describe('SXA ContentBlock', () => {
         fields={mockFields}
         rendering={{ componentName: 'ContentBlock', dataSource: '', uid: '123' }}
         params={{}}
+        page={mockPageBase}
+        componentMap={new Map()}
       />
     );
 

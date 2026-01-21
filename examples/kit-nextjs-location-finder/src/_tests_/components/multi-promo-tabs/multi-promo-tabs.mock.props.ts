@@ -2,6 +2,7 @@ import type {
   MultiPromoTabsProps,
   MultiPromoTabsFields,
 } from '@/components/multi-promo-tabs/multi-promo-tabs.props';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 export const mockMultiPromoTabItems: MultiPromoTabsFields[] = [
   {
@@ -175,9 +176,19 @@ export const mockMultiPromoTabsProps: MultiPromoTabsProps = {
   page: {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-    layout: {},
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
     locale: 'en',
-  },
+  } as Page,
   componentMap: new Map(),
 };

@@ -6,6 +6,7 @@ import {
   Centered as GlobalHeaderCentered,
 } from '@/components/global-header/GlobalHeader';
 import { mockGlobalHeaderProps } from './global-header.mock.props';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -49,17 +50,28 @@ describe('GlobalHeader Component', () => {
   });
 
   it('passes isPageEditing prop correctly in editing mode', () => {
+    const mockPageEditing = {
+      mode: {
+        isEditing: true,
+        isPreview: false,
+        isNormal: false,
+        name: 'edit' as const,
+        designLibrary: { isVariantGeneration: false },
+        isDesignLibrary: false,
+      },
+      layout: {
+        sitecore: {
+          context: {},
+          route: null,
+        },
+      },
+      locale: 'en',
+    } as Page;
+
     render(
       <GlobalHeader
         {...mockGlobalHeaderProps}
-        page={{
-          ...mockGlobalHeaderProps.page,
-          mode: {
-            isEditing: true,
-            isPreview: false,
-            isNormal: false,
-          },
-        }}
+        page={mockPageEditing}
       />
     );
     expect(screen.getByText(/Editing/)).toBeInTheDocument();

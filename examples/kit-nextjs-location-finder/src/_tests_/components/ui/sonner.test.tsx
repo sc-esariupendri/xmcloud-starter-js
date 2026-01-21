@@ -4,7 +4,8 @@ import { Toaster } from '@/components/ui/sonner';
 
 // Mock sonner
 jest.mock('sonner', () => ({
-  Toaster: ({ ...props }: Record<string, unknown>) => (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  Toaster: ({ toastOptions, ...props }: Record<string, unknown>) => (
     <div data-testid="sonner-toaster" {...props} />
   ),
 }));

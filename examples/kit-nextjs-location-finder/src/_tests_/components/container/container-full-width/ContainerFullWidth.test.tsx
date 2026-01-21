@@ -25,7 +25,7 @@ jest.mock('@/components/flex/Flex.dev', () => ({
 
 describe('ContainerFullWidth Component', () => {
   it('renders with basic props', () => {
-    render(<ContainerFullWidth {...mockContainerFullWidthProps} />);
+    render(<ContainerFullWidth {...(mockContainerFullWidthProps as unknown as React.ComponentProps<typeof ContainerFullWidth>)} />);
 
     expect(screen.getByTestId('flex-container')).toBeInTheDocument();
     expect(screen.getByTestId('flex-item')).toHaveAttribute('data-basis', 'full');
@@ -33,7 +33,7 @@ describe('ContainerFullWidth Component', () => {
   });
 
   it('applies custom styles from params', () => {
-    const { container } = render(<ContainerFullWidth {...mockContainerFullWidthProps} />);
+    const { container } = render(<ContainerFullWidth {...(mockContainerFullWidthProps as unknown as React.ComponentProps<typeof ContainerFullWidth>)} />);
 
     const section = container.querySelector('section');
     expect(section).toHaveClass('custom-fullwidth-styles');
@@ -41,7 +41,7 @@ describe('ContainerFullWidth Component', () => {
   });
 
   it('excludes top margin when specified', () => {
-    const { container } = render(<ContainerFullWidth {...mockContainerFullWidthPropsNoMargin} />);
+    const { container } = render(<ContainerFullWidth {...(mockContainerFullWidthPropsNoMargin as unknown as React.ComponentProps<typeof ContainerFullWidth>)} />);
 
     const section = container.querySelector('section');
     expect(section).toHaveClass('mt-0');
@@ -49,7 +49,7 @@ describe('ContainerFullWidth Component', () => {
   });
 
   it('includes top margin by default', () => {
-    const { container } = render(<ContainerFullWidth {...mockContainerFullWidthProps} />);
+    const { container } = render(<ContainerFullWidth {...(mockContainerFullWidthProps as unknown as React.ComponentProps<typeof ContainerFullWidth>)} />);
 
     const section = container.querySelector('section');
     expect(section).toHaveClass('mt-4');

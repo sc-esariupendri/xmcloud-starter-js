@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as RowSplitter } from '@/components/sxa/RowSplitter';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock AppPlaceholder component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -20,10 +21,20 @@ describe('SXA RowSplitter', () => {
   const mockPage = {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-    layout: {},
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
     locale: 'en',
-  };
+  } as Page;
 
   const mockComponentMap = new Map();
 

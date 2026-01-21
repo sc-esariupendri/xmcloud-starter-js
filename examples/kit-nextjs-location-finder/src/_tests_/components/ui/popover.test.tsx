@@ -16,8 +16,12 @@ jest.mock('@radix-ui/react-popover', () => {
     <div>{children as React.ReactNode}</div>
   );
 
-  const Content = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(
-    ({ children, ...props }, ref) => (
+  const Content = React.forwardRef<
+    HTMLDivElement,
+    React.PropsWithChildren<{ sideOffset?: number }>
+  >(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ children, sideOffset, ...props }, ref) => (
       <div ref={ref} data-testid="popover-content" {...props}>
         {children}
       </div>

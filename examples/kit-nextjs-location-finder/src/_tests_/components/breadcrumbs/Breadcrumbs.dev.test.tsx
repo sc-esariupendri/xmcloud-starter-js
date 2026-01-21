@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Breadcrumbs } from '@/components/breadcrumbs/Breadcrumbs';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 //  Mock NoDataFallback
 jest.mock('@/utils/NoDataFallback', () => ({
@@ -28,6 +29,25 @@ const mockRendering = {
 };
 const mockParams = {};
 
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 const mockPropsWithAncestors = {
   rendering: mockRendering,
   params: mockParams,
@@ -52,6 +72,8 @@ const mockPropsWithAncestors = {
       },
     },
   },
+  page: mockPageBase,
+  componentMap: new Map(),
 };
 
 const mockPropsWithoutAncestors = {
@@ -65,6 +87,8 @@ const mockPropsWithoutAncestors = {
       },
     },
   },
+  page: mockPageBase,
+  componentMap: new Map(),
 };
 
 const mockPropsMissingFields = {
@@ -116,6 +140,8 @@ describe('Breadcrumbs Component', () => {
           },
         },
       },
+      page: mockPageBase,
+      componentMap: new Map(),
     };
 
     render(<Breadcrumbs {...mockProps} />);

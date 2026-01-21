@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as CtaBanner } from '@/components/cta-banner/CtaBanner';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Component-specific mocks (Sitecore components are already mocked globally)
 // Override if needed for specific testing requirements
@@ -15,6 +16,25 @@ jest.mock('@/components/animated-section/AnimatedSection.dev', () => {
   return { Default: AnimatedSection };
 });
 
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 describe('CtaBanner Component', () => {
   const mockProps = {
     fields: {
@@ -26,13 +46,7 @@ describe('CtaBanner Component', () => {
       colorScheme: 'primary' as const,
     },
     rendering: { componentName: 'CtaBanner' },
-    page: {
-      mode: {
-        isEditing: false,
-      },
-      layout: {},
-      locale: 'en',
-    },
+    page: mockPageBase,
     componentMap: new Map(),
   } as React.ComponentProps<typeof CtaBanner>;
 
@@ -49,13 +63,7 @@ describe('CtaBanner Component', () => {
       fields: undefined,
       params: {},
       rendering: { componentName: 'CtaBanner' },
-      page: {
-        mode: {
-          isEditing: false,
-        },
-        layout: {},
-        locale: 'en',
-      },
+      page: mockPageBase,
       componentMap: new Map(),
     };
     render(<CtaBanner {...emptyProps} />);

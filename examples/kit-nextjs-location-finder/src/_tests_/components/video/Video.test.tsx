@@ -39,6 +39,7 @@ jest.mock('@/components/icon/Icon', () => ({
 // Mock ImageWrapper component
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
   Default: ({ image }: { image: { value?: { src?: string; alt?: string } } }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img data-testid="image-wrapper" src={image.value?.src} alt={image.value?.alt} />
   ),
 }));
@@ -93,7 +94,7 @@ describe('Video', () => {
   });
 
   it('renders NoDataFallback when fields are not provided', () => {
-    render(<Video rendering={mockVideoProps.rendering} params={mockVideoProps.params} />);
+    render(<Video rendering={mockVideoProps.rendering} params={mockVideoProps.params} page={mockVideoProps.page} componentMap={mockVideoProps.componentMap} />);
 
     const fallback = screen.getByTestId('no-data-fallback');
     expect(fallback).toBeInTheDocument();

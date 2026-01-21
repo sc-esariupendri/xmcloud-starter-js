@@ -65,6 +65,7 @@ jest.mock('@/components/ui/button', () => ({
 
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
   Default: ({ image, alt, className }: Record<string, unknown>) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={(image as { value?: { src?: string } })?.value?.src}
       alt={alt as string}

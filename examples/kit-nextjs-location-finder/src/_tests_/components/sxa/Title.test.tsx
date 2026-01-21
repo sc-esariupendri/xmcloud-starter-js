@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Title } from '@/components/sxa/Title';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -37,9 +38,14 @@ describe('SXA Title', () => {
     mode: {
       isNormal: true,
       isEditing: false,
+      isPreview: false,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
     layout: {
       sitecore: {
+        context: {},
         route: {
           fields: {
             pageTitle: {
@@ -50,7 +56,7 @@ describe('SXA Title', () => {
       },
     },
     locale: 'en',
-  };
+  } as unknown as Page;
 
   const mockFields = {
     data: {

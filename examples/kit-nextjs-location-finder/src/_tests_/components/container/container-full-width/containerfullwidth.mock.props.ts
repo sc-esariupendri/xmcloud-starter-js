@@ -1,3 +1,24 @@
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 // Simple mock props for ContainerFullWidth component
 export const mockContainerFullWidthProps = {
   rendering: {
@@ -10,13 +31,7 @@ export const mockContainerFullWidthProps = {
     DynamicPlaceholderId: 'main',
     styles: 'custom-fullwidth-styles',
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
 };
 
@@ -33,13 +48,7 @@ export const mockContainerFullWidthPropsNoMargin = {
     excludeTopMargin: '1',
     styles: 'no-margin-fullwidth',
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
 };
 
@@ -52,12 +61,6 @@ export const mockContainerFullWidthPropsEmpty = {
   params: {
     DynamicPlaceholderId: 'empty',
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
 };

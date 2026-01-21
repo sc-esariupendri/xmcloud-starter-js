@@ -1,3 +1,24 @@
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 // Simple mock props for Container5050 component
 export const mockContainer5050Props = {
   rendering: {
@@ -11,13 +32,7 @@ export const mockContainer5050Props = {
     DynamicPlaceholderId: 'main',
     styles: 'custom-5050-styles',
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
 };
 
@@ -35,12 +50,6 @@ export const mockContainer5050PropsNoMargin = {
     excludeTopMargin: '1',
     styles: 'no-margin-5050',
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
 };

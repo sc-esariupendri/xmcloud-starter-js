@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { FloatingDock } from '@/components/floating-dock/floating-dock.dev';
 
@@ -33,7 +33,15 @@ jest.mock('framer-motion', () => {
             onMouseLeave={onMouseLeave as React.MouseEventHandler<HTMLDivElement>}
             onMouseEnter={onMouseEnter as React.MouseEventHandler<HTMLDivElement>}
             data-testid={layoutId as string}
-            style={style as React.CSSProperties}
+            style={
+              style
+                ? Object.fromEntries(
+                    Object.entries(style as Record<string, unknown>).filter(
+                      ([, value]) => value !== Infinity && value !== -Infinity
+                    )
+                  )
+                : undefined
+            }
             role={role as string}
             aria-label={ariaLabel as string}
             {...props}
@@ -489,7 +497,9 @@ describe('FloatingDock Component', () => {
       );
 
       if (desktopButton) {
-        desktopButton.focus();
+        act(() => {
+          desktopButton.focus();
+        });
         fireEvent.keyDown(desktopButton, { key: 'Enter' });
         expect(mockItems[0].onClick).toHaveBeenCalled();
       }
@@ -505,7 +515,9 @@ describe('FloatingDock Component', () => {
 
       if (desktopButton) {
         mockItems[0].onClick.mockClear();
-        desktopButton.focus();
+        act(() => {
+          desktopButton.focus();
+        });
         fireEvent.keyDown(desktopButton, { key: ' ' });
         expect(mockItems[0].onClick).toHaveBeenCalled();
       }
@@ -569,7 +581,9 @@ describe('FloatingDock Component', () => {
       });
 
       // Fast-forward time
-      jest.advanceTimersByTime(2000);
+      act(() => {
+        jest.advanceTimersByTime(2000);
+      });
 
       jest.useRealTimers();
     });

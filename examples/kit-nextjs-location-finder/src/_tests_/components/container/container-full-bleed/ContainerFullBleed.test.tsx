@@ -25,7 +25,7 @@ jest.mock('@/components/flex/Flex.dev', () => ({
 
 describe('ContainerFullBleed Component', () => {
   it('renders with basic props', () => {
-    render(<ContainerFullBleed {...mockContainerFullBleedProps} />);
+    render(<ContainerFullBleed {...(mockContainerFullBleedProps as unknown as React.ComponentProps<typeof ContainerFullBleed>)} />);
 
     expect(screen.getByTestId('flex-container')).toBeInTheDocument();
     expect(screen.getByTestId('flex-item')).toHaveAttribute('data-basis', 'full');
@@ -33,7 +33,7 @@ describe('ContainerFullBleed Component', () => {
   });
 
   it('applies custom styles from params', () => {
-    const { container } = render(<ContainerFullBleed {...mockContainerFullBleedProps} />);
+    const { container } = render(<ContainerFullBleed {...(mockContainerFullBleedProps as unknown as React.ComponentProps<typeof ContainerFullBleed>)} />);
 
     const section = container.querySelector('section');
     expect(section).toHaveClass('custom-fullbleed-styles');
@@ -41,7 +41,7 @@ describe('ContainerFullBleed Component', () => {
   });
 
   it('excludes top margin when specified', () => {
-    const { container } = render(<ContainerFullBleed {...mockContainerFullBleedPropsNoMargin} />);
+    const { container } = render(<ContainerFullBleed {...(mockContainerFullBleedPropsNoMargin as unknown as React.ComponentProps<typeof ContainerFullBleed>)} />);
 
     const section = container.querySelector('section');
     expect(section).toHaveClass('mt-0');
@@ -49,7 +49,7 @@ describe('ContainerFullBleed Component', () => {
   });
 
   it('includes top margin by default', () => {
-    const { container } = render(<ContainerFullBleed {...mockContainerFullBleedProps} />);
+    const { container } = render(<ContainerFullBleed {...(mockContainerFullBleedProps as unknown as React.ComponentProps<typeof ContainerFullBleed>)} />);
 
     const section = container.querySelector('section');
     expect(section).toHaveClass('my-8');

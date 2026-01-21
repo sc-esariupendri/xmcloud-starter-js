@@ -2,8 +2,28 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as SiteMetadata } from '@/components/site-metadata/SiteMetadata';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Test props use type assertions for edge case testing where invalid data is intentionally passed
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 describe('SiteMetadata Component', () => {
   const mockRendering = { componentName: 'SiteMetadata' };
@@ -23,6 +43,8 @@ describe('SiteMetadata Component', () => {
       },
       params: {},
       rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
     };
 
     render(<SiteMetadata {...props} />);
@@ -57,6 +79,8 @@ describe('SiteMetadata Component', () => {
       },
       params: {},
       rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
     };
 
     render(<SiteMetadata {...props} />);
@@ -75,6 +99,8 @@ describe('SiteMetadata Component', () => {
       },
       params: {},
       rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
     };
 
     const { container } = render(<SiteMetadata {...props} />);
@@ -93,6 +119,8 @@ describe('SiteMetadata Component', () => {
       },
       params: {},
       rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
     };
 
     render(<SiteMetadata {...props} />);
@@ -111,6 +139,8 @@ describe('SiteMetadata Component', () => {
       },
       params: {},
       rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
     };
 
     render(<SiteMetadata {...props} />);

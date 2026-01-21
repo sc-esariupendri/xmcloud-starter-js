@@ -22,6 +22,7 @@ jest.mock('@radix-ui/react-avatar', () => {
     HTMLImageElement,
     { src?: string; alt?: string; className?: string }
   >(({ src, alt, className }, ref) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img ref={ref} src={src} alt={alt} className={className} data-testid="avatar-img" />
   ));
   Image.displayName = 'AvatarImage';

@@ -18,6 +18,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
   Default: jest.fn(({ image, className, wrapperClass }) => (
     <div className={wrapperClass} data-testid="image-wrapper">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={image?.value?.src}
         alt={image?.value?.alt}

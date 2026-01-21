@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Container } from '@/components/sxa/Container';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock AppPlaceholder component
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -26,10 +27,20 @@ describe('SXA Container', () => {
   const mockPage = {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-    layout: {},
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
     locale: 'en',
-  };
+  } as Page;
 
   const mockComponentMap = new Map();
 
@@ -59,7 +70,7 @@ describe('SXA Container', () => {
     };
 
     const { container } = render(
-      <Container rendering={mockRendering} params={paramsWithBackground} />
+      <Container rendering={mockRendering} params={paramsWithBackground} page={mockPage} componentMap={mockComponentMap} />
     );
 
     const bgElement = container.querySelector('.bg-cover');

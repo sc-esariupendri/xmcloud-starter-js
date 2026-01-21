@@ -192,16 +192,16 @@ describe('CdpPageView Component', () => {
       });
     });
 
-    it('handles pageView rejection gracefully', () => {
-      const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation();
+    it('handles pageView rejection gracefully', async () => {
+      const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
       mockPageView.mockRejectedValue(new Error('Test error'));
 
       render(<CdpPageView />);
 
-      // Wait for promise to resolve
-      setTimeout(() => {
-        expect(consoleDebugSpy).toHaveBeenCalledWith(new Error('Test error'));
-      }, 0);
+      // Wait for promise to reject
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(consoleDebugSpy).toHaveBeenCalledWith(new Error('Test error'));
 
       consoleDebugSpy.mockRestore();
     });

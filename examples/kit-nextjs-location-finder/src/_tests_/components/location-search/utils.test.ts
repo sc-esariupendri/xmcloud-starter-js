@@ -10,8 +10,23 @@ import { mockDealerships } from './location-search.mock.props';
 global.fetch = jest.fn();
 
 describe('Location Search Utils', () => {
+  let originalConsoleError: typeof console.error;
+  let originalConsoleWarn: typeof console.warn;
+  let originalConsoleLog: typeof console.log;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    // Store original console methods
+    originalConsoleError = console.error;
+    originalConsoleWarn = console.warn;
+    originalConsoleLog = console.log;
+  });
+
+  afterEach(() => {
+    // Restore original console methods
+    console.error = originalConsoleError;
+    console.warn = originalConsoleWarn;
+    console.log = originalConsoleLog;
   });
 
   describe('calculateHaversineDistance', () => {
@@ -42,6 +57,9 @@ describe('Location Search Utils', () => {
 
   describe('geocodeAddress', () => {
     it('returns coordinates on successful geocoding', async () => {
+      // Suppress console.log for this test
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         json: async () => ({
           status: 'OK',
@@ -61,6 +79,10 @@ describe('Location Search Utils', () => {
     });
 
     it('returns null on failed geocoding', async () => {
+      // Suppress console.error for this test
+      console.error = jest.fn();
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         json: async () => ({
           status: 'ZERO_RESULTS',
@@ -73,6 +95,10 @@ describe('Location Search Utils', () => {
     });
 
     it('handles fetch errors gracefully', async () => {
+      // Suppress console.error for this test
+      console.error = jest.fn();
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
       const result = await geocodeAddress('Atlanta, GA', 'test-api-key');
@@ -83,6 +109,9 @@ describe('Location Search Utils', () => {
 
   describe('calculateDistance', () => {
     it('returns distance on successful API call', async () => {
+      // Suppress console.log for this test
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         json: async () => ({
           status: 'OK',
@@ -105,6 +134,9 @@ describe('Location Search Utils', () => {
     });
 
     it('returns fallback distance on API failure', async () => {
+      // Suppress console.log for this test
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockResolvedValueOnce({
         json: async () => ({
           status: 'ZERO_RESULTS',
@@ -119,6 +151,10 @@ describe('Location Search Utils', () => {
     });
 
     it('returns fallback distance on fetch error', async () => {
+      // Suppress console.error for this test
+      console.error = jest.fn();
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('Network error'));
 
       const result = await calculateDistance('30303', '30328', 'test-api-key');
@@ -130,12 +166,19 @@ describe('Location Search Utils', () => {
 
   describe('enrichDealerships', () => {
     it('returns empty array when no dealerships provided', async () => {
+      // Suppress console.warn and console.log for this test
+      console.warn = jest.fn();
+      console.log = jest.fn();
+
       const result = await enrichDealerships([], '30303', 'test-api-key');
 
       expect(result).toEqual([]);
     });
 
     it('enriches dealerships with coordinates', async () => {
+      // Suppress console.log for this test
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockResolvedValue({
         json: async () => ({
           status: 'OK',
@@ -161,6 +204,9 @@ describe('Location Search Utils', () => {
     });
 
     it('sorts dealerships by distance', async () => {
+      // Suppress console.log for this test
+      console.log = jest.fn();
+
       (global.fetch as jest.Mock).mockResolvedValue({
         json: async () => ({
           status: 'OK',

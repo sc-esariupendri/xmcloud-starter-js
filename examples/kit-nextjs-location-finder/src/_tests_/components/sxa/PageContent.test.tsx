@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as PageContent, TitleAndBody } from '@/components/sxa/PageContent';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -51,9 +52,15 @@ describe('SXA PageContent', () => {
   const mockPage = {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
     layout: {
       sitecore: {
+        context: {},
         route: {
           fields: {
             Content: {
@@ -68,7 +75,7 @@ describe('SXA PageContent', () => {
       },
     },
     locale: 'en',
-  };
+  } as unknown as Page;
 
   it('renders page content with rich text', () => {
     const mockFields = {

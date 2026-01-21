@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as SecondaryNavigation } from '@/components/secondary-navigation/SecondaryNavigation';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Next.js Link component
 jest.mock('next/link', () => {
@@ -97,6 +98,25 @@ jest.mock('@radix-ui/react-icons', () => ({
 }));
 
 describe('SecondaryNavigation Component', () => {
+  // Mock page object with all required Page properties
+  const mockPageBase = {
+    mode: {
+      isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
+    },
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
+    locale: 'en',
+  } as Page;
+
   const mockRendering = { componentName: 'SecondaryNavigation' };
 
   const mockNavigationData = {
@@ -152,6 +172,8 @@ describe('SecondaryNavigation Component', () => {
     },
     params: {},
     rendering: mockRendering,
+    page: mockPageBase,
+    componentMap: new Map(),
   };
 
   beforeEach(() => {
@@ -374,6 +396,8 @@ describe('SecondaryNavigation Component', () => {
         fields: undefined,
         params: {},
         rendering: mockRendering,
+        page: mockPageBase,
+        componentMap: new Map(),
       };
       /* eslint-disable @typescript-eslint/no-explicit-any */
       render(<SecondaryNavigation {...(propsWithoutFields as any)} />);
@@ -394,6 +418,8 @@ describe('SecondaryNavigation Component', () => {
         },
         params: {},
         rendering: mockRendering,
+        page: mockPageBase,
+        componentMap: new Map(),
       };
 
       expect(() => render(<SecondaryNavigation {...propsWithoutParentChildren} />)).not.toThrow();
@@ -412,6 +438,8 @@ describe('SecondaryNavigation Component', () => {
         },
         params: {},
         rendering: mockRendering,
+        page: mockPageBase,
+        componentMap: new Map(),
       };
 
       render(<SecondaryNavigation {...propsWithEmptyParent} />);

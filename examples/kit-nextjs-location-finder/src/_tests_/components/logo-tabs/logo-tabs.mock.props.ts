@@ -3,6 +3,7 @@ import type {
   LogoItemProps,
   LogoTabContent,
 } from '@/components/logo-tabs/logo-tabs.props';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 export const mockLogos: LogoItemProps[] = [
   {
@@ -109,6 +110,25 @@ export const mockLogoTabContent: LogoTabContent[] = [
   },
 ];
 
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 export const mockLogoTabsProps: LogoTabsProps = {
   rendering: {
     componentName: 'LogoTabs',
@@ -144,4 +164,6 @@ export const mockLogoTabsProps: LogoTabsProps = {
       },
     },
   },
+  page: mockPageBase,
+  componentMap: new Map(),
 };

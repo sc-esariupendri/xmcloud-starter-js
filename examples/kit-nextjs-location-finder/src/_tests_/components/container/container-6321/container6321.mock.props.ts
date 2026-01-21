@@ -1,3 +1,24 @@
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 // Simple mock props for Container6321 component (6 column layout)
 export const mockContainer6321Props = {
   rendering: {
@@ -16,13 +37,7 @@ export const mockContainer6321Props = {
     styles: 'custom-6321-styles',
   },
   children: document.createElement('div') as unknown as Element,
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
 };
 
@@ -45,12 +60,6 @@ export const mockContainer6321PropsNoMargin = {
     styles: 'no-margin-6321',
   },
   children: document.createElement('div') as unknown as Element,
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
 };

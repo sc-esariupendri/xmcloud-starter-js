@@ -2,6 +2,7 @@ import type {
   ProductListingProps,
   ProductItemProps,
 } from '@/components/product-listing/product-listing.props';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 export const mockProductItems: ProductItemProps[] = [
   {
@@ -129,6 +130,43 @@ export const mockProductItems: ProductItemProps[] = [
   },
 ];
 
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 export const mockProductListingProps: ProductListingProps = {
   rendering: {
     componentName: 'ProductListing',
@@ -159,25 +197,13 @@ export const mockProductListingProps: ProductListingProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
   isPageEditing: false,
 };
 
 export const mockProductListingPropsEditMode: ProductListingProps = {
   ...mockProductListingProps,
-  page: {
-    mode: {
-      isEditing: true,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageEditing,
   isPageEditing: true,
 };

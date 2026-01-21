@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as AlertBanner } from '@/components/alert-banner/AlertBanner.dev';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // 🧪 Component-Specific Mocks
 jest.mock('@/components/button-component/ButtonComponent', () => ({
@@ -36,6 +37,25 @@ jest.mock('@/components/ui/alert', () => ({
   ),
 }));
 
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 const mockProps = {
   fields: {
     title: { value: 'Test Alert Title' },
@@ -52,6 +72,8 @@ const mockProps = {
     mock_external_data: { value: 'External Data' },
   },
   rendering: { componentName: 'AlertBanner' },
+  page: mockPageBase,
+  componentMap: new Map(),
 };
 
 describe('AlertBanner', () => {

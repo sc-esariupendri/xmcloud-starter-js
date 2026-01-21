@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Image, Banner } from '@/components/sxa/Image';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -15,6 +16,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     },
   })),
   NextImage: jest.fn(({ field }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img data-testid="sxa-image" src={field?.value?.src} alt={field?.value?.alt} />
   )),
   Link: jest.fn(({ field, children }) => (
@@ -35,10 +37,18 @@ describe('SXA Image', () => {
       isEditing: false,
       isPreview: false,
       isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-    layout: {},
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
     locale: 'en',
-  };
+  } as Page;
 
   const mockFields = {
     Image: {

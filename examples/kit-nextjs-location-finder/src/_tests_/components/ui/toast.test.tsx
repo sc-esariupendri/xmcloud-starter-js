@@ -41,8 +41,12 @@ jest.mock('@radix-ui/react-toast', () => {
   );
   Description.displayName = 'ToastDescription';
 
-  const Action = React.forwardRef<HTMLButtonElement, React.PropsWithChildren>(
-    ({ children, ...props }, ref) => (
+  const Action = React.forwardRef<
+    HTMLButtonElement,
+    React.PropsWithChildren<{ altText?: string }>
+  >(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ children, altText, ...props }, ref) => (
       <button ref={ref} data-testid="toast-action" {...props}>
         {children}
       </button>

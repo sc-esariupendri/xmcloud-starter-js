@@ -72,6 +72,27 @@ export const mockTopicItems: TopicItemProps[] = [
   },
 ];
 
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 export const mockTopicListingProps: TopicListingProps = {
   rendering: {
     componentName: 'TopicListing',
@@ -96,6 +117,8 @@ export const mockTopicListingProps: TopicListingProps = {
       },
     },
   },
+  page: mockPageBase,
+  componentMap: new Map(),
 };
 
 export const mockTopicListingPropsWithoutChildren: TopicListingProps = {
@@ -119,6 +142,8 @@ export const mockTopicListingPropsWithoutChildren: TopicListingProps = {
       },
     },
   },
+  page: mockPageBase,
+  componentMap: new Map(),
 };
 
 export const mockSingleTopicItem: TopicItemProps = {

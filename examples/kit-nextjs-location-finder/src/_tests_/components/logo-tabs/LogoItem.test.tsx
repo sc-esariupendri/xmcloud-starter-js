@@ -6,6 +6,7 @@ import { mockLogos } from './logo-tabs.mock.props';
 // Mock dependencies
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   Image: jest.fn(({ field, className }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={field?.value?.src}
       alt={field?.value?.alt}

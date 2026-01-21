@@ -17,6 +17,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => ({
     sizes?: string;
     alt?: string;
   }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="mock-image-wrapper"
       src={image?.value?.src}

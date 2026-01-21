@@ -7,11 +7,14 @@ import FEAASScripts from '@/components/content-sdk/FEAASScripts';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: Record<string, unknown>) => {
-    const { unoptimized, alt = '', ...rest } = props;
-    // eslint-disable-next-line @next/next/no-img-element
+    const { unoptimized, alt = '', src, ...rest } = props;
+    // Convert empty string src to undefined to avoid React warning
+    const srcProp = src === '' ? undefined : src;
     return (
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         {...rest}
+        src={srcProp as string | undefined}
         alt={alt as string}
         data-testid="next-image"
         data-unoptimized={unoptimized ? 'true' : 'false'}

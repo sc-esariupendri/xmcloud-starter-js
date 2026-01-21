@@ -9,7 +9,8 @@ jest.mock('@/components/ui/button', () => ({
 
 // Mock react-day-picker
 jest.mock('react-day-picker', () => ({
-  DayPicker: ({ ...props }: Record<string, unknown>) => (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  DayPicker: ({ showOutsideDays, classNames, ...props }: Record<string, unknown>) => (
     <div data-testid="day-picker" {...props}>
       Calendar Component
     </div>

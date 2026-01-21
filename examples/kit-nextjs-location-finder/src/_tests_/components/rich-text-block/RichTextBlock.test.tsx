@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as RichTextBlock } from '@/components/rich-text-block/RichTextBlock';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Sitecore SDK components and NoDataFallback are already mocked globally in jest.setup.js
 
@@ -22,6 +23,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     children?: React.ReactNode;
   }) => <a href={field?.value?.href}>{field?.value?.text || children}</a>,
   Image: ({ field }: { field?: { value?: { src?: string; alt?: string } } }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src={field?.value?.src} alt={field?.value?.alt} />
   ),
   Placeholder: ({ name }: { name: string }) => <div data-testid="sitecore-placeholder">{name}</div>,
@@ -44,6 +46,25 @@ jest.mock('@/lib/utils', () => ({
 
 // Test props will be handled with proper type safety
 
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 describe('RichTextBlock Component', () => {
   const mockFields = {
     text: { value: 'This is rich text content' },
@@ -61,7 +82,15 @@ describe('RichTextBlock Component', () => {
   };
 
   it('renders rich text content when fields are provided', () => {
-    render(<RichTextBlock fields={mockFields} params={mockParams} rendering={mockRendering} />);
+    render(
+      <RichTextBlock
+        fields={mockFields}
+        params={mockParams}
+        rendering={mockRendering}
+        page={mockPageBase}
+        componentMap={new Map()}
+      />
+    );
 
     expect(screen.getByTestId('richtext')).toHaveTextContent('This is rich text content');
     const container = screen.getByTestId('richtext').closest('.component.rich-text');
@@ -74,7 +103,15 @@ describe('RichTextBlock Component', () => {
       text: { value: '' },
     };
 
-    render(<RichTextBlock fields={emptyFields} params={{}} rendering={mockRendering} />);
+    render(
+      <RichTextBlock
+        fields={emptyFields}
+        params={{}}
+        rendering={mockRendering}
+        page={mockPageBase}
+        componentMap={new Map()}
+      />
+    );
     expect(screen.getByText('Rich text')).toBeInTheDocument();
   });
 

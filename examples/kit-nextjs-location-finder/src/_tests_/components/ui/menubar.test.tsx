@@ -28,8 +28,12 @@ jest.mock('@radix-ui/react-menubar', () => {
     <div>{children as React.ReactNode}</div>
   );
 
-  const Content = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(
-    ({ children, ...props }, ref) => (
+  const Content = React.forwardRef<
+    HTMLDivElement,
+    React.PropsWithChildren<{ sideOffset?: number; alignOffset?: number }>
+  >(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ children, sideOffset, alignOffset, ...props }, ref) => (
       <div ref={ref} data-testid="menubar-content" {...props}>
         {children}
       </div>

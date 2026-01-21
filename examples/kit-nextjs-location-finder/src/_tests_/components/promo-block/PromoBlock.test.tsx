@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import { Default as PromoBlock, TextLink } from '@/components/promo-block/PromoBlock';
 import { Orientation } from '@/enumerations/Orientation.enum';
 import { Variation } from '@/enumerations/Variation.enum';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Sitecore components are already mocked globally in jest.setup.js
 // No need to mock them again here
@@ -30,6 +31,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => {
     };
     className?: string;
   }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="image"
       src={image?.value?.src || ''}
@@ -42,6 +44,25 @@ jest.mock('@/components/image/ImageWrapper.dev', () => {
 });
 
 // UI components are already mocked globally in jest.setup.js
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 const baseFields = {
   heading: { value: 'Promo Title' },
@@ -130,6 +151,8 @@ describe('PromoBlock', () => {
       fields: baseFields,
       params: { orientation: Orientation.IMAGE_RIGHT },
       rendering: { componentName: 'TextLink' },
+      page: mockPageBase,
+      componentMap: new Map(),
     };
     // Testing TextLink component variant - type assertion for test compatibility
     render(<TextLink {...props} />);

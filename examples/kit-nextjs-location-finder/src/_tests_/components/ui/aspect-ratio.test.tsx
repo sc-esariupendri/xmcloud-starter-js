@@ -15,6 +15,7 @@ describe('AspectRatio', () => {
   it('renders aspect ratio container', () => {
     render(
       <AspectRatio ratio={16 / 9}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/image.jpg" alt="Test" />
       </AspectRatio>
     );

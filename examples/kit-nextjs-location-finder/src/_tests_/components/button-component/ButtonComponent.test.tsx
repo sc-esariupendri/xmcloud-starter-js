@@ -7,18 +7,26 @@ import {
 } from '@/components/button-component/ButtonComponent';
 
 //  Mocks
+/* eslint-disable @typescript-eslint/no-unused-vars */
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
-  Link: ({
-    field,
-    children,
-    ...props
-  }: React.PropsWithChildren<{ field?: { value?: { href?: string; text?: string } } }> &
-    React.ComponentProps<'a'>) => (
-    <a href={field?.value?.href} {...props}>
-      {children || field?.value?.text}
-    </a>
-  ),
+  Link: (linkProps: React.PropsWithChildren<{
+    field?: { value?: { href?: string; text?: string } };
+  }> &
+    React.ComponentProps<'a'> & {
+      editable?: boolean;
+      asChild?: boolean;
+    }) => {
+    // Filter out editable and asChild props before spreading (these props are filtered out intentionally)
+    const { field, children, ...restProps } = linkProps;
+    const { editable, asChild, ...props } = restProps;
+    return (
+      <a href={field?.value?.href} {...props}>
+        {children || field?.value?.text}
+      </a>
+    );
+  },
 }));
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 jest.mock('@/components/icon/Icon', () => ({
   Default: ({
@@ -45,7 +53,10 @@ jest.mock('@/components/image/ImageWrapper.dev', () => ({
     image?: { value?: { src?: string } };
     className?: string;
     'aria-hidden'?: boolean;
-  }) => <img src={image?.value?.src} alt="" className={className} aria-hidden={ariaHidden} />,
+  }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={image?.value?.src} alt="" className={className} aria-hidden={ariaHidden} />
+  ),
 }));
 
 jest.mock('@/utils/NoDataFallback', () => ({
@@ -55,9 +66,19 @@ jest.mock('@/utils/NoDataFallback', () => ({
 }));
 
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, ...props }: React.PropsWithChildren<React.ComponentProps<'button'>>) => (
-    <button {...props}>{children}</button>
-  ),
+  Button: ({
+    children,
+    asChild,
+    ...props
+  }: React.PropsWithChildren<
+    React.ComponentProps<'button'> & { asChild?: boolean }
+  >) => {
+    // When asChild is true, Button should render its child directly without wrapping
+    if (asChild && React.isValidElement(children)) {
+      return children;
+    }
+    return <button {...props}>{children}</button>;
+  },
 }));
 
 // ----------------------

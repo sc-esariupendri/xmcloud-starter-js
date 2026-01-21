@@ -3,6 +3,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as ArticleHeader } from '@/components/article-header/ArticleHeader';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 //  Component-Specific Mocks
 jest.mock('@/components/image/ImageWrapper.dev', () => {
@@ -10,6 +11,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => {
     HTMLImageElement,
     { image?: { value?: { src?: string } }; alt?: string }
   >(({ image, alt }, ref) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img ref={ref} data-testid="image-wrapper" src={image?.value?.src} alt={alt} />
   ));
 
@@ -60,6 +62,25 @@ jest.mock('@/components/button-component/ButtonComponent', () => {
   return { ButtonBase };
 });
 
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 //  Define mock props safely
 const mockProps = {
   fields: {
@@ -83,6 +104,8 @@ const mockProps = {
       },
     },
   },
+  page: mockPageBase,
+  componentMap: new Map(),
 };
 
 describe('ArticleHeader Component', () => {
@@ -96,7 +119,7 @@ describe('ArticleHeader Component', () => {
   });
 
   it('renders the header with image and details', () => {
-    render(<ArticleHeader {...mockProps} />);
+    render(<ArticleHeader {...(mockProps as React.ComponentProps<typeof ArticleHeader>)} />);
 
     expect(screen.getByText('Sample Article')).toBeInTheDocument();
     expect(screen.getByText('Tech News')).toBeInTheDocument();
@@ -107,7 +130,7 @@ describe('ArticleHeader Component', () => {
   });
 
   it('renders back button correctly', () => {
-    render(<ArticleHeader {...mockProps} />);
+    render(<ArticleHeader {...(mockProps as React.ComponentProps<typeof ArticleHeader>)} />);
 
     const backButton = screen.getByTestId('button-base');
     expect(backButton).toHaveAttribute('data-variant', 'link');
@@ -116,7 +139,7 @@ describe('ArticleHeader Component', () => {
   });
 
   it('renders author section correctly', () => {
-    render(<ArticleHeader {...mockProps} />);
+    render(<ArticleHeader {...(mockProps as React.ComponentProps<typeof ArticleHeader>)} />);
 
     expect(screen.getByTestId('avatar')).toBeInTheDocument();
     expect(screen.getByTestId('avatar-img')).toHaveAttribute('src', '/author.jpg');
@@ -133,7 +156,7 @@ describe('ArticleHeader Component', () => {
   });
 
   it('handles share button clicks correctly', () => {
-    render(<ArticleHeader {...mockProps} />);
+    render(<ArticleHeader {...(mockProps as React.ComponentProps<typeof ArticleHeader>)} />);
 
     const fbButtons = screen.getAllByTestId('share-Share on Facebook');
     fireEvent.click(fbButtons[0]); // Click the first one (mobile version)
@@ -146,7 +169,7 @@ describe('ArticleHeader Component', () => {
   });
 
   it('renders floating dock with share buttons', () => {
-    render(<ArticleHeader {...mockProps} />);
+    render(<ArticleHeader {...(mockProps as React.ComponentProps<typeof ArticleHeader>)} />);
 
     // Note: FloatingDock is not mocked, so we test the actual share button interaction
     expect(screen.getAllByTestId('floating-dock')).toBeTruthy();
@@ -156,14 +179,14 @@ describe('ArticleHeader Component', () => {
   });
 
   it('renders category badge when eyebrow is provided', () => {
-    render(<ArticleHeader {...mockProps} />);
+    render(<ArticleHeader {...(mockProps as React.ComponentProps<typeof ArticleHeader>)} />);
 
     expect(screen.getByTestId('badge')).toBeInTheDocument();
     expect(screen.getByText('Tech News')).toBeInTheDocument();
   });
 
   it('renders toaster component', () => {
-    render(<ArticleHeader {...mockProps} />);
+    render(<ArticleHeader {...(mockProps as React.ComponentProps<typeof ArticleHeader>)} />);
     expect(screen.getByTestId('toaster')).toBeInTheDocument();
   });
 });

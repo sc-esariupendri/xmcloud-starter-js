@@ -16,6 +16,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 // Mock child components
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
   Default: ({ image, className }: Record<string, unknown>) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={(image as { value?: { src?: string } })?.value?.src}
       className={className as string}

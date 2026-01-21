@@ -20,6 +20,7 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
 
 jest.mock('@/components/image/ImageWrapper.dev', () => ({
   Default: jest.fn(({ image, className }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="image-wrapper"
       src={image?.value?.src}

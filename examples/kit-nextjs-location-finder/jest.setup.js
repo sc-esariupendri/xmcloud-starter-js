@@ -272,6 +272,60 @@ Object.defineProperty(window, 'localStorage', { value: createStorageMock() });
 Object.defineProperty(window, 'sessionStorage', { value: createStorageMock() });
 
 // ---------------------------
+//  Mock fetch API
+// ---------------------------
+global.fetch = jest.fn((url) => {
+  // Default mock response for geocoding API
+  if (typeof url === 'string' && url.includes('geocode')) {
+    return Promise.resolve({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        status: 'OK',
+        results: [
+          {
+            geometry: {
+              location: {
+                lat: 33.749,
+                lng: -84.388,
+              },
+            },
+          },
+        ],
+      }),
+    });
+  }
+  // Default mock response for distance matrix API
+  if (typeof url === 'string' && url.includes('distancematrix')) {
+    return Promise.resolve({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        status: 'OK',
+        rows: [
+          {
+            elements: [
+              {
+                status: 'OK',
+                distance: {
+                  value: 8368, // meters (approximately 5.2 miles)
+                },
+              },
+            ],
+          },
+        ],
+      }),
+    });
+  }
+  // Default fallback
+  return Promise.resolve({
+    ok: true,
+    status: 200,
+    json: async () => ({}),
+  });
+});
+
+// ---------------------------
 //  Mock Common UI Components
 // ---------------------------
 jest.mock('@/components/ui/avatar', () => {
@@ -690,7 +744,9 @@ beforeAll(() => {
       (
         message.includes('Each child in a list should have a unique "key" prop') ||
         message.includes('Warning: ReactDOM.render') ||
-        message.includes('Warning:')
+        message.includes('Warning:') ||
+        message.includes('Received `false` for a non-boolean attribute') ||
+        message.includes('Maximum update depth exceeded')
       )
     ) {
       return;

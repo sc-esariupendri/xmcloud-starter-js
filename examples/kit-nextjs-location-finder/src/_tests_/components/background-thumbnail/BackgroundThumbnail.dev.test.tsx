@@ -1,15 +1,50 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as BackgroundThumbnail } from '../../../components/background-thumbnail/BackgroundThumbnail.dev';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 //  Mock useSitecore hook
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
   useSitecore: jest.fn(),
 }));
 
-const { useSitecore } = jest.requireMock('@sitecore-content-sdk/nextjs');
+// Mock page objects with all required Page properties
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+const mockPageNormal = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 describe('BackgroundThumbnail Component', () => {
   beforeEach(() => {
@@ -18,7 +53,7 @@ describe('BackgroundThumbnail Component', () => {
 
   it('renders badge and children when in editing mode', () => {
     render(
-      <BackgroundThumbnail page={{ mode: { isEditing: true } }}>
+      <BackgroundThumbnail page={mockPageEditing}>
         <div data-testid="child">Child Content</div>
       </BackgroundThumbnail>
     );
@@ -31,7 +66,7 @@ describe('BackgroundThumbnail Component', () => {
 
   it('renders nothing when not in editing mode', () => {
     render(
-      <BackgroundThumbnail page={{ mode: { isEditing: false } }}>
+      <BackgroundThumbnail page={mockPageNormal}>
         <div data-testid="child">Child Content</div>
       </BackgroundThumbnail>
     );

@@ -101,7 +101,7 @@ describe('AccordionBlockTwoColumnTitleLeft Component', () => {
   });
 
   it('splits accordion items correctly between two columns', () => {
-    render(<AccordionBlockTwoColumnTitleLeft {...mockAccordionPropsMany} />);
+    render(<AccordionBlockTwoColumnTitleLeft {...(mockAccordionPropsMany as unknown as React.ComponentProps<typeof AccordionBlockTwoColumnTitleLeft>)} />);
 
     const accordions = screen.getAllByTestId('accordion');
     expect(accordions).toHaveLength(2);

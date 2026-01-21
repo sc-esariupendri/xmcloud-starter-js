@@ -1,3 +1,42 @@
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
+
 // Mock props with complete accordion data
 export const mockAccordionProps = {
   fields: {
@@ -106,13 +145,7 @@ export const mockAccordionProps = {
     dataSource: 'accordion-datasource-id',
     uid: 'accordion-uid',
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
   isPageEditing: false,
 };
@@ -167,6 +200,8 @@ export const mockAccordionPropsMinimal = {
     dataSource: 'accordion-minimal-id',
     uid: 'accordion-minimal-uid',
   },
+  page: mockPageBase,
+  componentMap: new Map(),
   isPageEditing: false,
 };
 
@@ -174,6 +209,7 @@ export const mockAccordionPropsMinimal = {
 export const mockAccordionPropsEditing = {
   ...mockAccordionProps,
   isPageEditing: true,
+  page: mockPageEditing,
 };
 
 // Mock props without datasource (for fallback testing)
@@ -189,6 +225,8 @@ export const mockAccordionPropsEmpty = {
     dataSource: '',
     uid: 'accordion-empty-uid',
   },
+  page: mockPageBase,
+  componentMap: new Map(),
   isPageEditing: false,
 };
 
@@ -232,6 +270,8 @@ export const mockAccordionPropsNoExtras = {
     dataSource: 'accordion-simple-id',
     uid: 'accordion-simple-uid',
   },
+  page: mockPageBase,
+  componentMap: new Map(),
   isPageEditing: false,
 };
 
@@ -349,5 +389,7 @@ export const mockAccordionPropsMany = {
     dataSource: 'accordion-extended-id',
     uid: 'accordion-extended-uid',
   },
+  page: mockPageBase,
+  componentMap: new Map(),
   isPageEditing: false,
 };

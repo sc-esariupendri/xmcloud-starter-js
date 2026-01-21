@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Promo, CenteredCard } from '@/components/sxa/Promo';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -15,6 +16,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
     },
   })),
   NextImage: jest.fn(({ field, className }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       data-testid="promo-image"
       src={field?.value?.src}
@@ -51,10 +53,18 @@ describe('SXA Promo', () => {
       isEditing: false,
       isPreview: false,
       isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-    layout: {},
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
     locale: 'en',
-  };
+  } as Page;
 
   const mockFields = {
     PromoIcon: {

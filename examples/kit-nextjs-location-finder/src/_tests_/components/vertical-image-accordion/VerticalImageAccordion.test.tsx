@@ -2,12 +2,21 @@ import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as VerticalImageAccordion } from '@/components/vertical-image-accordion/VerticalImageAccordion';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock framer-motion components
 jest.mock('framer-motion', () => ({
   motion: {
     div: ({
       children,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      initial,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      animate,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      exit,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      transition,
       ...props
     }: React.PropsWithChildren<{
       initial?: unknown;
@@ -31,6 +40,7 @@ jest.mock('@/components/image/ImageWrapper.dev', () => ({
     wrapperClass?: string;
   }) => (
     <div className={wrapperClass}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         data-testid="image-wrapper"
         src={image?.value?.src}
@@ -63,6 +73,24 @@ jest.mock('@/components/button-component/ButtonComponent', () => ({
 
 describe('VerticalImageAccordion Component', () => {
   const mockRendering = { componentName: 'VerticalImageAccordion' };
+
+  const mockPageBase = {
+    mode: {
+      isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
+    },
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
+    locale: 'en',
+  } as Page;
 
   beforeEach(() => {
     jest.useFakeTimers();
@@ -98,6 +126,8 @@ describe('VerticalImageAccordion Component', () => {
     },
     params: {},
     rendering: mockRendering,
+    page: mockPageBase,
+    componentMap: new Map(),
   };
 
   it('renders accordion with title and items', () => {

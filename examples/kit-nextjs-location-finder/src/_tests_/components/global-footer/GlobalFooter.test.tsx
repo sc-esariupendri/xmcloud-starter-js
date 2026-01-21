@@ -9,6 +9,26 @@ import {
   BlueCompactVariant,
 } from '@/components/global-footer/GlobalFooter';
 import { mockGlobalFooterProps } from './global-footer.mock.props';
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object for editing mode
+const mockPageEditing = {
+  mode: {
+    isEditing: true,
+    isPreview: false,
+    isNormal: false,
+    name: 'edit' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -18,7 +38,17 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
         isEditing: false,
         isPreview: false,
         isNormal: true,
+        name: 'normal' as const,
+        designLibrary: { isVariantGeneration: false },
+        isDesignLibrary: false,
       },
+      layout: {
+        sitecore: {
+          context: {},
+          route: null,
+        },
+      },
+      locale: 'en',
     },
   })),
   Text: ({ field, tag = 'span', className }: Record<string, unknown>) => {
@@ -32,6 +62,7 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   },
   Image: ({ field }: Record<string, unknown>) => {
     const imageField = field as { value?: { src?: string; alt?: string } };
+    // eslint-disable-next-line @next/next/no-img-element
     return <img src={imageField?.value?.src} alt={imageField?.value?.alt} />;
   },
 }));
@@ -117,15 +148,7 @@ describe('GlobalFooter Component', () => {
       render(
         <GlobalFooter
           {...mockGlobalFooterProps}
-          page={{
-            mode: {
-              isEditing: true,
-              isPreview: false,
-              isNormal: false,
-            },
-            layout: {},
-            locale: 'en',
-          }}
+          page={mockPageEditing}
         />
       );
       expect(screen.getByText(/Editing/)).toBeInTheDocument();
@@ -161,15 +184,7 @@ describe('GlobalFooter Component', () => {
       render(
         <BlackCompactVariant
           {...mockGlobalFooterProps}
-          page={{
-            mode: {
-              isEditing: true,
-              isPreview: false,
-              isNormal: false,
-            },
-            layout: {},
-            locale: 'en',
-          }}
+          page={mockPageEditing}
         />
       );
       expect(screen.getByText(/Editing/)).toBeInTheDocument();
@@ -196,7 +211,17 @@ describe('GlobalFooter Component', () => {
             isEditing: false,
             isPreview: false,
             isNormal: true,
+            name: 'normal' as const,
+            designLibrary: { isVariantGeneration: false },
+            isDesignLibrary: false,
           },
+          layout: {
+            sitecore: {
+              context: {},
+              route: null,
+            },
+          },
+          locale: 'en',
         },
       });
 
@@ -244,15 +269,7 @@ describe('GlobalFooter Component', () => {
       render(
         <BlueCompactVariant
           {...mockGlobalFooterProps}
-          page={{
-            mode: {
-              isEditing: true,
-              isPreview: false,
-              isNormal: false,
-            },
-            layout: {},
-            locale: 'en',
-          }}
+          page={mockPageEditing}
         />
       );
       expect(screen.getByText(/Editing/)).toBeInTheDocument();

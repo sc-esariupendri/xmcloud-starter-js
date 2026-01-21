@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Navigation, ButtonNavigation } from '@/components/sxa/Navigation';
+import { Page } from '@sitecore-content-sdk/nextjs';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -34,13 +35,36 @@ jest.mock('lucide-react', () => ({
 }));
 
 describe('SXA Navigation', () => {
+  let originalConsoleLog: typeof console.log;
+
+  beforeEach(() => {
+    // Suppress console.log for tests
+    originalConsoleLog = console.log;
+    console.log = jest.fn();
+  });
+
+  afterEach(() => {
+    // Restore original console.log
+    console.log = originalConsoleLog;
+  });
+
   const mockPage = {
     mode: {
       isEditing: false,
+      isPreview: false,
+      isNormal: true,
+      name: 'normal' as const,
+      designLibrary: { isVariantGeneration: false },
+      isDesignLibrary: false,
     },
-    layout: {},
+    layout: {
+      sitecore: {
+        context: {},
+        route: null,
+      },
+    },
     locale: 'en',
-  };
+  } as Page;
 
   const mockChildFields = [
     {

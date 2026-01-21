@@ -2,6 +2,26 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as SubscriptionBanner } from '@/components/subscription-banner/SubscriptionBanner';
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 // Mock react-hook-form
 jest.mock('react-hook-form', () => ({
@@ -92,13 +112,7 @@ describe('SubscriptionBanner Component', () => {
     },
     params: {},
     rendering: mockRendering,
-    page: {
-      mode: {
-        isEditing: false,
-      },
-      layout: {},
-      locale: 'en',
-    },
+    page: mockPageBase,
     componentMap: new Map(),
   } as React.ComponentProps<typeof SubscriptionBanner>;
 
@@ -214,13 +228,15 @@ describe('SubscriptionBanner Component', () => {
   });
 
   it('handles missing fields gracefully', () => {
-    const minimalProps: SubscriptionBannerProps = {
+    const minimalProps: React.ComponentProps<typeof SubscriptionBanner> = {
       fields: {
         titleRequired: { value: 'Title Only' },
         buttonLink: { value: { text: 'Submit' } },
       },
       params: {},
       rendering: mockRendering,
+      page: mockPageBase,
+      componentMap: new Map(),
     };
 
     expect(() => render(<SubscriptionBanner {...minimalProps} />)).not.toThrow();

@@ -1,4 +1,24 @@
 import type { PromoImageProps } from '@/components/promo-image/promo-image.props';
+import { Page } from '@sitecore-content-sdk/nextjs';
+
+// Mock page object with all required Page properties
+const mockPageBase = {
+  mode: {
+    isEditing: false,
+    isPreview: false,
+    isNormal: true,
+    name: 'normal' as const,
+    designLibrary: { isVariantGeneration: false },
+    isDesignLibrary: false,
+  },
+  layout: {
+    sitecore: {
+      context: {},
+      route: null,
+    },
+  },
+  locale: 'en',
+} as Page;
 
 export const mockPromoImageProps: PromoImageProps = {
   rendering: {
@@ -33,13 +53,7 @@ export const mockPromoImageProps: PromoImageProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
   isPageEditing: false,
 };
@@ -77,13 +91,7 @@ export const mockPromoImagePropsFireTruck: PromoImageProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
   isPageEditing: false,
 };
@@ -118,13 +126,7 @@ export const mockPromoImagePropsNoLink: PromoImageProps = {
       },
     },
   },
-  page: {
-    mode: {
-      isEditing: false,
-    },
-    layout: {},
-    locale: 'en',
-  },
+  page: mockPageBase,
   componentMap: new Map(),
   isPageEditing: false,
 };
