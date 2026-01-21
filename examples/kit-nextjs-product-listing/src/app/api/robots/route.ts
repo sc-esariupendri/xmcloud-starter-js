@@ -18,7 +18,6 @@ const { GET: sitecoreGET } = createRobotsRouteHandler({
   sites,
 });
 
-
 // Custom GET handler that ensures indexing is allowed
 export async function GET(request: NextRequest) {
   try {

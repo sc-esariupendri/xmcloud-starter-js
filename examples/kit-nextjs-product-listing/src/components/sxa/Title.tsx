@@ -83,14 +83,12 @@ export const Default = (props: TitleProps): JSX.Element => {
       <>
         {mode.isEditing ? (
           <Text field={titleField} />
-        ) : (
-          link?.value?.href ? (
-            <NextLink href={link.value.href}>
-              <Text field={titleField} />
-            </NextLink>
-          ) : (
+        ) : link?.value?.href ? (
+          <NextLink href={link.value.href}>
             <Text field={titleField} />
-          )
+          </NextLink>
+        ) : (
+          <Text field={titleField} />
         )}
       </>
     </ComponentContent>

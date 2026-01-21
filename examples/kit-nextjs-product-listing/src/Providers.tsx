@@ -28,18 +28,18 @@ export default function Providers({
       loadImportMap={() => import('.sitecore/import-map.client')}
     >
       <ComponentPropsContext value={componentProps}>
-          <VideoProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="light"
-              forcedTheme="light"
-              enableSystem={false}
-              disableTransitionOnChange
-            >
-              {children}
-            </ThemeProvider>
-          </VideoProvider>
-        </ComponentPropsContext>
-      </SitecoreProvider>
+        <VideoProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            forcedTheme="light"
+            enableSystem={false}
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </VideoProvider>
+      </ComponentPropsContext>
+    </SitecoreProvider>
   );
 }
