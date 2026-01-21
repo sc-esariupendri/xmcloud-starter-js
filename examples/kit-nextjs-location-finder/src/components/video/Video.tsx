@@ -119,7 +119,9 @@ export function VideoBase({
                     alt=""
                     fill
                     className="object-cover"
-                    unoptimized={fallbackImage?.includes('youtube.com') || fallbackImage?.includes('ytimg.com')}
+                    unoptimized={
+                      fallbackImage?.includes('youtube.com') || fallbackImage?.includes('ytimg.com')
+                    }
                   />
                 </div>
               )}

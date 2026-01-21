@@ -158,7 +158,11 @@ export const ImageCarouselDefault = (props: ImageCarouselProps) => {
                       </div>
                     )}
                   </div>
-                  <ImageWrapper image={slide.image?.jsonValue} className={mainImageClasses} page={props.page} />
+                  <ImageWrapper
+                    image={slide.image?.jsonValue}
+                    className={mainImageClasses}
+                    page={props.page}
+                  />
                 </CarouselItem>
               ))}
             </CarouselContent>

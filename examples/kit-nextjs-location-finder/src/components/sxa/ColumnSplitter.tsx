@@ -28,7 +28,12 @@ interface ColumnSplitterProps extends ComponentProps {
   params: ComponentProps['params'] & ColumnWidths & ColumnStyles;
 }
 
-export const Default = ({ params, rendering, page, componentMap }: ColumnSplitterProps): JSX.Element => {
+export const Default = ({
+  params,
+  rendering,
+  page,
+  componentMap,
+}: ColumnSplitterProps): JSX.Element => {
   const { EnabledPlaceholders, RenderingIdentifier: id, styles } = params;
 
   const enabledColumns = EnabledPlaceholders?.split(',') ?? [];
@@ -44,7 +49,12 @@ export const Default = ({ params, rendering, page, componentMap }: ColumnSplitte
         return (
           <div key={index} className={columnClassNames}>
             <div className="row">
-              <AppPlaceholder page={page} componentMap={componentMap} name={`column-${columnNum}-{*}`} rendering={rendering} />
+              <AppPlaceholder
+                page={page}
+                componentMap={componentMap}
+                name={`column-${columnNum}-{*}`}
+                rendering={rendering}
+              />
             </div>
           </div>
         );

@@ -270,7 +270,7 @@ export interface XMComponent extends ComponentProps {
 
 const getVariantString = <T extends FlexVariantKey>(
   key: T,
-  value: EnumValues<(typeof flexVariants)[T]>,
+  value: EnumValues<(typeof flexVariants)[T]>
 ) => {
   return flexVariants[key][value as keyof (typeof flexVariants)[T]] || '';
 };
@@ -300,7 +300,7 @@ export const Flex: React.FC<FlexProps> = ({
         getVariantString('align', align),
         getVariantString('gap', gap),
         getVariantString('wrap', wrap),
-        className,
+        className
       )}
     >
       {children}
@@ -329,7 +329,7 @@ export const FlexItem: React.FC<FlexItemProps> = ({
         `md:${getVariantString('width', basis)}`,
         getVariantString('alignSelf', alignSelf),
         'w-full',
-        className,
+        className
       )}
     >
       {children}
@@ -337,12 +337,7 @@ export const FlexItem: React.FC<FlexItemProps> = ({
   );
 };
 
-export const XMFlex: React.FC<XMComponent> = ({
-  params,
-  rendering,
-  fields,
-  page,
-}) => {
+export const XMFlex: React.FC<XMComponent> = ({ params, rendering, fields, page }) => {
   const phKey = `flex-${params.DynamicPlaceholderId}`;
   return (
     <Flex
@@ -352,22 +347,12 @@ export const XMFlex: React.FC<XMComponent> = ({
       gap={getFieldValue(fields, 'gap')}
       className={getFieldValue(fields, 'className')}
     >
-      <AppPlaceholder
-        name={phKey}
-        rendering={rendering}
-        page={page}
-        componentMap={componentMap}
-      />
+      <AppPlaceholder name={phKey} rendering={rendering} page={page} componentMap={componentMap} />
     </Flex>
   );
 };
 
-export const XMFlexItem: React.FC<XMComponent> = ({
-  params,
-  rendering,
-  fields,
-  page,
-}) => {
+export const XMFlexItem: React.FC<XMComponent> = ({ params, rendering, fields, page }) => {
   const phKey = `flex-item-${params.DynamicPlaceholderId}`;
   return (
     <FlexItem
@@ -377,12 +362,7 @@ export const XMFlexItem: React.FC<XMComponent> = ({
       alignSelf={getFieldValue(fields, 'alignSelf')}
       className={getFieldValue(fields, 'className')}
     >
-      <AppPlaceholder
-        name={phKey}
-        rendering={rendering}
-        page={page}
-        componentMap={componentMap}
-      />
+      <AppPlaceholder name={phKey} rendering={rendering} page={page} componentMap={componentMap} />
     </FlexItem>
   );
 };

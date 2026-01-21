@@ -1,4 +1,11 @@
-import { RichText, Text, Field, ImageField, LinkField, ComponentRendering } from '@sitecore-content-sdk/nextjs';
+import {
+  RichText,
+  Text,
+  Field,
+  ImageField,
+  LinkField,
+  ComponentRendering,
+} from '@sitecore-content-sdk/nextjs';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Default as Icon } from '@/components/icon/Icon';
@@ -32,10 +39,12 @@ type CardProps = ComponentProps & {
 
 export const Default: React.FC<CardProps> = (props) => {
   // Handle both ComponentProps structure and flat structure for backward compatibility
-  const fields = (props.fields ?? (props.rendering as ComponentRendering & { fields?: CardFields })?.fields ?? props) as CardFields;
+  const fields = (props.fields ??
+    (props.rendering as ComponentRendering & { fields?: CardFields })?.fields ??
+    props) as CardFields;
   const params = props.params ?? props.rendering?.params ?? {};
   const page = props.page;
-  
+
   const { image, heading, description, link } = fields || {};
   const { className, icon, editable } = params || {};
 

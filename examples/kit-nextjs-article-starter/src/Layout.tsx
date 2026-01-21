@@ -55,21 +55,16 @@ const Layout = ({ page }: LayoutProps): JSX.Element => {
   const classNamesMain = `${mainClassPageEditing} ${body.variable} ${heading.variable} main-layout`;
 
   const metaTitle =
-    fields?.metadataTitle?.value?.toString() ||
-    fields?.pageTitle?.value?.toString() ||
-    'Page';
+    fields?.metadataTitle?.value?.toString() || fields?.pageTitle?.value?.toString() || 'Page';
   const metaDescription =
-    fields?.metadataDescription?.value?.toString() ||
-    fields?.pageSummary?.value?.toString() ||
-    '';
+    fields?.metadataDescription?.value?.toString() || fields?.pageSummary?.value?.toString() || '';
   const metaKeywords = fields?.metadataKeywords?.value?.toString() || '';
   const ogTitle =
     fields?.ogTitle?.value?.toString() ||
     fields?.metadataTitle?.value?.toString() ||
     fields?.pageTitle?.value?.toString() ||
     'Page';
-  const ogImage =
-    fields?.ogImage?.value?.src || fields?.thumbnailImage?.value?.src;
+  const ogImage = fields?.ogImage?.value?.src || fields?.thumbnailImage?.value?.src;
   const ogDescription =
     fields?.ogDescription?.value?.toString() ||
     fields?.metadataDescription?.value?.toString() ||
@@ -82,15 +77,11 @@ const Layout = ({ page }: LayoutProps): JSX.Element => {
       <Head>
         <link rel="preconnect" href="https://edge-platform.sitecorecloud.io" />
         <title>{metaTitle}</title>
-        {metaDescription && (
-          <meta name="description" content={metaDescription} />
-        )}
+        {metaDescription && <meta name="description" content={metaDescription} />}
         {metaKeywords && <meta name="keywords" content={metaKeywords} />}
         <link rel="icon" href="/favicon.ico" />
         {ogTitle && <meta property="og:title" content={ogTitle} />}
-        {ogDescription && (
-          <meta property="og:description " content={ogDescription} />
-        )}
+        {ogDescription && <meta property="og:description " content={ogDescription} />}
         {ogImage && <meta property="og:image " content={ogImage} />}
       </Head>
       <Providers page={page}>
@@ -102,9 +93,7 @@ const Layout = ({ page }: LayoutProps): JSX.Element => {
                 page={page}
                 rendering={route}
                 componentMap={componentMap}
-                loadServerImportMap={() =>
-                  import('.sitecore/import-map.server')
-                }
+                loadServerImportMap={() => import('.sitecore/import-map.server')}
               />
             )
           ) : (

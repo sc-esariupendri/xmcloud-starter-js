@@ -15,4 +15,3 @@ export const IMAGE_REMOTE_PATTERNS = [
     port: '',
   },
 ] as const;
-

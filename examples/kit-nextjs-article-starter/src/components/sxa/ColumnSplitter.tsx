@@ -29,11 +29,7 @@ interface ColumnSplitterProps extends ComponentProps {
   params: ComponentProps['params'] & ColumnWidths & ColumnStyles;
 }
 
-export const Default = ({
-  params,
-  rendering,
-  page,
-}: ColumnSplitterProps): JSX.Element => {
+export const Default = ({ params, rendering, page }: ColumnSplitterProps): JSX.Element => {
   const { EnabledPlaceholders, RenderingIdentifier: id, styles } = params;
 
   const enabledColumns = EnabledPlaceholders?.split(',') ?? [];

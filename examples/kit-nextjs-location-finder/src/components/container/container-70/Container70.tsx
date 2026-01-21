@@ -35,7 +35,12 @@ export const Default: React.FC<Container70Props> = (props) => {
       <Flex className="group-[.is-inset]:p-0">
         <FlexItem basis="full">
           <div className="mx-auto md:max-w-[70%]">
-            <AppPlaceholder page={page} componentMap={componentMap} name={PLACEHOLDER_NAME} rendering={rendering} />
+            <AppPlaceholder
+              page={page}
+              componentMap={componentMap}
+              name={PLACEHOLDER_NAME}
+              rendering={rendering}
+            />
           </div>
         </FlexItem>
       </Flex>

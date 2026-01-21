@@ -56,22 +56,52 @@ export const Default: React.FC<Container6321Props> = (props) => {
     >
       <div className="w-full mx-auto max-w-[1760px] flex flex-wrap">
         <FlexItem>
-          <AppPlaceholder page={page} componentMap={componentMap} name={col1Placeholder.dynamicKey} rendering={rendering} />
+          <AppPlaceholder
+            page={page}
+            componentMap={componentMap}
+            name={col1Placeholder.dynamicKey}
+            rendering={rendering}
+          />
         </FlexItem>
         <FlexItem>
-          <AppPlaceholder page={page} componentMap={componentMap} name={col2Placeholder.dynamicKey} rendering={rendering} />
+          <AppPlaceholder
+            page={page}
+            componentMap={componentMap}
+            name={col2Placeholder.dynamicKey}
+            rendering={rendering}
+          />
         </FlexItem>
         <FlexItem>
-          <AppPlaceholder page={page} componentMap={componentMap} name={col3Placeholder.dynamicKey} rendering={rendering} />
+          <AppPlaceholder
+            page={page}
+            componentMap={componentMap}
+            name={col3Placeholder.dynamicKey}
+            rendering={rendering}
+          />
         </FlexItem>
         <FlexItem>
-          <AppPlaceholder page={page} componentMap={componentMap} name={col4Placeholder.dynamicKey} rendering={rendering} />
+          <AppPlaceholder
+            page={page}
+            componentMap={componentMap}
+            name={col4Placeholder.dynamicKey}
+            rendering={rendering}
+          />
         </FlexItem>
         <FlexItem>
-          <AppPlaceholder page={page} componentMap={componentMap} name={col5Placeholder.dynamicKey} rendering={rendering} />
+          <AppPlaceholder
+            page={page}
+            componentMap={componentMap}
+            name={col5Placeholder.dynamicKey}
+            rendering={rendering}
+          />
         </FlexItem>
         <FlexItem>
-          <AppPlaceholder page={page} componentMap={componentMap} name={col6Placeholder.dynamicKey} rendering={rendering} />
+          <AppPlaceholder
+            page={page}
+            componentMap={componentMap}
+            name={col6Placeholder.dynamicKey}
+            rendering={rendering}
+          />
         </FlexItem>
       </div>
     </section>

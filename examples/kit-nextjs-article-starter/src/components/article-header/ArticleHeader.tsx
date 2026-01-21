@@ -5,14 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Facebook, Linkedin, Twitter, Link, Check, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  Field,
-  Item,
-  ImageField,
-  LinkField,
-  Text,
-  DateField,
-} from '@sitecore-content-sdk/nextjs';
+import { Field, Item, ImageField, LinkField, Text, DateField } from '@sitecore-content-sdk/nextjs';
 import { ComponentProps } from '@/lib/component-props';
 
 import { NoDataFallback } from '@/utils/NoDataFallback';

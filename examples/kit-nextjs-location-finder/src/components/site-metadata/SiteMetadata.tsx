@@ -20,7 +20,7 @@ type SiteMetadataFields = {
 
 export const Default: React.FC<SiteMetadataProps> = (props) => {
   const { fields } = props;
-  
+
   if (!fields) {
     return <NoDataFallback componentName="Site Metadata" />;
   }

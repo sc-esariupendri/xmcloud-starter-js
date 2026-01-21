@@ -8,7 +8,6 @@ import Layout from 'src/Layout';
 import Providers from 'src/Providers';
 import { NextIntlClientProvider } from 'next-intl';
 
-
 export default async function NotFound() {
   const headersList = await headers();
   const { site, locale } = parseRewriteHeader(headersList);

@@ -22,22 +22,10 @@ export const Default: React.FC<Container25252525Props> = (props) => {
 
   const isPageEditing = page.mode.isEditing;
 
-  const col1Placeholder = getContainerPlaceholderProps(
-    'container-25-one',
-    props.params,
-  );
-  const col2Placeholder = getContainerPlaceholderProps(
-    'container-25-two',
-    props.params,
-  );
-  const col3Placeholder = getContainerPlaceholderProps(
-    'container-25-three',
-    props.params,
-  );
-  const col4Placeholder = getContainerPlaceholderProps(
-    'container-25-four',
-    props.params,
-  );
+  const col1Placeholder = getContainerPlaceholderProps('container-25-one', props.params);
+  const col2Placeholder = getContainerPlaceholderProps('container-25-two', props.params);
+  const col3Placeholder = getContainerPlaceholderProps('container-25-three', props.params);
+  const col4Placeholder = getContainerPlaceholderProps('container-25-four', props.params);
 
   const isEmptyPlaceholder =
     isContainerPlaceholderEmpty(rendering, col1Placeholder, col1) &&
@@ -49,8 +37,7 @@ export const Default: React.FC<Container25252525Props> = (props) => {
     return null;
   }
 
-  const excludeTopMargin =
-    props?.params?.excludeTopMargin === '1' ? true : false;
+  const excludeTopMargin = props?.params?.excludeTopMargin === '1' ? true : false;
 
   return (
     <section

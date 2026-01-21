@@ -340,7 +340,13 @@ export const FlexItem: React.FC<FlexItemProps> = ({
   );
 };
 
-export const XMFlex: React.FC<XMComponent> = ({ params, rendering, fields, page, componentMap }) => {
+export const XMFlex: React.FC<XMComponent> = ({
+  params,
+  rendering,
+  fields,
+  page,
+  componentMap,
+}) => {
   const phKey = `flex-${params.DynamicPlaceholderId}`;
   return (
     <Flex
@@ -355,7 +361,13 @@ export const XMFlex: React.FC<XMComponent> = ({ params, rendering, fields, page,
   );
 };
 
-export const XMFlexItem: React.FC<XMComponent> = ({ params, rendering, fields, page, componentMap }) => {
+export const XMFlexItem: React.FC<XMComponent> = ({
+  params,
+  rendering,
+  fields,
+  page,
+  componentMap,
+}) => {
   const phKey = `flex-item-${params.DynamicPlaceholderId}`;
   return (
     <FlexItem

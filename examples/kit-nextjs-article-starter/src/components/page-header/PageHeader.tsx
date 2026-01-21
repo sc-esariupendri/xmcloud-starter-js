@@ -20,18 +20,12 @@ const pageHeaderComponentClasses = cva(
         secondary: 'bg-secondary text-secondary-foreground',
       },
     },
-  },
+  }
 );
 
-export const Default: React.FC<PageHeaderProps> = ({
-  fields,
-  params,
-  page,
-}) => {
-  const { imageRequired, videoOptional, logoText, children } =
-    fields?.data?.datasource || {};
-  const { pageHeaderTitle, pageTitle, pageSubtitle } =
-    fields?.data?.externalFields || {};
+export const Default: React.FC<PageHeaderProps> = ({ fields, params, page }) => {
+  const { imageRequired, videoOptional, logoText, children } = fields?.data?.datasource || {};
+  const { pageHeaderTitle, pageTitle, pageSubtitle } = fields?.data?.externalFields || {};
 
   const title = pageHeaderTitle?.jsonValue ?? pageTitle?.jsonValue;
   const subtitle = pageSubtitle?.jsonValue;
@@ -53,10 +47,7 @@ export const Default: React.FC<PageHeaderProps> = ({
         <div className="@md:grid-cols-2 @lg:gap-12 mx-auto grid w-full grid-cols-1 gap-8">
           {/* Left */}
           <div className="flex flex-col justify-between">
-            <AnimatedSection
-              reducedMotion={prefersReducedMotion}
-              isPageEditing={isPageEditing}
-            >
+            <AnimatedSection reducedMotion={prefersReducedMotion} isPageEditing={isPageEditing}>
               <Text
                 tag="h1"
                 className="@md:text-5xl @lg:text-7xl font-heading text-pretty text-5xl font-normal leading-[0.93] tracking-tighter"
@@ -64,10 +55,7 @@ export const Default: React.FC<PageHeaderProps> = ({
               />
             </AnimatedSection>
             {children?.results && (
-              <AnimatedSection
-                reducedMotion={prefersReducedMotion}
-                isPageEditing={isPageEditing}
-              >
+              <AnimatedSection reducedMotion={prefersReducedMotion} isPageEditing={isPageEditing}>
                 <div className="@md:mt-16 mt-4 flex max-w-[504px] flex-col gap-6">
                   <Text
                     tag="p"
@@ -87,19 +75,13 @@ export const Default: React.FC<PageHeaderProps> = ({
           </div>
           {/* Right */}
           <div className="flex flex-col justify-end gap-10">
-            <AnimatedSection
-              reducedMotion={prefersReducedMotion}
-              isPageEditing={isPageEditing}
-            >
+            <AnimatedSection reducedMotion={prefersReducedMotion} isPageEditing={isPageEditing}>
               <RichText
                 className="line-height[26px] @lg:ms-auto max-w-[547px] text-lg font-medium tracking-tight"
                 field={subtitle}
               />
             </AnimatedSection>
-            <AnimatedSection
-              reducedMotion={prefersReducedMotion}
-              isPageEditing={isPageEditing}
-            >
+            <AnimatedSection reducedMotion={prefersReducedMotion} isPageEditing={isPageEditing}>
               <div className="@md:rounded-[22px] @lg:ms-auto relative max-w-[547px] overflow-hidden rounded-xl">
                 {videoOptional?.jsonValue?.value?.href ? (
                   <Video

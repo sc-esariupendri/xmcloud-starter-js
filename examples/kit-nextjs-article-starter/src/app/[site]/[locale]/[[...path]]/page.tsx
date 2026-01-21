@@ -48,11 +48,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   }
 
   // Fetch the component data from Sitecore (Likely will be deprecated)
-  const componentProps = await client.getComponentData(
-    page.layout,
-    {},
-    components,
-  );
+  const componentProps = await client.getComponentData(page.layout, {}, components);
 
   return (
     <NextIntlClientProvider>
@@ -75,10 +71,7 @@ export const generateStaticParams = async () => {
           .filter((site: SiteInfo) => site.name === defaultSite)
           .map((site: SiteInfo) => site.name)
       : sites.map((site: SiteInfo) => site.name);
-    return await client.getAppRouterStaticParams(
-      allowedSites,
-      routing.locales.slice(),
-    );
+    return await client.getAppRouterStaticParams(allowedSites, routing.locales.slice());
   }
   return [];
 };
@@ -95,31 +88,20 @@ export const generateMetadata = async ({ params }: PageProps) => {
   // The same call as for rendering the page. Should be cached by default react behavior
   const page = await client.getPage(path ?? [], { site, locale });
   return {
-    title:
-      (
-        page?.layout.sitecore.route?.fields as RouteFields
-      )?.Title?.value?.toString() || 'Page',
+    title: (page?.layout.sitecore.route?.fields as RouteFields)?.Title?.value?.toString() || 'Page',
     description:
-      (
-        page?.layout.sitecore.route?.fields as RouteFields
-      )?.ogDescription?.value?.toString() ||
+      (page?.layout.sitecore.route?.fields as RouteFields)?.ogDescription?.value?.toString() ||
       'Sitecore Next.js App Router Example',
     openGraph: {
       title:
-        (
-          page?.layout.sitecore.route?.fields as RouteFields
-        )?.ogTitle?.value?.toString() || 'Page',
+        (page?.layout.sitecore.route?.fields as RouteFields)?.ogTitle?.value?.toString() || 'Page',
       description:
-        (
-          page?.layout.sitecore.route?.fields as RouteFields
-        )?.ogDescription?.value?.toString() ||
+        (page?.layout.sitecore.route?.fields as RouteFields)?.ogDescription?.value?.toString() ||
         'Sitecore Next.js App Router Example',
       url: url,
       images:
-        (page?.layout.sitecore.route?.fields as RouteFields)?.ogImage?.value
-          ?.src ||
-        (page?.layout.sitecore.route?.fields as RouteFields)?.thumbnailImage
-          ?.value?.src,
+        (page?.layout.sitecore.route?.fields as RouteFields)?.ogImage?.value?.src ||
+        (page?.layout.sitecore.route?.fields as RouteFields)?.thumbnailImage?.value?.src,
     },
   };
 };

@@ -66,7 +66,12 @@ export const Default: React.FC<ContainerFullBleedProps> = (props) => {
     >
       <Flex fullBleed={true} className="group-[.is-inset]:p-0">
         <FlexItem basis="full">
-          <AppPlaceholder page={page} componentMap={componentMap} name={PLACEHOLDER_NAME} rendering={rendering} />
+          <AppPlaceholder
+            page={page}
+            componentMap={componentMap}
+            name={PLACEHOLDER_NAME}
+            rendering={rendering}
+          />
         </FlexItem>
       </Flex>
     </section>

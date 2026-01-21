@@ -24,14 +24,8 @@ export const Default: React.FC<Container3070Props> = (props) => {
 
   const isPageEditing = page.mode.isEditing;
 
-  const leftPlaceholders = getContainerPlaceholderProps(
-    'container-thirty-left',
-    props.params,
-  );
-  const rightPlaceholders = getContainerPlaceholderProps(
-    'container-seventy-right',
-    props.params,
-  );
+  const leftPlaceholders = getContainerPlaceholderProps('container-thirty-left', props.params);
+  const rightPlaceholders = getContainerPlaceholderProps('container-seventy-right', props.params);
 
   const isEmptyPlaceholder =
     isContainerPlaceholderEmpty(rendering, leftPlaceholders, left) &&
@@ -41,8 +35,7 @@ export const Default: React.FC<Container3070Props> = (props) => {
     return null;
   }
 
-  const excludeTopMargin =
-    props?.params?.excludeTopMargin === '1' ? true : false;
+  const excludeTopMargin = props?.params?.excludeTopMargin === '1' ? true : false;
 
   return (
     <section

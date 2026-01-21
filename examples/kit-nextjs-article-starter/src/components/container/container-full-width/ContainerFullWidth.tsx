@@ -5,9 +5,7 @@ import { PlaceholderProps } from '@/types/Placeholder.props';
 import componentMap from '.sitecore/component-map';
 import { AppPlaceholder } from '@sitecore-content-sdk/nextjs';
 
-export type ContainerFullWidthProps = ComponentProps &
-  PlaceholderProps &
-  ContainerFullWidthParams;
+export type ContainerFullWidthProps = ComponentProps & PlaceholderProps & ContainerFullWidthParams;
 
 export type ContainerFullWidthParams = {
   params?: {
@@ -30,8 +28,7 @@ export const Default: React.FC<ContainerFullWidthProps> = (props) => {
     return null;
   }
 
-  const excludeTopMargin =
-    props?.params?.excludeTopMargin === '1' ? true : false;
+  const excludeTopMargin = props?.params?.excludeTopMargin === '1' ? true : false;
 
   return (
     <section

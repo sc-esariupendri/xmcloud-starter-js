@@ -6,13 +6,7 @@ import components from '.sitecore/component-map.client';
 import { ThemeProvider } from '@/components/theme-provider/theme-provider.dev';
 import { VideoProvider } from './contexts/VideoContext';
 
-export default function Providers({
-  children,
-  page,
-}: {
-  children: React.ReactNode;
-  page: Page;
-}) {
+export default function Providers({ children, page }: { children: React.ReactNode; page: Page }) {
   return (
     <SitecoreProvider
       api={scConfig.api}

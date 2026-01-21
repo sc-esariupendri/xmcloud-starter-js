@@ -1,13 +1,13 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 import {
   ComponentPropsCollection,
   ComponentPropsContext,
   Page,
   SitecoreProvider,
-} from "@sitecore-content-sdk/nextjs";
-import scConfig from "sitecore.config";
-import components from ".sitecore/component-map.client";
+} from '@sitecore-content-sdk/nextjs';
+import scConfig from 'sitecore.config';
+import components from '.sitecore/component-map.client';
 
 export default function Providers({
   children,
@@ -23,11 +23,9 @@ export default function Providers({
       api={scConfig.api}
       componentMap={components}
       page={page}
-      loadImportMap={() => import(".sitecore/import-map.client")}
+      loadImportMap={() => import('.sitecore/import-map.client')}
     >
-      <ComponentPropsContext value={componentProps}>
-        {children}
-      </ComponentPropsContext>
+      <ComponentPropsContext value={componentProps}>{children}</ComponentPropsContext>
     </SitecoreProvider>
   );
 }

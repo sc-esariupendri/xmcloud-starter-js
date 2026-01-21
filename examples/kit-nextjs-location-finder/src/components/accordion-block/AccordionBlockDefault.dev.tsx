@@ -21,8 +21,8 @@ export const AccordionBlockDefault: React.FC<AccordionProps> = (props) => {
         className={cn(
           '@container @md:py-16 @lg:py-20 border-b-2 border-t-2 py-10 [.border-b-2+&]:border-t-0',
           props?.params?.styles && {
-    [props.params.styles]: true,
-  }
+            [props.params.styles]: true,
+          }
         )}
         data-class-change
       >

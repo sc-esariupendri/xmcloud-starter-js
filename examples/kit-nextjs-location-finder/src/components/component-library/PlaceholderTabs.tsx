@@ -30,7 +30,13 @@ type PlaceholderTabsProps = {
   componentMap: Map<string, NextjsContentSdkComponent>;
 };
 
-export const Default = ({ rendering, params, fields, page, componentMap }: PlaceholderTabsProps): JSX.Element => {
+export const Default = ({
+  rendering,
+  params,
+  fields,
+  page,
+  componentMap,
+}: PlaceholderTabsProps): JSX.Element => {
   const datasource = useMemo(() => fields.data.datasource, [fields.data.datasource]);
   const phSuffixes = ['one', 'two', 'three', 'four', 'five'];
 

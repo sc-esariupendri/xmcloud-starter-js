@@ -149,7 +149,11 @@ const FloatingDockMobile = ({
       aria-label="Share menu"
     >
       <AnimatePresence>
-        {open && <Portal><Backdrop onClick={closeMenu} /></Portal>}
+        {open && (
+          <Portal>
+            <Backdrop onClick={closeMenu} />
+          </Portal>
+        )}
       </AnimatePresence>
 
       <AnimatePresence>

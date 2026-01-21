@@ -1,10 +1,5 @@
 import React, { type JSX } from 'react';
-import {
-  Field,
-  ImageField,
-  Page,
-  AppPlaceholder,
-} from '@sitecore-content-sdk/nextjs';
+import { Field, ImageField, Page, AppPlaceholder } from '@sitecore-content-sdk/nextjs';
 import Scripts from 'src/Scripts';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Sora, Roboto } from 'next/font/google';
@@ -64,9 +59,7 @@ const Layout = ({ page }: LayoutProps): JSX.Element => {
                 page={page}
                 rendering={route}
                 componentMap={componentMap}
-                loadServerImportMap={() =>
-                  import('.sitecore/import-map.server')
-                }
+                loadServerImportMap={() => import('.sitecore/import-map.server')}
               />
             )
           ) : (
