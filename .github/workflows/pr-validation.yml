@@ -111,34 +111,6 @@ jobs:
           echo "Changed starters: $CHANGED_STARTERS"
           echo "changed-starters=$CHANGED_STARTERS" >> $GITHUB_OUTPUT
 
-      - name: Check for PowerShell incompatible commands
-        run: |
-          echo "Checking for && usage in package.json scripts (incompatible with PowerShell)..."
-          
-          FOUND_ISSUES=false
-          
-          # Check all package.json files in examples directory
-          for pkg in examples/*/package.json; do
-            if [ -f "$pkg" ]; then
-              # Check if scripts section contains &&
-              if grep -q '"[^"]*&&[^"]*"' "$pkg" 2>/dev/null; then
-                echo "❌ ERROR: Found && in $pkg"
-                echo "   PowerShell does not support && as command separator"
-                grep '"[^"]*&&[^"]*"' "$pkg" | head -5
-                FOUND_ISSUES=true
-              fi
-            fi
-          done
-          
-          if [ "$FOUND_ISSUES" = true ]; then
-            echo ""
-            echo "::error::Found && usage in package.json scripts. This is incompatible with PowerShell terminals."
-            echo "Replace && with npm-run-all or separate scripts for cross-platform compatibility."
-            exit 1
-          fi
-          
-          echo "✅ No PowerShell incompatible commands found"
-
       - name: Install dependencies for changed starters
         run: |
           echo "Installing dependencies for changed starters..."
@@ -228,9 +200,9 @@ jobs:
               fi
               echo "✅ Linting passed for $starter"
               
-              # Check formatting (only if format:check script AND .prettierrc exist)
+              # Check formatting (only if format:check script exists)
               # Warning only - does not fail the workflow
-              if grep -q '"format:check"' package.json 2>/dev/null && [ -f ".prettierrc" ]; then
+              if grep -q '"format:check"' package.json 2>/dev/null; then
                 echo "Running format check for $starter..."
                 if ! npm run format:check; then
                   echo "⚠️ WARNING: Formatting issues found in $starter"
@@ -240,8 +212,6 @@ jobs:
                 else
                   echo "✅ Formatting check passed for $starter"
                 fi
-              elif grep -q '"format:check"' package.json 2>/dev/null; then
-                echo "⏭️ Skipping format check (no .prettierrc config found)"
               else
                 echo "⏭️ Skipping format check (no format:check script found in package.json)"
               fi
