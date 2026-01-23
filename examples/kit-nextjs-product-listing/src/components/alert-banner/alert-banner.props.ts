@@ -28,6 +28,3 @@ export type AlertBannerFields = {
     link?: LinkField; // Sitecore editable link field
   };
 };
-
-// INTENTIONAL TYPE ERROR FOR CI TESTING - REMOVE AFTER TEST
-const testTypeError: string = 123; // This will fail type-check
