@@ -35,8 +35,8 @@ export function useSearchConfigApi(
   const fetchData = React.useCallback(async () => {
     // Only fetch if we have a token from OAuth
     if (!token) {
-      setError("No authentication token available");
       setLoading(false);
+      setError("No authentication token available");
       return;
     }
 
@@ -62,8 +62,11 @@ export function useSearchConfigApi(
   }, [token]);
 
   React.useEffect(() => {
-    // Only fetch when we have a token from OAuth
-    if (token) {
+    // Set error immediately if no token, otherwise fetch
+    if (!token) {
+      setError("No authentication token available");
+      setLoading(false);
+    } else {
       fetchData();
     }
   }, [token, fetchData]);

@@ -61,12 +61,6 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
           const hostState = hostStateRes?.data;
           const userData = hostUserRes?.data;
 
-          console.log("✅ SDK Context fetched:", {
-            appContextData,
-            hostState,
-            userData,
-          });
-
           if (appContextData) {
             setAppContext(appContextData);
           }
@@ -79,10 +73,6 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
             appContextData?.organizationId &&
             hostState?.xmCloudTenantInfo?.name
           ) {
-            console.log("✅ Setting auth config from SDK:", {
-              organization_id: appContextData.organizationId,
-              tenant_name: hostState.xmCloudTenantInfo.name,
-            });
             setAuthConfig({
               organization_id: appContextData.organizationId,
               tenant_name: hostState.xmCloudTenantInfo.name,

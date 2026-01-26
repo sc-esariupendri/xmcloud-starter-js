@@ -23,23 +23,12 @@ export function SearchConfiguration({
   apiError,
   isLoading = false,
 }: SearchConfigurationProps = {}) {
+  // Ensure searchIndices and fieldsMap are always arrays/objects, never null/undefined
+  const safeSearchIndices = searchIndices || [];
+  const safeFieldsMap = fieldsMap || {};
   // Get Marketplace client and app context for custom field operations
   const { client } = useMarketplaceClient({ autoInit: true });
   const appContext = useAppContextOptional();
-
-  // Log full context for debugging
-  React.useEffect(() => {
-    if (appContext) {
-      console.debug(
-        "🔍 Full App Context:",
-        JSON.stringify(appContext, null, 2)
-      );
-    } else {
-      console.debug(
-        "ℹ️ Marketplace context not available - running in standalone mode"
-      );
-    }
-  }, [appContext]);
 
   // Initialize state with defaults or initial config
   const [config, setConfig] = React.useState<SearchConfigState>(() => {
@@ -53,13 +42,13 @@ export function SearchConfiguration({
   React.useEffect(() => {
     // We intentionally do NOT auto-select the first index.
     // The user must explicitly select an index.
-    // if (searchIndices.length > 0 && !config.searchIndex) {
+    // if (safeSearchIndices.length > 0 && !config.searchIndex) {
     //   setConfig((prev) => ({
     //     ...prev,
-    //     searchIndex: searchIndices[0].value,
+    //     searchIndex: safeSearchIndices[0].value,
     //   }));
     // }
-  }, [searchIndices, config.searchIndex]);
+  }, [safeSearchIndices, config.searchIndex]);
 
   // Track last saved time for UI feedback
   const prevIsSavingRef = React.useRef(false);
@@ -81,18 +70,18 @@ export function SearchConfiguration({
         // Check if loaded searchIndex exists in available indices
         let validatedSearchIndex = cleanConfig.searchIndex;
         if (validatedSearchIndex) {
-          const indexExists = searchIndices.some(
+          const indexExists = safeSearchIndices.some(
             (idx) => idx.value === validatedSearchIndex
           );
           if (!indexExists) {
             console.warn(
               `⚠️ Cannot map previously selected index "${validatedSearchIndex}" with the API response. Available indices:`,
-              searchIndices.map((idx) => idx.value)
+              safeSearchIndices.map((idx) => idx.value)
             );
             // Reset to default or first available index
             validatedSearchIndex =
-              searchIndices.length > 0
-                ? searchIndices[0].value
+              safeSearchIndices.length > 0
+                ? safeSearchIndices[0].value
                 : prev.searchIndex || DEFAULT_CONFIG.searchIndex;
           }
         }
@@ -109,7 +98,7 @@ export function SearchConfiguration({
         };
       });
     },
-    [searchIndices]
+    [safeSearchIndices]
   );
 
   const cleanConfigForSave = React.useMemo<SearchConfigState>(() => {
@@ -135,14 +124,14 @@ export function SearchConfiguration({
   // Check if selected index exists in available indices
   const isValidIndex = React.useMemo(() => {
     if (!config.searchIndex) return false;
-    return searchIndices.some((idx) => idx.value === config.searchIndex);
-  }, [config.searchIndex, searchIndices]);
+    return safeSearchIndices.some((idx) => idx.value === config.searchIndex);
+  }, [config.searchIndex, safeSearchIndices]);
 
   // Get available fields for the selected search index
   const availableFields = React.useMemo(() => {
     if (!config.searchIndex || !isValidIndex) return [];
-    return fieldsMap[config.searchIndex] || [];
-  }, [config.searchIndex, fieldsMap, isValidIndex]);
+    return safeFieldsMap[config.searchIndex] || [];
+  }, [config.searchIndex, safeFieldsMap, isValidIndex]);
 
   // Handlers for UI changes
   const handleSearchIndexChange = React.useCallback((value: string) => {
@@ -238,11 +227,11 @@ export function SearchConfiguration({
       <SearchIndexSelect
         value={config.searchIndex}
         onValueChange={handleSearchIndexChange}
-        options={searchIndices}
+        options={safeSearchIndices}
       />
 
       {/* No Indexes Available Fallback */}
-      {searchIndices.length === 0 && (
+      {safeSearchIndices.length === 0 && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-800 p-3 text-amber-800 dark:text-amber-200 text-sm">
           <p className="font-medium">There is no Search Index available.</p>
           <p className="text-xs mt-1 opacity-90">
@@ -252,7 +241,7 @@ export function SearchConfiguration({
       )}
 
       {/* No Selected Index Fallback */}
-      {searchIndices.length > 0 && !config.searchIndex && (
+      {safeSearchIndices.length > 0 && !config.searchIndex && (
         <Alert variant="warning">
           <AlertDescription>
             Please select a search index from the dropdown above.

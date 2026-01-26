@@ -26,6 +26,12 @@ const DEFAULT_OPTIONS: Required<UseMarketplaceClientOptions> = {
 let client: ClientSDK | undefined = undefined;
 let initializationPromise: Promise<ClientSDK> | null = null;
 
+// Test-only function to reset module state
+export function __resetModuleState() {
+  client = undefined;
+  initializationPromise = null;
+}
+
 function isInMarketplaceContext(): boolean {
   try {
     if (typeof window === "undefined") return false;
@@ -48,7 +54,7 @@ function isInMarketplaceContext(): boolean {
         return true;
       }
     } catch (e) {
-      console.debug("Could not check parent origin:", e);
+      // Silently handle parent origin check errors
     }
 
     return isInIframe;
@@ -116,7 +122,8 @@ export function useMarketplaceClient(
     async (attempt = 1): Promise<void> => {
       let shouldProceed = false;
       setState((prev) => {
-        if (prev.isLoading || prev.isInitialized || isInitializingRef.current) {
+        // Allow retry attempts (attempt > 1) to proceed even if isLoading is true
+        if (prev.isInitialized || (attempt === 1 && isInitializingRef.current)) {
           return prev;
         }
         shouldProceed = true;
@@ -127,7 +134,6 @@ export function useMarketplaceClient(
       if (!shouldProceed) return;
 
       if (!isInMarketplaceContext()) {
-        // console.log("ℹ️ Not running in Sitecore Marketplace context");
         setState({
           client: null,
           error: null,
@@ -147,13 +153,11 @@ export function useMarketplaceClient(
           isLoading: false,
           isInitialized: true,
         });
-        // console.log("✅ Marketplace client initialized successfully");
       } catch (error) {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
 
         if (errorMessage.includes("Not in Marketplace context")) {
-          // console.log("ℹ️ Running in standalone mode");
           setState({
             client: null,
             error: null,
@@ -161,6 +165,9 @@ export function useMarketplaceClient(
             isInitialized: true,
           });
         } else if (attempt < opts.retryAttempts) {
+          // Reset flags and state before retry to allow the recursive call to proceed
+          isInitializingRef.current = false;
+          setState((prev) => ({ ...prev, isLoading: false }));
           await new Promise((resolve) => setTimeout(resolve, opts.retryDelay));
           return initializeClient(attempt + 1);
         } else {
