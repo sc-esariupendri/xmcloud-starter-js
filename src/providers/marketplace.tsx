@@ -4,6 +4,7 @@ import { ClientSDK } from "@sitecore-marketplace-sdk/client";
 import type { ApplicationContext } from "@sitecore-marketplace-sdk/client";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { useMarketplaceClient as useMarketplaceClientHook } from "../utils/hooks/useMarketplaceClient";
+import { getEnvironmentConfig } from "../utils/environment-detection";
 
 interface ClientSDKProviderProps {
   children: ReactNode;
@@ -22,6 +23,7 @@ const MarketplaceErrorContext = createContext<{
 export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
   children,
 }) => {
+  const envConfig = getEnvironmentConfig();
   const [redirectUri, setRedirectUri] = useState<string | null>(null);
   const { client, isInitialized } = useMarketplaceClientHook();
   const [appContext, setAppContext] = useState<ApplicationContext | null>(null);
@@ -128,17 +130,16 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
   if (redirectUri && authConfig) {
     return (
       <Auth0Provider
-        domain="https://auth.sitecorecloud.io"
-        clientId="fNgQatuiFS87Luw7BhkfKIzNOqHFU6UN"
+        domain={envConfig.domain}
+        clientId={envConfig.clientId}
         authorizationParams={{
           redirect_uri: redirectUri,
           scope: "openid profile email offline_access",
-          audience: "https://api-webapp.sitecorecloud.io",
-          system_id: "5907637C-CDDF-48E9-ACEF-BD06F1A6BAB8",
+          audience: envConfig.audience,
+          system_id: envConfig.systemId,
           organization_id: authConfig.organization_id,
           tenant_name: authConfig.tenant_name,
-          auth0Client:
-            "eyJuYW1lIjoiYXV0aDAtcmVhY3QiLCJ2ZXJzaW9uIjoiMi41LjAifQ==",
+          auth0Client: envConfig.auth0Client,
         }}
       >
         <MarketplaceLoadingContext.Provider value={isMarketplaceLoading}>
