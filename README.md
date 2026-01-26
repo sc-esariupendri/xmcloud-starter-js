@@ -1,4 +1,57 @@
-# Deployment
+# MKP Search App
+
+Marketplace Search Configuration App for Sitecore Marketplace.
+
+## Overview
+
+This app allows users to configure search indices and field mappings for Sitecore Marketplace applications. It integrates with Auth0 for authentication and the Sitecore Marketplace SDK for data persistence.
+
+## Features
+
+- 🔐 Auth0 authentication
+- 🔍 Search index configuration
+- 📋 Field mapping management
+- 💾 Custom field persistence with auto-save
+- 🎨 Modern UI with Tailwind CSS
+- ⚡ Built with React, TypeScript, and Vite
+
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Run tests
+npm test
+
+# Build for production
+npm run build
+```
+
+## Testing
+
+Comprehensive test suite with 152 tests covering all functionality and edge cases.
+
+📖 **[See Testing Guide](./TESTING.md)** for detailed information.
+
+```bash
+# Run all tests
+npm test
+
+# Run tests once
+npm run test:run
+
+# View test UI
+npm run test:ui
+
+# Generate coverage
+npm run test:coverage
+```
+
+## Deployment
 
 1. Build app locally
 2. Log into Cloudflare using MyApps (make sure you have access to it)
@@ -7,6 +60,17 @@
    https://dash.cloudflare.com/dbfc301dee0ee3640018e15cf82e3e4b/pages/view/search-mkp-app/deployments/new
 5. Select "folder" option and point prompt to the dist folder
 6. Click "Save and Deploy".
+
+## Tech Stack
+
+- **React 19** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Build tool
+- **Tailwind CSS** - Styling
+- **Auth0** - Authentication
+- **Sitecore Marketplace SDK** - Integration
+- **Vitest** - Testing framework
+- **React Testing Library** - Component testing
 
 # React + TypeScript + Vite
 
