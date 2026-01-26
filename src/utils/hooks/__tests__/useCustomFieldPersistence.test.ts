@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import { renderHook, waitFor, act } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useCustomFieldPersistence } from '../useCustomFieldPersistence';
 import type { ClientSDK } from '@sitecore-marketplace-sdk/client';
 

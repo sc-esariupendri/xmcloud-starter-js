@@ -249,8 +249,8 @@ describe('useSearchConfigApi', () => {
       );
 
       const { result, rerender } = renderHook(
-        ({ token }) => useSearchConfigApi(token),
-        { initialProps: { token: mockToken } }
+        ({ token }: { token: string | null }) => useSearchConfigApi(token),
+        { initialProps: { token: mockToken as string | null } }
       );
 
       await waitFor(() => {
@@ -282,8 +282,8 @@ describe('useSearchConfigApi', () => {
       );
 
       const { result, rerender } = renderHook(
-        ({ token }) => useSearchConfigApi(token),
-        { initialProps: { token: mockToken } }
+        ({ token }: { token: string | null }) => useSearchConfigApi(token),
+        { initialProps: { token: mockToken as string | null } }
       );
 
       await waitFor(() => {
@@ -293,7 +293,7 @@ describe('useSearchConfigApi', () => {
       expect(searchConfigApi.fetchSearchConfig).toHaveBeenCalledTimes(1);
 
       // Change token to null
-      rerender({ token: null });
+      rerender({ token: null as string | null });
 
       // Should not call fetch again
       await waitFor(() => {
@@ -315,8 +315,8 @@ describe('useSearchConfigApi', () => {
       );
 
       const { result, rerender } = renderHook(
-        ({ token }) => useSearchConfigApi(token),
-        { initialProps: { token: null } }
+        ({ token }: { token: string | null }) => useSearchConfigApi(token),
+        { initialProps: { token: null as string | null } }
       );
 
       // Wait for initial state to settle
@@ -326,7 +326,7 @@ describe('useSearchConfigApi', () => {
       expect(searchConfigApi.fetchSearchConfig).not.toHaveBeenCalled();
 
       // Change token to valid
-      rerender({ token: mockToken });
+      rerender({ token: mockToken as string | null });
 
       await waitFor(() => {
         expect(result.current.loading).toBe(false);

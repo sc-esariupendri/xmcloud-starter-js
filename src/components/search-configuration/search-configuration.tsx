@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useAppContextOptional } from "@/providers/marketplace";
 import { SearchIndexSelect } from "./search-index-select";
 import { FieldMappingCheckbox } from "./field-mapping-checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -28,7 +27,6 @@ export function SearchConfiguration({
   const safeFieldsMap = fieldsMap || {};
   // Get Marketplace client and app context for custom field operations
   const { client } = useMarketplaceClient({ autoInit: true });
-  const appContext = useAppContextOptional();
 
   // Initialize state with defaults or initial config
   const [config, setConfig] = React.useState<SearchConfigState>(() => {

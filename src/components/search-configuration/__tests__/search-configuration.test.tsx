@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { SearchConfiguration } from '../search-configuration';
 import type { FieldOption, ContentField } from '../types';
 import * as marketplaceContext from '../../../providers/marketplace';
@@ -434,7 +433,6 @@ describe('SearchConfiguration', () => {
 
   describe('Data transformation', () => {
     it('should handle loaded config with legacy field names', () => {
-      const mockOnLoad = vi.fn();
 
       vi.mocked(
         useCustomFieldPersistenceHook.useCustomFieldPersistence
