@@ -290,25 +290,29 @@ jobs:
             fi
           done
 
-      - name: Run tests for changed starters
+      - name: Run tests with coverage for changed starters
         run: |
-          echo "Running tests for changed starters..."
+          set -e  # Exit immediately if any command fails
+          echo "Running tests with coverage for changed starters..."
 
           for starter in ${{ steps.detect-changes.outputs.changed-starters }}; do
             if [ -d "examples/$starter" ]; then
               echo "Testing $starter..."
               cd "examples/$starter"
               
-              # Check if test script exists
-              if grep -q '"test"' package.json; then
-                if npm test; then
-                  echo "✅ Tests passed for $starter"
-                else
+              # Check if test:coverage script exists
+              if grep -q '"test:coverage"' package.json; then
+                echo "Running tests with coverage for $starter..."
+                if ! npm run test:coverage; then
                   echo "❌ Tests failed for $starter"
+                  echo "::error::Tests failed for $starter"
                   exit 1
                 fi
+                echo "✅ Tests passed for $starter"
               else
-                echo "⏭️ Skipping tests (no test script found in package.json)"
+                echo "❌ No test:coverage script found for $starter - tests are mandatory"
+                echo "::error::No test:coverage script found for $starter"
+                exit 1
               fi
               
               cd ../..
@@ -347,7 +351,7 @@ jobs:
               - ✅ Linting and formatting
               - ✅ TypeScript type checking
               - ✅ Build verification
-              - ✅ Test execution
+              - ✅ Test execution with coverage
 
               **Next Steps:**
               ${'${{ job.status }}' === 'success' ? 
