@@ -196,10 +196,10 @@ jobs:
             fi
           done
 
-      - name: Run tests
+      - name: Run tests with coverage
         run: |
           set -e  # Exit immediately if any command fails
-          echo "Running tests for all starters..."
+          echo "Running tests with coverage for all starters..."
 
           # Test each enabled starter
           for starter in examples/kit-nextjs-skate-park examples/kit-nextjs-article-starter examples/kit-nextjs-location-finder examples/kit-nextjs-product-listing; do
@@ -207,18 +207,18 @@ jobs:
               echo "Testing $starter..."
               cd "$starter"
               
-              # Check if test script exists, if not fail the workflow
-              if grep -q '"test"' package.json; then
-                echo "Running tests for $starter..."
-                if ! npm test; then
+              # Check if test:coverage script exists, if not fail the workflow
+              if grep -q '"test:coverage"' package.json; then
+                echo "Running tests with coverage for $starter..."
+                if ! npm run test:coverage; then
                   echo "❌ Tests failed for $starter"
                   echo "::error::Tests failed for $starter"
                   exit 1
                 fi
                 echo "✅ Tests passed for $starter"
               else
-                echo "❌ No test script found for $starter - tests are mandatory"
-                echo "::error::No test script found for $starter"
+                echo "❌ No test:coverage script found for $starter - tests are mandatory"
+                echo "::error::No test:coverage script found for $starter"
                 exit 1
               fi
 
@@ -234,7 +234,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Validation Results:**" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ All builds passed" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ All tests passed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ All tests passed with coverage" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Linting and formatting checks passed" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Type checking passed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
