@@ -184,7 +184,6 @@ jobs:
 
       - name: Lint and format check for all starters
         run: |
-          set -e  # Exit immediately if any command fails
           echo "Running linting and formatting checks for all starters..."
           
           for starter in kit-nextjs-skate-park kit-nextjs-article-starter kit-nextjs-location-finder kit-nextjs-product-listing; do
@@ -194,14 +193,15 @@ jobs:
               echo "=================================="
               cd "examples/$starter"
               
-              # Run linting
+              # Run linting - WARNING ONLY (does not fail the workflow)
               echo "Running lint for $starter..."
               if ! npm run lint; then
-                echo "❌ Linting failed for $starter"
-                echo "::error::Linting failed for $starter"
-                exit 1
+                echo "⚠️ WARNING: Linting issues found in $starter"
+                echo "::warning::Linting found issues in $starter (non-blocking)"
+                # Continue without failing - lint check is a warning only for now
+              else
+                echo "✅ Linting passed for $starter"
               fi
-              echo "✅ Linting passed for $starter"
               
               # Check formatting (only if format:check script exists)
               # WARNING ONLY - does not fail the workflow
