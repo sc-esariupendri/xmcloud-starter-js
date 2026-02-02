@@ -48,12 +48,14 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "npm-run-all2": "^8.0.4",
+    "prettier": "3.6.2",
     "tailwindcss": "^4",
     "typescript": "~5.8.3"
   },
   "scripts": {
     "build": "cross-env NODE_ENV=production npm-run-all --serial sitecore-tools:generate-map sitecore-tools:build next:build",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "prettier": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "type-check": "tsc --noEmit --incremental false",
     "next:build": "next build",
