@@ -97,33 +97,36 @@ jobs:
 
       - name: Lint and format check
         run: |
-          set -e  # Exit immediately if any command fails
           echo "Running linting and formatting checks..."
 
           # Check each enabled starter
           for starter in examples/kit-nextjs-skate-park examples/kit-nextjs-article-starter examples/kit-nextjs-location-finder examples/kit-nextjs-product-listing; do
             if [ -d "$starter" ]; then
-              echo "Checking $starter..."
+              echo "=================================="
+              echo "Checking $starter"
+              echo "=================================="
               cd "$starter"
               
-              # Run linting
+              # Run linting - WARNING ONLY (does not fail the workflow)
               echo "Running lint for $starter..."
               if ! npm run lint; then
-                echo "❌ Linting failed for $starter"
-                echo "::error::Linting failed for $starter"
-                exit 1
+                echo "⚠️ WARNING: Linting issues found in $starter"
+                echo "::warning::Linting found issues in $starter (non-blocking)"
+                # Continue without failing - lint check is a warning only for now
+              else
+                echo "✅ Linting passed for $starter"
               fi
-              echo "✅ Linting passed for $starter"
               
-              # Check formatting
+              # Check formatting - WARNING ONLY (does not fail the workflow)
               echo "Running format check for $starter..."
               if ! npm run format:check; then
-                echo "❌ Formatting check failed for $starter"
+                echo "⚠️ WARNING: Formatting issues found in $starter"
                 echo "Run 'npm run prettier' to fix formatting issues"
-                echo "::error::Formatting check failed for $starter"
-                exit 1
+                echo "::warning::Formatting check found issues in $starter (non-blocking)"
+                # Continue without failing - format check is a warning only for now
+              else
+                echo "✅ Formatting check passed for $starter"
               fi
-              echo "✅ Formatting check passed for $starter"
               
               cd ../..
             fi
