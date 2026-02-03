@@ -2,8 +2,8 @@ import React, { JSX } from 'react';
 import { Link, LinkField, Text, TextField } from '@sitecore-content-sdk/nextjs';
 import { ComponentProps } from 'lib/component-props';
 
-// TEST: Build-breaking type error - REMOVE AFTER TESTING
-const testBuildError: string = 123; // Type 'number' is not assignable to type 'string'
+
+const testBuildError: string = 123;
 console.log(testBuildError);
 
 interface Item {

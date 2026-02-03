@@ -123,3 +123,10 @@ describe('Title Component Edge Cases should', () => {
     expect(screen.getByText('Test Title from Datasource')).toBeInTheDocument();
   });
 });
+
+// TEST: Intentional failing test - REMOVE AFTER TESTING
+describe('TEST: Intentional Failing Test', () => {
+  it('should fail to verify pipeline catches test failures', () => {
+    expect(true).toBe(false); // This will FAIL
+  });
+});
