@@ -2,10 +2,6 @@ import React, { JSX } from 'react';
 import { Link, LinkField, Text, TextField } from '@sitecore-content-sdk/nextjs';
 import { ComponentProps } from 'lib/component-props';
 
-
-const testBuildError: string = 123;
-console.log(testBuildError);
-
 interface Item {
   url: {
     path: string;
