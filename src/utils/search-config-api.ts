@@ -35,10 +35,6 @@ export async function fetchSearchConfig(
     throw new Error("Invalid bearer token provided.");
   }
 
-  // Debug log in development
-  // if (process.env.NODE_ENV === "development") {
-  //   console.log("🔐 Making API request with token:", bearerToken.substring(0, 20) + "...");
-  // }
 
   const envConfig = getEnvironmentConfig();
   
@@ -82,7 +78,13 @@ export async function fetchSearchConfig(
     throw new Error(`Failed to fetch config: ${errorDetails}`);
   }
 
-  return response.json();
+  const data = await response.json();
+  if (data == null) {
+    throw new Error(
+      "Search config API returned no data. The configuration may not be available for this tenant."
+    );
+  }
+  return data;
 }
 
 /**

@@ -147,6 +147,19 @@ function SearchApp() {
     );
   }
 
+  if (apiError?.includes("returned no data")) {
+    return (
+      <div className="w-full px-4 py-6 sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-4">
+        <div className="text-center">
+          <h3 className="text-lg font-medium text-amber-600">Search config unavailable</h3>
+          <p className="text-sm text-gray-500 mt-2">
+            The configuration may not be available for this tenant.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (apiError) {
     return (
       <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
