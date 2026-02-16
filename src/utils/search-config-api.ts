@@ -59,8 +59,9 @@ export async function fetchSearchConfig(
   if (!response.ok) {
     // Get error details from response if available
     let errorDetails = `${response.status} ${response.statusText}`;
+    let errorBody = "";
     try {
-      const errorBody = await response.text();
+      errorBody = await response.text();
       if (errorBody) {
         errorDetails += ` - ${errorBody.substring(0, 200)}`;
       }
@@ -72,6 +73,21 @@ export async function fetchSearchConfig(
     if (response.status === 401) {
       throw new Error(
         `Authentication failed (401): Token may be invalid or expired. ${errorDetails}`
+      );
+    }
+
+    // Handle 400 Bad Request (known and unknown messages)
+    if (response.status === 400) {
+      const isSearchClientKey = errorBody
+        .toLowerCase()
+        .includes("search client key not found in jwt claims");
+      if (isSearchClientKey) {
+        throw new Error(
+          "Search configuration is not available: search client key is missing from the token. Check user permissions or tenant search setup."
+        );
+      }
+      throw new Error(
+        `Bad request (400): ${errorBody?.trim() || response.statusText}`
       );
     }
 

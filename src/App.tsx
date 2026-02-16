@@ -147,23 +147,29 @@ function SearchApp() {
     );
   }
 
-  if (apiError?.includes("returned no data")) {
+  if (apiError) {
+    const isUnavailable =
+      apiError.includes("returned no data") ||
+      apiError.includes("Search configuration is not available") ||
+      apiError.includes("search client key");
+    const isBadRequest = apiError.startsWith("Bad request (400):");
+
     return (
       <div className="w-full px-4 py-6 sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-4">
-        <div className="text-center">
-          <h3 className="text-lg font-medium text-amber-600">Search config unavailable</h3>
-          <p className="text-sm text-gray-500 mt-2">
-            The configuration may not be available for this tenant.
-          </p>
+        <div className="text-center max-w-md">
+          <h3
+            className={
+              isUnavailable || isBadRequest
+                ? "text-lg font-medium text-amber-600"
+                : "text-lg font-medium text-red-600"
+            }
+          >
+            {isUnavailable || isBadRequest
+              ? "Search config unavailable"
+              : "Unable to load search config"}
+          </h3>
+          <p className="text-sm text-gray-500 mt-2">{apiError}</p>
         </div>
-      </div>
-    );
-  }
-
-  if (apiError) {
-    return (
-      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
-        <SearchConfigSkeleton />
       </div>
     );
   }
