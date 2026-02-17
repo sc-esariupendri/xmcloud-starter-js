@@ -72,10 +72,6 @@ export function SearchConfiguration({
             (idx) => idx.value === validatedSearchIndex
           );
           if (!indexExists) {
-            console.warn(
-              `⚠️ Cannot map previously selected index "${validatedSearchIndex}" with the API response. Available indices:`,
-              safeSearchIndices.map((idx) => idx.value)
-            );
             // Reset to default or first available index
             validatedSearchIndex =
               safeSearchIndices.length > 0
@@ -121,13 +117,17 @@ export function SearchConfiguration({
 
   // Check if selected index exists in available indices
   const isValidIndex = React.useMemo(() => {
-    if (!config.searchIndex) return false;
+    if (!config.searchIndex) {
+      return false;
+    }
     return safeSearchIndices.some((idx) => idx.value === config.searchIndex);
   }, [config.searchIndex, safeSearchIndices]);
 
   // Get available fields for the selected search index
   const availableFields = React.useMemo(() => {
-    if (!config.searchIndex || !isValidIndex) return [];
+    if (!config.searchIndex || !isValidIndex) {
+      return [];
+    }
     return safeFieldsMap[config.searchIndex] || [];
   }, [config.searchIndex, safeFieldsMap, isValidIndex]);
 

@@ -16,10 +16,6 @@ vi.mock('../../utils/hooks/useMarketplaceClient', () => ({
   useMarketplaceClient: vi.fn(),
 }));
 
-vi.mock('@auth0/auth0-react', () => ({
-  Auth0Provider: ({ children }: { children: ReactNode }) => <>{children}</>,
-}));
-
 describe('MarketplaceProvider', () => {
   let mockClient: any;
 
@@ -547,9 +543,6 @@ describe('MarketplaceProvider', () => {
       await waitFor(() => {
         expect(result.current).toBe(false);
       });
-
-      // Check that Auth0Provider gets the redirect URI (window.location.origin is mocked)
-      expect(window.location.origin).toBe('http://localhost:3000');
     });
   });
 });

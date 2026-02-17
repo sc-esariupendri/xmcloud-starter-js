@@ -34,7 +34,9 @@ export function __resetModuleState() {
 
 function isInMarketplaceContext(): boolean {
   try {
-    if (typeof window === "undefined") return false;
+    if (typeof window === "undefined") {
+      return false;
+    }
 
     const isInIframe = window.self !== window.top;
     const hasParent = window.parent && window.parent !== window;
@@ -131,7 +133,9 @@ export function useMarketplaceClient(
         return { ...prev, isLoading: true, error: null };
       });
 
-      if (!shouldProceed) return;
+      if (!shouldProceed) {
+        return;
+      }
 
       if (!isInMarketplaceContext()) {
         setState({
@@ -171,10 +175,7 @@ export function useMarketplaceClient(
           await new Promise((resolve) => setTimeout(resolve, opts.retryDelay));
           return initializeClient(attempt + 1);
         } else {
-          console.warn(
-            "Could not initialize Marketplace client:",
-            errorMessage
-          );
+         
           setState({
             client: null,
             error: null,

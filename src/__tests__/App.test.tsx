@@ -2,16 +2,10 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
-import * as auth0React from '@auth0/auth0-react';
 import * as marketplaceContext from '../providers/marketplace';
 import * as useSearchConfigApiHook from '../utils/hooks/useSearchConfigApi';
 
 // Mock all dependencies
-vi.mock('@auth0/auth0-react', () => ({
-  Auth0Provider: ({ children }: any) => <>{children}</>,
-  useAuth0: vi.fn(),
-}));
-
 vi.mock('../providers/marketplace', () => ({
   MarketplaceProvider: ({ children }: any) => <>{children}</>,
   useMarketplaceLoading: vi.fn(),
@@ -26,27 +20,9 @@ vi.mock('../utils/hooks/useSearchConfigApi', () => ({
 }));
 
 describe('App', () => {
-  const mockGetAccessTokenSilently = vi.fn();
-  const mockLoginWithPopup = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
-
-    // Default Auth0 mock
-    vi.mocked(auth0React.useAuth0).mockReturnValue({
-      getAccessTokenSilently: mockGetAccessTokenSilently,
-      loginWithPopup: mockLoginWithPopup,
-      isLoading: false,
-      isAuthenticated: true,
-      error: undefined,
-      user: undefined,
-      logout: vi.fn(),
-      loginWithRedirect: vi.fn(),
-      getAccessTokenWithPopup: vi.fn(),
-      getIdTokenClaims: vi.fn(),
-      handleRedirectCallback: vi.fn(),
-    } as any);
 
     // Default Marketplace mock
     vi.mocked(marketplaceContext.useMarketplaceLoading).mockReturnValue(false);
@@ -60,10 +36,7 @@ describe('App', () => {
       },
       loading: false,
       error: null,
-      refetch: vi.fn(),
     });
-
-    mockGetAccessTokenSilently.mockResolvedValue('valid-token');
   });
 
   afterEach(() => {
@@ -80,7 +53,7 @@ describe('App', () => {
   };
 
   describe('Basic functionality', () => {
-    it('should render search configuration when authenticated', async () => {
+    it('should render search configuration when marketplace and API are ready', async () => {
       await act(async () => {
         renderApp();
       });
@@ -102,108 +75,6 @@ describe('App', () => {
       // Should show skeleton (checking for loading state using data-slot)
       const skeletons = document.querySelectorAll('[data-slot="skeleton"]');
       expect(skeletons.length).toBeGreaterThan(0);
-    });
-  });
-
-  describe('Edge cases - Authentication errors', () => {
-    it('should show authentication required when not authenticated', async () => {
-      // When not authenticated, getAccessTokenSilently should fail
-      mockGetAccessTokenSilently.mockRejectedValue(
-        new Error('Not authenticated')
-      );
-
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: false,
-        isAuthenticated: false,
-        error: undefined,
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
-
-      await act(async () => {
-        renderApp();
-      });
-
-      // Fast forward past minimum loading time (use async version to resolve promises)
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(2000);
-      });
-
-      // With fake timers, use direct assertion after timer advance
-      expect(screen.getByText('Authentication Required')).toBeInTheDocument();
-      expect(screen.getByText('Sign In')).toBeInTheDocument();
-    });
-
-    it('should show auth error message when present', async () => {
-      const authError = new Error('Auth failed');
-      // When there's an auth error, getAccessTokenSilently should fail
-      mockGetAccessTokenSilently.mockRejectedValue(authError);
-
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: false,
-        isAuthenticated: false,
-        error: authError,
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
-
-      await act(async () => {
-        renderApp();
-      });
-
-      // Fast forward past minimum loading time (use async version to resolve promises)
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(2000);
-      });
-
-      // With fake timers, use direct assertion after timer advance
-      expect(screen.getByText('Auth failed')).toBeInTheDocument();
-    });
-
-    it('should handle token retrieval error', async () => {
-      mockGetAccessTokenSilently.mockRejectedValue(
-        new Error('Failed to get token')
-      );
-
-      renderApp();
-
-      // Fast forward past minimum loading time (use async version to resolve promises)
-      await vi.advanceTimersByTimeAsync(2000);
-
-      // With fake timers, use direct assertion after timer advance
-      expect(screen.getByText('Authentication Required')).toBeInTheDocument();
-      expect(
-        screen.getByText(/Failed to retrieve access token/i)
-      ).toBeInTheDocument();
-    });
-
-    it('should handle auth0 network timeout', async () => {
-      mockGetAccessTokenSilently.mockImplementation(
-        () =>
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error('Network timeout')), 100)
-          )
-      );
-
-      renderApp();
-
-      // Fast forward past minimum loading time (use async version to resolve promises)
-      await vi.advanceTimersByTimeAsync(2000);
-
-      // With fake timers, use direct assertion after timer advance
-      expect(screen.getByText('Authentication Required')).toBeInTheDocument();
     });
   });
 
@@ -244,7 +115,7 @@ describe('App', () => {
       expect(screen.getByText('Failed to initialize')).toBeInTheDocument();
     });
 
-    it('should prioritize marketplace error over auth', () => {
+    it('should show marketplace context required error', () => {
       const marketplaceError = {
         title: 'Marketplace Context Required',
         message: 'Must run in marketplace',
@@ -254,25 +125,10 @@ describe('App', () => {
         marketplaceError
       );
 
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: false,
-        isAuthenticated: false,
-        error: new Error('Auth error'),
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
-
       renderApp();
 
-      // Should show marketplace error, not auth error
       expect(screen.getByText('Marketplace Context Required')).toBeInTheDocument();
-      expect(screen.queryByText('Authentication Required')).not.toBeInTheDocument();
+      expect(screen.getByText('Must run in marketplace')).toBeInTheDocument();
     });
   });
 
@@ -283,7 +139,6 @@ describe('App', () => {
         fieldsMap: {},
         loading: false,
         error: 'Failed to fetch config',
-        refetch: vi.fn(),
       });
 
       renderApp();
@@ -303,7 +158,6 @@ describe('App', () => {
         fieldsMap: {},
         loading: false,
         error: 'Request timeout',
-        refetch: vi.fn(),
       });
 
       renderApp();
@@ -322,16 +176,15 @@ describe('App', () => {
         fieldsMap: {} as any, // Component will handle null by using default {}
         loading: false,
         error: null,
-        refetch: vi.fn(),
       });
 
-      renderApp();
+      await act(async () => {
+        renderApp();
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
 
-      // Fast forward past minimum loading time (use async version to resolve promises)
-      await vi.advanceTimersByTimeAsync(2000);
-
-      // With fake timers, use direct assertion after timer advance
-      // Should still render (handle null gracefully)
       expect(screen.getByText('Search index')).toBeInTheDocument();
     });
 
@@ -341,34 +194,22 @@ describe('App', () => {
         fieldsMap: {},
         loading: false,
         error: null,
-        refetch: vi.fn(),
       });
 
-      renderApp();
+      await act(async () => {
+        renderApp();
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
 
-      // Fast forward past minimum loading time (use async version to resolve promises)
-      await vi.advanceTimersByTimeAsync(2000);
-
-      // With fake timers, use direct assertion after timer advance
       expect(screen.getByText('Search index')).toBeInTheDocument();
     });
   });
 
   describe('Loading states', () => {
-    it('should show skeleton during auth loading', () => {
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: true,
-        isAuthenticated: false,
-        error: undefined,
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
+    it('should show skeleton during marketplace loading', () => {
+      vi.mocked(marketplaceContext.useMarketplaceLoading).mockReturnValue(true);
 
       renderApp();
 
@@ -382,7 +223,6 @@ describe('App', () => {
         fieldsMap: {},
         loading: true,
         error: null,
-        refetch: vi.fn(),
       });
 
       renderApp();
@@ -396,140 +236,61 @@ describe('App', () => {
     });
 
     it('should respect minimum loading time', async () => {
-      renderApp();
+      await act(async () => {
+        renderApp();
+      });
 
-      // Before minimum time
-      await vi.advanceTimersByTimeAsync(1000);
-
-      // Should still show skeleton
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1000);
+      });
       let skeletons = document.querySelectorAll('[data-slot="skeleton"]');
       expect(skeletons.length).toBeGreaterThan(0);
 
-      // After minimum time
-      await vi.advanceTimersByTimeAsync(1000);
-
-      // With fake timers, use direct assertion after timer advance
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(1000);
+      });
       expect(screen.getByText('Search index')).toBeInTheDocument();
     });
   });
 
   describe('Routing', () => {
     it('should handle root path', async () => {
-      renderApp();
-
-      await vi.advanceTimersByTimeAsync(2000);
-
-      // With fake timers, use direct assertion after timer advance
+      await act(async () => {
+        renderApp();
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
       expect(screen.getByText('Search index')).toBeInTheDocument();
     });
 
     it('should redirect unknown paths to root', async () => {
-      render(
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      );
-
-      await vi.advanceTimersByTimeAsync(2000);
-
-      // With fake timers, use direct assertion after timer advance
-      // Should still render the app (redirected to /)
+      await act(async () => {
+        render(
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        );
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(2000);
+      });
       expect(screen.getByText('Search index')).toBeInTheDocument();
     });
   });
 
-  describe('Edge cases - Token states', () => {
-    it('should not fetch token if already present', async () => {
-      const { rerender } = renderApp();
-
-      await vi.advanceTimersByTimeAsync(2000);
-
-      // With fake timers, use direct assertion after timer advance
-      expect(mockGetAccessTokenSilently).toHaveBeenCalledTimes(1);
-
-      // Rerender should not fetch again
-      rerender(
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      );
-
-      expect(mockGetAccessTokenSilently).toHaveBeenCalledTimes(1);
-    });
-
-    it('should handle empty token string', async () => {
-      // Empty token is considered as "no authentication" - should show auth required
-      mockGetAccessTokenSilently.mockRejectedValue(
-        new Error('No token available')
-      );
-
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: false,
-        isAuthenticated: false,
-        error: undefined,
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
-
-      await act(async () => {
-        renderApp();
-      });
-
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(2000);
-      });
-
-      // With fake timers, use direct assertion after timer advance
-      // Empty/no token should show authentication required
-      expect(screen.getByText('Authentication Required')).toBeInTheDocument();
-    });
-  });
-
   describe('Multiple loading states interaction', () => {
-    it('should handle marketplace loading with auth complete', () => {
+    it('should show skeleton when marketplace is loading', () => {
       vi.mocked(marketplaceContext.useMarketplaceLoading).mockReturnValue(true);
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: false,
-        isAuthenticated: true,
-        error: undefined,
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
 
       renderApp();
 
-      // Should show skeleton due to marketplace loading
       const skeletons = document.querySelectorAll('[data-slot="skeleton"]');
       expect(skeletons.length).toBeGreaterThan(0);
     });
 
     it('should handle all systems loaded but minimum time not met', async () => {
       vi.mocked(marketplaceContext.useMarketplaceLoading).mockReturnValue(false);
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: false,
-        isAuthenticated: true,
-        error: undefined,
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
 
       renderApp();
 
@@ -542,64 +303,20 @@ describe('App', () => {
   });
 
   describe('Complex error scenarios', () => {
-    it('should handle both auth and API errors', async () => {
-      mockGetAccessTokenSilently.mockRejectedValue(
-        new Error('Token error')
-      );
-
+    it('should show skeleton when API returns error', async () => {
       vi.mocked(useSearchConfigApiHook.useSearchConfigApi).mockReturnValue({
         searchIndexOptions: [],
         fieldsMap: {},
         loading: false,
         error: 'API error',
-        refetch: vi.fn(),
       });
 
       renderApp();
 
       await vi.advanceTimersByTimeAsync(2000);
 
-      // With fake timers, use direct assertion after timer advance
-      expect(screen.getByText('Authentication Required')).toBeInTheDocument();
-
-      // Auth error takes precedence
-      expect(screen.queryByText('API error')).not.toBeInTheDocument();
-    });
-  });
-
-  describe('User interaction', () => {
-    it('should have clickable sign in button', async () => {
-      // When not authenticated, getAccessTokenSilently should fail
-      mockGetAccessTokenSilently.mockRejectedValue(
-        new Error('Not authenticated')
-      );
-
-      vi.mocked(auth0React.useAuth0).mockReturnValue({
-        getAccessTokenSilently: mockGetAccessTokenSilently,
-        loginWithPopup: mockLoginWithPopup,
-        isLoading: false,
-        isAuthenticated: false,
-        error: undefined,
-        user: undefined,
-        logout: vi.fn(),
-        loginWithRedirect: vi.fn(),
-        getAccessTokenWithPopup: vi.fn(),
-        getIdTokenClaims: vi.fn(),
-        handleRedirectCallback: vi.fn(),
-      } as any);
-
-      await act(async () => {
-        renderApp();
-      });
-
-      await act(async () => {
-        await vi.advanceTimersByTimeAsync(2000);
-      });
-
-      // With fake timers, use direct assertion after timer advance
-      const signInButton = screen.getByText('Sign In');
-      expect(signInButton).toBeInTheDocument();
-      expect(signInButton).toBeEnabled();
+      const skeletons = document.querySelectorAll('[data-slot="skeleton"]');
+      expect(skeletons.length).toBeGreaterThan(0);
     });
   });
 });

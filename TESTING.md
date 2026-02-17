@@ -2,12 +2,16 @@
 
 ## 📊 Overview
 
+The test suite covers the Marketplace Search Configuration app with focus on:
 
-```
-Total Test Files:    7
-Total Tests:        152
-Passing:            152 (100%)
-Execution Time:     ~7.7s
+- **Marketplace SDK & Edge API** – search config via `xmc.search.getConfigs` (client + context), no in-app Auth0
+- **Search configuration UI** – indices, field mappings, persistence
+- **Loading and error states** – marketplace errors, API errors, skeletons
+
+Run the full suite:
+
+```bash
+npm run test:run
 ```
 
 ---
@@ -40,40 +44,37 @@ npm run test:run -- src/__tests__/App.test.tsx
 ```
 src/
 ├── __tests__/
-│   └── App.test.tsx                                   (24 tests)
+│   └── App.test.tsx                                   (App flow, marketplace/API mocks)
 ├── components/
 │   └── search-configuration/
 │       └── __tests__/
-│           └── search-configuration.test.tsx          (26 tests)
+│           └── search-configuration.test.tsx          (Search config UI)
 ├── providers/
 │   └── __tests__/
-│       └── marketplace.test.tsx                       (~15 tests)
+│       └── marketplace.test.tsx                       (Marketplace provider & context)
 └── utils/
     ├── __tests__/
-    │   └── search-config-api.test.ts                 (~53 tests)
+    │   └── search-config-api.test.ts                  (Transform helpers only)
     └── hooks/
         └── __tests__/
-            ├── useSearchConfigApi.test.ts             (17 tests)
-            ├── useCustomFieldPersistence.test.ts      (20 tests)
-            └── useMarketplaceClient.test.ts           (12 tests)
+            ├── useSearchConfigApi.test.ts             (SDK xmc.search.getConfigs)
+            ├── useCustomFieldPersistence.test.ts      (Custom field save/load)
+            └── useMarketplaceClient.test.ts           (Marketplace SDK client)
 ```
 
 ---
 
 ## ✅ Requirements Coverage
 
-### 1. Basic Functionality (100%)
+### 1. Basic Functionality
 
-All core features fully tested:
-
-**Authentication & Authorization**
-- ✅ Auth0 login flow
-- ✅ Token retrieval and management
-- ✅ Authenticated vs unauthenticated states
-- ✅ Token expiration handling
+**Search config (Edge API)**
+- ✅ Fetch search config via SDK `xmc.search.getConfigs` (client + sitecoreContextId)
+- ✅ No token in app; auth/context from Marketplace
+- ✅ Transform configs to search index options and fields map
+- ✅ Refetch when client or sitecoreContextId changes
 
 **Search Index Management**
-- ✅ Fetch search indices from API
 - ✅ Display search index dropdown
 - ✅ Select and update search index
 - ✅ Empty state handling
@@ -91,110 +92,66 @@ All core features fully tested:
 - ✅ Error recovery
 
 **Loading & Error States**
-- ✅ Loading skeletons
-- ✅ Minimum loading time (800ms)
-- ✅ Error messages
-- ✅ Empty states
+- ✅ Loading skeletons (marketplace + min loading time)
+- ✅ Marketplace error UI (title, message, details)
+- ✅ Search config API error UI (message from hook)
+- ✅ Minimum loading time (2s)
 
-### 2. Connection Issues (100%)
+### 2. Connection & Failure Scenarios
 
-All failure scenarios covered:
-
-**Authentication Failures**
+**Search config (Edge API)**
 ```
-❌ Not authenticated          → Show "Authentication Required"
-❌ Token retrieval failed      → Show error message
-❌ Token timeout               → Handle gracefully
+❌ No client / no sitecoreContextId  → No fetch, clear state
+❌ SDK query error                   → Set error, show error UI
+❌ Malformed / non-array response    → Safe handling
 ```
 
-**API Failures**
-```
-❌ Network error               → Retry with exponential backoff
-❌ 401/403/404/500 errors      → Show appropriate error
-❌ Timeout                     → Graceful degradation
-❌ Malformed response          → Parse error handling
-❌ Empty response              → Show "No data" message
-```
-
-**SDK Failures**
+**SDK / Marketplace**
 ```
 ❌ SDK init timeout            → Fall back to standalone
 ❌ SDK init failure            → Graceful degradation
-❌ Not in marketplace          → Standalone mode
+❌ Not in marketplace          → Standalone mode / error UI
 ❌ Custom field not supported  → Skip save operations
 ```
 
-**Persistence Failures**
+**Persistence**
 ```
 ❌ Save failure                → Retry up to 3 times
 ❌ Max retries exceeded        → Show error state
 ❌ Invalid custom field data   → Parse with fallback
 ```
 
-### 3. Data Edge Cases (100%)
+### 3. Data Edge Cases
 
-All data scenarios covered:
-
-**Null/Undefined Values**
+**Null / Missing context**
 ```
+✅ null client                 → No fetch, no error
+✅ null sitecoreContextId       → No fetch, no error
 ✅ null searchIndices          → Safe rendering
-✅ undefined searchIndices     → Safe rendering
-✅ null fieldsMap              → Safe access
-✅ null token                  → Error state
-✅ undefined token             → Error state
-✅ null custom field data      → Load with defaults
+✅ null fieldsMap               → Safe access
+✅ null custom field data       → Load with defaults
 ```
 
-**Invalid JSON/Strings**
+**Invalid / malformed data**
 ```
 ✅ Invalid JSON string         → Parse error handling
-✅ Malformed JSON              → Graceful fallback
-✅ Empty string                → Validation error
-✅ Non-JSON string             → Type error handling
-```
-
-**Wrong Format**
-```
-✅ Non-array API response      → Type validation
+✅ Non-array API response      → Type validation / safe list
 ✅ Missing required fields     → Field validation
-✅ Empty configuration         → Empty state UI
-✅ Wrong field types           → Type coercion
-✅ Unexpected data structure   → Schema validation
+✅ Empty configuration        → Empty state UI
 ```
 
 ---
 
 ## 📝 Test File Details
 
-### 1. `App.test.tsx` (24 tests)
+### 1. `App.test.tsx`
 
 **Integration tests for main application flow**
 
-#### Test Categories:
-- **Authentication** (6 tests)
-  - Authenticated state
-  - Unauthenticated state
-  - Token retrieval
-  - Token errors
-  - Auth timeout
-
-- **API Integration** (6 tests)
-  - Successful data fetch
-  - API errors
-  - Empty responses
-  - Loading states
-
-- **Search Configuration** (8 tests)
-  - Search index selection
-  - Field mapping updates
-  - Configuration persistence
-  - Validation
-
-- **User Flow** (4 tests)
-  - Complete workflow
-  - Navigation
-  - Error recovery
-  - Minimum loading time
+- **Basic functionality** – Renders search configuration when marketplace and API are ready; shows skeleton during loading
+- **Marketplace errors** – Shows marketplace error UI (title, message, details) when provider reports error
+- **API / search config** – Uses mocked `useSearchConfigApi` (no Auth0); tests API loading and error states
+- **User flow** – Minimum loading time, navigation, error recovery
 
 ### 2. `search-configuration.test.tsx` (26 tests)
 
@@ -244,26 +201,14 @@ All data scenarios covered:
   - Empty data
   - Save errors
 
-### 4. `useSearchConfigApi.test.ts` (17 tests)
+### 4. `useSearchConfigApi.test.ts`
 
-**Hook tests for API data fetching**
+**Hook tests for search config via Marketplace SDK Edge API**
 
-#### Test Categories:
-- **Basic Functionality** (5 tests)
-  - Fetch with token
-  - Data transformation
-  - Refetch capability
-
-- **Token Management** (6 tests)
-  - Null token
-  - Undefined token
-  - Empty token
-  - Token changes
-
-- **Error Handling** (6 tests)
-  - API errors
-  - Network errors
-  - Loading states
+- **Basic functionality** – Fetches via `client.query('xmc.search.getConfigs', { params: { query: { sitecoreContextId } } })`, transforms to options and fieldsMap
+- **No client or context** – When client is null or sitecoreContextId is null: no fetch, loading false, empty data, no error
+- **Error handling** – SDK query errors set error state; loading and data reset correctly
+- **Context change** – Refetches when client or sitecoreContextId changes
 
 ### 5. `useMarketplaceClient.test.ts` (12 tests)
 
@@ -287,30 +232,17 @@ All data scenarios covered:
   - Rapid rerenders
   - Context detection
 
-### 6. `search-config-api.test.ts` (~53 tests)
+### 6. `search-config-api.test.ts`
 
-**Utility function tests for API layer**
+**Utility tests for search config transforms (no HTTP/API calls)**
 
-#### Test Categories:
-- **fetchSearchConfig** (20 tests)
-  - Success scenarios
-  - Token validation
-  - HTTP errors (401/403/404/500)
-  - Network errors
-  - Timeouts
+- **transformToSearchIndexOptions** – Converts configs to dropdown options (value, label)
+- **transformToFieldsMap** – Builds fields map from configs; handles empty/missing fields and normalization
+- **Edge cases** – Empty arrays, missing fields, wrong types
 
-- **Data Transformation** (15 tests)
-  - Search index options
-  - Fields map
-  - Data normalization
+*Note: Search config is now fetched via the SDK (`xmc.search.getConfigs`); this file only tests the transform helpers.*
 
-- **Edge Cases** (18 tests)
-  - Malformed JSON
-  - Missing fields
-  - Wrong types
-  - Empty responses
-
-### 7. `marketplace.test.tsx` (~15 tests)
+### 7. `marketplace.test.tsx`
 
 **Provider tests for marketplace context**
 
@@ -387,40 +319,46 @@ test('user interaction', async () => {
 ```typescript
 import { renderHook, waitFor } from '@testing-library/react';
 
-test('custom hook', async () => {
-  const { result } = renderHook(() => 
-    useSearchConfigApi(token)
+test('fetches search config via SDK', async () => {
+  const mockClient = {
+    query: vi.fn().mockResolvedValue({ data: { data: mockConfigs } }),
+  };
+  const { result } = renderHook(() =>
+    useSearchConfigApi(mockClient as any, 'context-123')
   );
-  
+
   await waitFor(() => {
     expect(result.current.loading).toBe(false);
   });
-  
-  expect(result.current.data).toBeDefined();
+
+  expect(result.current.searchIndexOptions).toHaveLength(1);
+  expect(mockClient.query).toHaveBeenCalledWith('xmc.search.getConfigs', {
+    params: { query: { sitecoreContextId: 'context-123' } },
+  });
 });
 ```
 
 ### Mocking
 
 ```typescript
-// Mock API
-vi.mock('../api', () => ({
-  fetchSearchConfig: vi.fn(),
+// Mock Marketplace provider / hooks
+vi.mock('../providers/marketplace', () => ({
+  MarketplaceProvider: ({ children }: any) => <>{children}</>,
+  useMarketplaceLoading: vi.fn(),
+  useMarketplaceError: vi.fn(),
+  useAppContextOptional: vi.fn(),
+  useMarketplaceClientOptional: vi.fn(),
 }));
 
-// Mock Auth0
-vi.mock('@auth0/auth0-react', () => ({
-  useAuth0: vi.fn(),
+// Mock useSearchConfigApi (e.g. in App tests)
+vi.mock('../utils/hooks/useSearchConfigApi', () => ({
+  useSearchConfigApi: vi.fn().mockReturnValue({
+    searchIndexOptions: [],
+    fieldsMap: {},
+    loading: false,
+    error: null,
+  }),
 }));
-
-// Setup mocks
-beforeEach(() => {
-  vi.mocked(useAuth0).mockReturnValue({
-    isAuthenticated: true,
-    getAccessTokenSilently: vi.fn().mockResolvedValue('token'),
-    // ... other properties
-  });
-});
 ```
 
 ---
@@ -645,24 +583,21 @@ export default defineConfig({
 
 ## 🎯 Summary
 
-✅ **152 tests covering 100% of requirements**
-- Basic functionality: Complete
-- Connection issues: All scenarios covered
-- Data edge cases: Comprehensive coverage
+✅ **Coverage**
+- Search config via Marketplace SDK Edge API (`xmc.search.getConfigs`) – client + sitecoreContextId, no in-app token
+- Marketplace provider, loading and error states
+- Search configuration UI, field persistence, and edge cases
 
-✅ **Fast & Reliable**
-- Execution time: ~7.7 seconds
+✅ **Fast & reliable**
 - No flaky tests
 - CI/CD ready
 
 ✅ **Maintainable**
 - Clear test organization
-- Consistent patterns
-- Well documented
+- Consistent patterns (mocks for provider and `useSearchConfigApi`)
 
-**The test suite ensures the MKP app works correctly across all scenarios and protects against regressions during future development.**
+**The test suite ensures the MKP app works correctly with the Edge API and Marketplace context and protects against regressions.**
 
 ---
 
-*Last Updated: 2025-01-30*
-*Requirements: SCB-468, SCB-472*
+*Last Updated: 2026-02-16*

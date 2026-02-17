@@ -1,10 +1,15 @@
-import React, { useEffect, useState, createContext, useContext } from "react";
+import React, {
+  useEffect,
+  useState,
+  createContext,
+  useContext,
+} from "react";
 import type { ReactNode } from "react";
-import { ClientSDK } from "@sitecore-marketplace-sdk/client";
+import {
+  ClientSDK,
+} from "@sitecore-marketplace-sdk/client";
 import type { ApplicationContext } from "@sitecore-marketplace-sdk/client";
-import { Auth0Provider } from "@auth0/auth0-react";
 import { useMarketplaceClient as useMarketplaceClientHook } from "../utils/hooks/useMarketplaceClient";
-import { getEnvironmentConfig } from "../utils/environment-detection";
 
 interface ClientSDKProviderProps {
   children: ReactNode;
@@ -14,37 +19,20 @@ const ClientSDKContext = createContext<ClientSDK | null>(null);
 const AppContextContext = createContext<ApplicationContext | null>(null);
 const UserContextContext = createContext<any | null>(null);
 const MarketplaceLoadingContext = createContext<boolean>(true);
-const MarketplaceErrorContext = createContext<{
-  title: string;
-  message: string;
-  details?: string;
-} | null>(null);
+const MarketplaceErrorContext = createContext<{ title: string; message: string; details?: string } | null>(null);
 
 export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
   children,
 }) => {
-  const envConfig = getEnvironmentConfig();
-  const [redirectUri, setRedirectUri] = useState<string | null>(null);
   const { client, isInitialized } = useMarketplaceClientHook();
   const [appContext, setAppContext] = useState<ApplicationContext | null>(null);
   const [userInfo, setUserInfo] = useState<any | null>(null);
-  const [authConfig, setAuthConfig] = useState<{
-    organization_id: string;
-    tenant_name: string;
-  } | null>(null);
   const [error, setError] = useState<{
     title: string;
     message: string;
     details?: string;
   } | null>(null);
-  const [isMarketplaceLoading, setIsMarketplaceLoading] =
-    useState<boolean>(true);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setRedirectUri(window.location.origin);
-    }
-  }, []);
+  const [isMarketplaceLoading, setIsMarketplaceLoading] = useState<boolean>(true);
 
   useEffect(() => {
     if (client) {
@@ -53,15 +41,15 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
           const [appContextRes, hostStateRes, hostUserRes] = await Promise.all([
             client.query("application.context"),
             client.query("host.state"),
-            client.query("host.user").catch((err) => {
-              console.warn("Failed to fetch host.user:", err);
+            client.query("host.user").catch((_err) => {
               return { data: null };
             }),
           ]);
-
+          
           const appContextData = appContextRes?.data;
           const hostState = hostStateRes?.data;
           const userData = hostUserRes?.data;
+
 
           if (appContextData) {
             setAppContext(appContextData);
@@ -71,94 +59,49 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
             setUserInfo(userData);
           }
 
-          if (
-            appContextData?.organizationId &&
-            hostState?.xmCloudTenantInfo?.name
-          ) {
-            setAuthConfig({
-              organization_id: appContextData.organizationId,
-              tenant_name: hostState.xmCloudTenantInfo.name,
-            });
-            setError(null); // Clear any previous errors
-            setIsMarketplaceLoading(false); // Marketplace ready
+          if (appContextData?.organizationId && hostState?.xmCloudTenantInfo?.name) {
+            setError(null);
+            setIsMarketplaceLoading(false);
           } else {
             const missingFields = [];
-            if (!appContextData?.organizationId)
+            if (!appContextData?.organizationId) {
               missingFields.push("organizationId");
+            }
             if (!hostState?.xmCloudTenantInfo?.name)
+            { 
               missingFields.push("xmCloudTenantInfo.name");
+            }
 
-            console.error("⚠️ Missing required data from SDK:", missingFields);
             setError({
               title: "Configuration Error",
-              message:
-                "Unable to retrieve required Sitecore Marketplace context.",
-              details: `Missing fields: ${missingFields.join(
-                ", "
-              )}. Please ensure the app is properly configured in the Marketplace.`,
+              message: "Unable to retrieve required Sitecore Marketplace context.",
+              details: `Missing fields: ${missingFields.join(", ")}. Please ensure the app is properly configured in the Marketplace.`
             });
-            setIsMarketplaceLoading(false); // Stop loading even on error
+            setIsMarketplaceLoading(false);
           }
         } catch (error) {
-          console.error("❌ Failed to fetch Marketplace context:", error);
           setError({
             title: "SDK Error",
             message: "Failed to communicate with Sitecore Marketplace SDK.",
-            details: error instanceof Error ? error.message : String(error),
+            details: error instanceof Error ? error.message : String(error)
           });
-          setIsMarketplaceLoading(false); // Stop loading even on error
+          setIsMarketplaceLoading(false);
         }
       };
 
       fetchContext();
     } else if (isInitialized && !client) {
-      console.warn(
-        "ℹ️ Standalone mode detected - app requires Marketplace context to function"
-      );
-      setError({
-        title: "Marketplace Context Required",
-        message: "This app must be run within the Sitecore Marketplace.",
-        details:
-          "The app cannot operate in standalone mode. Please access it through your Sitecore XM Cloud instance.",
+      queueMicrotask(() => {
+        setError({
+          title: "Marketplace Context Required",
+          message: "This app must be run within the Sitecore Marketplace.",
+          details: "The app cannot operate in standalone mode. Please access it through your Sitecore XM Cloud instance."
+        });
+        setIsMarketplaceLoading(false);
       });
-      setIsMarketplaceLoading(false); // Stop loading even on error
     }
   }, [client, isInitialized]);
 
-  // If we have authConfig, render with Auth0Provider
-  // Otherwise, render without it (but still provide contexts)
-  if (redirectUri && authConfig) {
-    return (
-      <Auth0Provider
-        domain={envConfig.domain}
-        clientId={envConfig.clientId}
-        authorizationParams={{
-          redirect_uri: redirectUri,
-          scope: "openid profile email offline_access",
-          audience: envConfig.audience,
-          system_id: envConfig.systemId,
-          organization_id: authConfig.organization_id,
-          tenant_name: authConfig.tenant_name,
-          auth0Client: envConfig.auth0Client,
-        }}
-      >
-        <MarketplaceLoadingContext.Provider value={isMarketplaceLoading}>
-          <MarketplaceErrorContext.Provider value={error}>
-            <ClientSDKContext.Provider value={client}>
-              <AppContextContext.Provider value={appContext}>
-                <UserContextContext.Provider value={userInfo}>
-                  {children}
-                </UserContextContext.Provider>
-              </AppContextContext.Provider>
-            </ClientSDKContext.Provider>
-          </MarketplaceErrorContext.Provider>
-        </MarketplaceLoadingContext.Provider>
-      </Auth0Provider>
-    );
-  }
-
-  // Still initializing or have error - render without Auth0Provider
-  // Let the children (App.tsx) handle the loading/error UI
   return (
     <MarketplaceLoadingContext.Provider value={isMarketplaceLoading}>
       <MarketplaceErrorContext.Provider value={error}>

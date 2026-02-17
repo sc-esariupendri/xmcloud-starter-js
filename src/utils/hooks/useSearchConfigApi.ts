@@ -1,82 +1,77 @@
-import * as React from "react";
+import { useCallback, useEffect, useState } from "react";
+import type { ClientSDK } from "@sitecore-marketplace-sdk/client";
 import {
-  fetchSearchConfig,
+  type SearchIndexConfig,
   transformToSearchIndexOptions,
   transformToFieldsMap,
-} from "../../utils";
-import type {
-  FieldOption,
-  ContentField,
-} from "../../components/search-configuration/types";
+} from "../search-config-api";
 
-interface UseSearchConfigApiReturn {
-  searchIndexOptions: FieldOption[];
-  fieldsMap: Record<string, ContentField[]>;
+export interface UseSearchConfigApiResult {
+  searchIndexOptions: ReturnType<typeof transformToSearchIndexOptions>;
+  fieldsMap: ReturnType<typeof transformToFieldsMap>;
   loading: boolean;
   error: string | null;
-  refetch: () => Promise<void>;
 }
 
 /**
- * Hook to fetch search configuration from API
+ * Fetches search configuration via the Sitecore Marketplace SDK (xmc.search.getConfigs).
+ * Uses the SDK client so auth and context are handled by the marketplace.
+ *
+ * @param client - Marketplace ClientSDK instance (from useMarketplaceClient / MarketplaceProvider).
+ * @param sitecoreContextId - Sitecore context ID from application context (e.g. appContext?.id).
  */
 export function useSearchConfigApi(
-  token: string | null | undefined
-): UseSearchConfigApiReturn {
-  const [searchIndexOptions, setSearchIndexOptions] = React.useState<
-    FieldOption[]
-  >([]);
-  const [fieldsMap, setFieldsMap] = React.useState<
-    Record<string, ContentField[]>
-  >({});
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
+  client: ClientSDK | null,
+  sitecoreContextId: string | null
+): UseSearchConfigApiResult {
+  const [configs, setConfigs] = useState<SearchIndexConfig[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const fetchData = React.useCallback(async () => {
-    // Only fetch if we have a token from OAuth
-    if (!token) {
+  const fetchConfig = useCallback(async () => {
+    if (!client || !sitecoreContextId) {
       setLoading(false);
-      setError("No authentication token available");
+      setConfigs([]);
+      setError(null);
       return;
     }
 
     setLoading(true);
     setError(null);
-
     try {
-      // Use the OAuth token to fetch search config
-      const configs = await fetchSearchConfig(token);
-      const options = transformToSearchIndexOptions(configs);
-      const map = transformToFieldsMap(configs);
+      const response = await client.query("xmc.search.getConfigs", {
+        params: {
+          query: {
+            sitecoreContextId,
+          },
+        },
+      });
 
-      setSearchIndexOptions(options);
-      setFieldsMap(map);
+
+      const data = response?.data?.data;
+      const list = Array.isArray(data) ? data : [];
+      setConfigs(list as SearchIndexConfig[]);
     } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch search config";
-      setError(errorMessage);
-      console.error("Error fetching search config:", err);
+      const message =
+        err instanceof Error ? err.message : String(err);
+      setError(message);
+      setConfigs([]);
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [client, sitecoreContextId]);
 
-  React.useEffect(() => {
-    // Set error immediately if no token, otherwise fetch
-    if (!token) {
-      setError("No authentication token available");
-      setLoading(false);
-    } else {
-      fetchData();
-    }
-  }, [token, fetchData]);
+  useEffect(() => {
+    fetchConfig();
+  }, [fetchConfig]);
+
+  const searchIndexOptions = transformToSearchIndexOptions(configs);
+  const fieldsMap = transformToFieldsMap(configs);
 
   return {
     searchIndexOptions,
     fieldsMap,
     loading,
-    error,
-    refetch: fetchData,
+    error: error ?? null,
   };
 }
-

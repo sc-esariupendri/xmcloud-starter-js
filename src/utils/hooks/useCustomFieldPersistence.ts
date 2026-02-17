@@ -41,7 +41,9 @@ export function useCustomFieldPersistence<T>({
   const lastSavedDataRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!isCustomFieldClient(client)) return;
+    if (!isCustomFieldClient(client)) {
+      return;
+    }
 
     const fetchValue = async () => {
       try {
@@ -53,11 +55,7 @@ export function useCustomFieldPersistence<T>({
           if (typeof latest === "string") {
             try {
               parsedData = JSON.parse(latest) as Partial<T>;
-            } catch (parseError) {
-              console.warn(
-                "Failed to parse custom field value, using defaults:",
-                parseError
-              );
+            } catch {
               setIsLoaded(true);
               return;
             }
@@ -69,15 +67,8 @@ export function useCustomFieldPersistence<T>({
             onLoad(parsedData);
           }
         }
-      } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        if (errorMessage?.includes("not implemented")) {
-          console.info(
-            "ℹ️ Custom field methods not available. Extension point may not be enabled."
-          );
-        } else {
-          console.warn("Failed to parse or load config, using defaults:", err);
-        }
+      } catch {
+        // Custom field methods may not be available if extension point is not enabled
       } finally {
         isInitialLoadRef.current = false;
         setIsLoaded(true);
@@ -136,7 +127,6 @@ export function useCustomFieldPersistence<T>({
 
             // Only retry on timeout errors
             if (errorMessage?.includes("timed out") && attempt < 2) {
-              console.warn(`⚠️ Save attempt ${attempt} timed out, retrying...`);
               // Wait a bit before retry
               await new Promise((resolve) => setTimeout(resolve, 500));
               continue;
@@ -148,12 +138,8 @@ export function useCustomFieldPersistence<T>({
       } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         if (errorMessage?.includes("not implemented")) {
-          console.info(
-            "ℹ️ Custom field extension point not enabled. Enable it in Sitecore Cloud Portal."
-          );
           setIsSaving(false);
         } else {
-          console.error("Failed to save config:", err);
           setSaveError(`Failed to save: ${errorMessage || "Unknown error"}`);
           setIsSaving(false);
         }

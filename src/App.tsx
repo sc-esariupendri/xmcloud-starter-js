@@ -4,27 +4,27 @@ import {
   SearchConfiguration, 
   SearchConfigSkeleton 
 } from "@/components/search-configuration";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useState } from "react";
 import { useSearchConfigApi } from "@/utils";
-import { MarketplaceProvider, useMarketplaceLoading, useMarketplaceError } from "@/providers/marketplace";
+import { MarketplaceProvider, useMarketplaceLoading, useMarketplaceError, useAppContextOptional, useMarketplaceClientOptional } from "@/providers/marketplace";
 
 function SearchApp() {
-  const { getAccessTokenSilently, loginWithPopup, isLoading: authLoading, isAuthenticated, error: authError } = useAuth0();
-  const [token, setToken] = useState<string | null>(null);
-  const [tokenError, setTokenError] = useState<string | null>(null);
   const isMarketplaceLoading = useMarketplaceLoading();
   const marketplaceError = useMarketplaceError();
-  const [isInitializing, setIsInitializing] = useState(true);
+  const appContext = useAppContextOptional();
+  const client = useMarketplaceClientOptional();
   const [minLoadingComplete, setMinLoadingComplete] = useState(false);
 
-  // Fetch search config from API using the token
+  // Sitecore context ID for search config (used by xmc.search.getConfigs)
+  // Prefer resourceAccess[0].context.live, fallback to resource[0].context.live, else null
+  const sitecoreContextId = appContext?.resourceAccess?.[0]?.context.live ?? appContext?.resources?.[0]?.context.live ?? null;
+  // Fetch search config via Marketplace SDK (xmc.search.getConfigs)
   const {
     searchIndexOptions,
     fieldsMap,
     loading: apiLoading,
     error: apiError,
-  } = useSearchConfigApi(token);
+  } = useSearchConfigApi(client, sitecoreContextId);
 
   // Minimum loading time to prevent flash (2 seconds)
   React.useEffect(() => {
@@ -34,37 +34,6 @@ function SearchApp() {
 
     return () => clearTimeout(timer);
   }, []);
-
-  // Check token expiration if token exists
-  React.useEffect(() => {
-    // Don't run if Auth0 is still loading
-    if (authLoading) {
-      return;
-    }
-
-    // Don't try to get token if already have one
-    if (token) {
-      setIsInitializing(false);
-      return;
-    }
-
-    (async () => {
-      try {
-        const apiToken = await getAccessTokenSilently();
-        setToken(apiToken);
-        setTokenError(null);
-        setIsInitializing(false);
-      } catch (error) {
-        console.error("Failed to get access token:", error);
-        setTokenError("Failed to retrieve access token. Interaction required.");
-        setIsInitializing(false);
-      }
-    })();
-  }, [authLoading, getAccessTokenSilently, token]);
-
-  const handleLogin = () => {
-    loginWithPopup();
-  };
 
   // Show marketplace error if it exists
   if (marketplaceError) {
@@ -100,41 +69,13 @@ function SearchApp() {
   }
 
   // Determine if we should show skeleton
-  const shouldShowSkeleton = 
-    isMarketplaceLoading || 
-    !minLoadingComplete || 
-    isInitializing || 
-    authLoading || 
-    (!token && !tokenError && isAuthenticated);
+  const shouldShowSkeleton = isMarketplaceLoading || !minLoadingComplete;
 
   // Show skeleton during all loading states
   if (shouldShowSkeleton) {
     return (
       <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
          <SearchConfigSkeleton />
-      </div>
-    );
-  }
-
-  // Only show sign-in UI if ALL loading is complete AND there's an error OR user is not authenticated
-  if (!token && (tokenError || !isAuthenticated)) {
-    return (
-      <div className="w-full px-4 py-6 sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-4">
-        <div className="text-center">
-           <h3 className="text-lg font-medium text-red-600">Authentication Required</h3>
-           <p className="text-sm text-gray-500 mt-2">
-             {tokenError || "Please sign in to access the configuration."}
-           </p>
-           {authError && (
-             <p className="text-xs text-red-500 mt-1">{authError.message}</p>
-           )}
-        </div>
-        <button
-          onClick={handleLogin}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          Sign In
-        </button>
       </div>
     );
   }
@@ -148,26 +89,10 @@ function SearchApp() {
   }
 
   if (apiError) {
-    const isUnavailable =
-      apiError.includes("returned no data") ||
-      apiError.includes("Search configuration is not available") ||
-      apiError.includes("search client key");
-    const isBadRequest = apiError.startsWith("Bad request (400):");
-
     return (
       <div className="w-full px-4 py-6 sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-4">
         <div className="text-center max-w-md">
-          <h3
-            className={
-              isUnavailable || isBadRequest
-                ? "text-lg font-medium text-amber-600"
-                : "text-lg font-medium text-red-600"
-            }
-          >
-            {isUnavailable || isBadRequest
-              ? "Search config unavailable"
-              : "Unable to load search config"}
-          </h3>
+          <h3 className="text-lg font-medium text-red-600">Search configuration error</h3>
           <p className="text-sm text-gray-500 mt-2">{apiError}</p>
         </div>
       </div>
@@ -196,4 +121,3 @@ function App() {
 }
 
 export default App;
-

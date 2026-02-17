@@ -4,12 +4,11 @@ Marketplace Search Configuration App for Sitecore Marketplace.
 
 ## Overview
 
-This app allows users to configure search indices and field mappings for Sitecore Marketplace applications. It integrates with Auth0 for authentication and the Sitecore Marketplace SDK for data persistence.
+This app lets users configure search indices and field mappings for Sitecore Marketplace applications. It runs inside the Sitecore Marketplace and uses the **Sitecore Marketplace SDK** for context and for loading search configuration via the **Edge API** (`xmc.search.getConfigs`). Authentication and tenant context are provided by the Marketplace host; the app does not implement its own auth (e.g. no Auth0 in the app).
 
 ## Features
 
-- 🔐 Auth0 authentication
-- 🔍 Search index configuration
+- 🔍 Search index configuration (loaded via Marketplace SDK Edge API)
 - 📋 Field mapping management
 - 💾 Custom field persistence with auto-save
 - 🎨 Modern UI with Tailwind CSS
@@ -33,7 +32,7 @@ npm run build
 
 ## Testing
 
-Comprehensive test suite with 152 tests covering all functionality and edge cases.
+Comprehensive test suite covering search config (Edge API), marketplace provider, and UI flows.
 
 📖 **[See Testing Guide](./TESTING.md)** for detailed information.
 
@@ -67,8 +66,7 @@ npm run test:coverage
 - **TypeScript** - Type safety
 - **Vite** - Build tool
 - **Tailwind CSS** - Styling
-- **Auth0** - Authentication
-- **Sitecore Marketplace SDK** - Integration
+- **Sitecore Marketplace SDK** - Context and Edge API (e.g. `xmc.search.getConfigs` for search config)
 - **Vitest** - Testing framework
 - **React Testing Library** - Component testing
 

@@ -6,7 +6,6 @@ interface EnvironmentConfig {
   audience: string;
   systemId: string;
   apiReferer: string;
-  auth0Client: string;
 }
 
 const ENV_CONFIG: Record<Environment, EnvironmentConfig> = {
@@ -16,7 +15,6 @@ const ENV_CONFIG: Record<Environment, EnvironmentConfig> = {
     audience: "https://api-staging.sitecore-staging.cloud",
     systemId: "8db0ad22-445f-43fb-8d8e-f23c9396c974",
     apiReferer: "https://searchconfig-staging.sitecore-staging.cloud/",
-    auth0Client: "eyJuYW1lIjoiYXV0aDAtcmVhY3QiLCJ2ZXJzaW9uIjoiMi41LjAifQ=="
   },
   production: {
     domain: "https://auth.sitecorecloud.io",
@@ -24,7 +22,6 @@ const ENV_CONFIG: Record<Environment, EnvironmentConfig> = {
     audience: "https://api-webapp.sitecorecloud.io",
     systemId: "5907637C-CDDF-48E9-ACEF-BD06F1A6BAB8",
     apiReferer: "https://searchconfig.sitecorecloud.io/",
-    auth0Client: "eyJuYW1lIjoiYXV0aDAtcmVhY3QiLCJ2ZXJzaW9uIjoiMi41LjAifQ=="
   }
 };
 
