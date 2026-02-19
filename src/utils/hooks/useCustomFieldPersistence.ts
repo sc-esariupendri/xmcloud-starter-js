@@ -19,6 +19,9 @@ interface UseCustomFieldPersistenceReturn {
   isLoaded: boolean;
 }
 
+/** Delay (ms) after initial load before allowing writes, so the client is ready. */
+const CLIENT_READY_DELAY_MS = 300;
+
 function isCustomFieldClient(
   client: ClientSDK | null
 ): client is CustomFieldClient {
@@ -75,7 +78,7 @@ export function useCustomFieldPersistence<T>({
         // Wait a bit after load to ensure client is fully ready for writes
         setTimeout(() => {
           clientReadyRef.current = true;
-        }, 300);
+        }, CLIENT_READY_DELAY_MS);
       }
     };
 

@@ -1,16 +1,19 @@
 import type { FieldOption, ContentField } from "../components/search-configuration/types";
 
+/** Single field definition from the search index config API */
+export interface SearchIndexField {
+  id?: string;
+  name: string;
+  type?: string;
+  displayName?: string;
+  description?: string;
+}
+
 export interface SearchIndexConfig {
   id: string;
   name: string;
   description?: string;
-  fields?: Array<{
-    id?: string;
-    name: string;
-    type?: string;
-    displayName?: string;
-    description?: string;
-  }>;
+  fields?: SearchIndexField[];
 }
 
 /**

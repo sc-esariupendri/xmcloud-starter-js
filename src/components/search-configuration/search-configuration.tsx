@@ -7,6 +7,7 @@ import { useCustomFieldPersistence, useMarketplaceClient } from "@/utils";
 import {
   FIELD_MAPPING_FIELDS,
   DEFAULT_CONFIG,
+  MESSAGE_BANNER_CLASSES,
   transformFieldsMappingToCamelCase,
   transformFieldsMappingToPascalCase,
 } from "./constants";
@@ -36,17 +37,7 @@ export function SearchConfiguration({
     };
   });
 
-  // Set default search index from API data when available
-  React.useEffect(() => {
-    // We intentionally do NOT auto-select the first index.
-    // The user must explicitly select an index.
-    // if (safeSearchIndices.length > 0 && !config.searchIndex) {
-    //   setConfig((prev) => ({
-    //     ...prev,
-    //     searchIndex: safeSearchIndices[0].value,
-    //   }));
-    // }
-  }, [safeSearchIndices, config.searchIndex]);
+  // We intentionally do NOT auto-select the first index; the user must explicitly select one.
 
   // Track last saved time for UI feedback
   const prevIsSavingRef = React.useRef(false);
@@ -60,7 +51,7 @@ export function SearchConfiguration({
       }
     ) => {
       setConfig((prev) => {
-        // Remove enabledContentFields and enabledContentFeilds (typo) if they exist in old data
+        // Strip legacy/unknown keys so they don't overwrite current config
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { enabledContentFields, enabledContentFeilds, ...cleanConfig } =
           loadedConfig;
@@ -198,14 +189,14 @@ export function SearchConfiguration({
     <div className={`w-full space-y-3 ${className || ""}`}>
       {/* Save error message */}
       {saveError && (
-        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 p-2 text-red-800 dark:text-red-200 text-sm">
+        <div className={MESSAGE_BANNER_CLASSES.error}>
           {saveError}
         </div>
       )}
 
       {/* API Error Fallback */}
       {apiError && (
-        <div className="rounded-lg border border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800 p-3 text-red-800 dark:text-red-200 text-sm">
+        <div className={MESSAGE_BANNER_CLASSES.errorPadded}>
           <p className="font-medium">API does not work</p>
           <p className="text-xs mt-1 opacity-90">{apiError}</p>
           <p className="text-xs mt-1 opacity-75">
@@ -216,7 +207,7 @@ export function SearchConfiguration({
 
       {/* Loading State */}
       {isLoading && (
-        <div className="rounded-lg border border-blue-200 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-800 p-3 text-blue-800 dark:text-blue-200 text-sm">
+        <div className={MESSAGE_BANNER_CLASSES.loading}>
           <p className="font-medium">Loading search configuration...</p>
         </div>
       )}
@@ -230,7 +221,7 @@ export function SearchConfiguration({
 
       {/* No Indexes Available Fallback */}
       {safeSearchIndices.length === 0 && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-800 p-3 text-amber-800 dark:text-amber-200 text-sm">
+        <div className={MESSAGE_BANNER_CLASSES.warning}>
           <p className="font-medium">There is no Search Index available.</p>
           <p className="text-xs mt-1 opacity-90">
             Please go and create your first one.
@@ -249,7 +240,7 @@ export function SearchConfiguration({
 
       {/* Invalid Index Fallback */}
       {config.searchIndex && !isValidIndex && (
-        <div className="rounded-lg border border-orange-200 bg-orange-50 dark:bg-orange-900/20 dark:border-orange-800 p-3 text-orange-800 dark:text-orange-200 text-sm">
+        <div className={MESSAGE_BANNER_CLASSES.invalid}>
           <p className="font-medium">
             Cannot map previously selected index with the API response
           </p>
@@ -285,7 +276,7 @@ export function SearchConfiguration({
           })}
         </div>
       ) : config.searchIndex && isValidIndex && availableFields.length === 0 ? (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 dark:bg-gray-800/30 dark:border-gray-700 p-3 text-gray-600 dark:text-gray-400 text-sm">
+        <div className={MESSAGE_BANNER_CLASSES.muted}>
           <p className="font-medium">No content fields available</p>
           <p className="text-xs mt-1 opacity-90">
             No content fields are configured for the selected search index.

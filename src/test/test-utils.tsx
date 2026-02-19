@@ -3,8 +3,9 @@ import { render } from '@testing-library/react';
 import type { RenderOptions } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { vi } from 'vitest';
+import { MarketplaceProvider } from '../providers/marketplace';
 
-// Custom render function that includes common providers
+// Custom render function that includes router only
 export function renderWithRouter(
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
@@ -15,8 +16,23 @@ export function renderWithRouter(
   });
 }
 
+// Custom render that includes router and marketplace context (for tests that need real provider)
+export function renderWithAllProviders(
+  ui: ReactElement,
+  options?: Omit<RenderOptions, 'wrapper'>
+) {
+  return render(ui, {
+    wrapper: ({ children }) => (
+      <BrowserRouter>
+        <MarketplaceProvider>{children}</MarketplaceProvider>
+      </BrowserRouter>
+    ),
+    ...options,
+  });
+}
+
 // Mock fetch helper
-export function mockFetch(response: any, ok = true, status = 200) {
+export function mockFetch(response: unknown, ok = true, status = 200) {
   global.fetch = vi.fn(() =>
     Promise.resolve({
       ok,
@@ -40,7 +56,7 @@ export function mockFetchNetworkError() {
   );
 }
 
+// Re-export testing-library for convenience; rule can't verify barrel exports
+// eslint-disable-next-line react-refresh/only-export-components
 export * from '@testing-library/react';
-
-
 

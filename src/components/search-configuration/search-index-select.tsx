@@ -26,7 +26,7 @@ export function SearchIndexSelect({
 
   const handleContainerClick = (e: React.MouseEvent) => {
     if (hasOptions && containerRef.current) {
-      // Find the Select trigger button within the container
+      // Radix Select renders a trigger with data-slot="select-trigger". If the UI library changes, update this selector.
       const trigger = containerRef.current.querySelector('button[data-slot="select-trigger"]') as HTMLButtonElement;
       if (trigger && e.target !== trigger && !trigger.contains(e.target as Node)) {
         trigger.click();

@@ -5,11 +5,16 @@ import React, {
   useContext,
 } from "react";
 import type { ReactNode } from "react";
-import {
-  ClientSDK,
-} from "@sitecore-marketplace-sdk/client";
+import { ClientSDK } from "@sitecore-marketplace-sdk/client";
 import type { ApplicationContext } from "@sitecore-marketplace-sdk/client";
 import { useMarketplaceClient as useMarketplaceClientHook } from "../utils/hooks/useMarketplaceClient";
+import type { MarketplaceError, UserInfo } from "./marketplace-types";
+import {
+  ERROR_CONFIGURATION,
+  ERROR_SDK,
+  ERROR_MARKETPLACE_REQUIRED,
+  getConfigurationErrorDetails,
+} from "./marketplace-constants";
 
 interface ClientSDKProviderProps {
   children: ReactNode;
@@ -17,21 +22,17 @@ interface ClientSDKProviderProps {
 
 const ClientSDKContext = createContext<ClientSDK | null>(null);
 const AppContextContext = createContext<ApplicationContext | null>(null);
-const UserContextContext = createContext<any | null>(null);
+const UserContextContext = createContext<UserInfo>(null);
 const MarketplaceLoadingContext = createContext<boolean>(true);
-const MarketplaceErrorContext = createContext<{ title: string; message: string; details?: string } | null>(null);
+const MarketplaceErrorContext = createContext<MarketplaceError | null>(null);
 
 export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
   children,
 }) => {
   const { client, isInitialized } = useMarketplaceClientHook();
   const [appContext, setAppContext] = useState<ApplicationContext | null>(null);
-  const [userInfo, setUserInfo] = useState<any | null>(null);
-  const [error, setError] = useState<{
-    title: string;
-    message: string;
-    details?: string;
-  } | null>(null);
+  const [userInfo, setUserInfo] = useState<UserInfo>(null);
+  const [error, setError] = useState<MarketplaceError | null>(null);
   const [isMarketplaceLoading, setIsMarketplaceLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -56,7 +57,7 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
           }
 
           if (userData) {
-            setUserInfo(userData);
+            setUserInfo(userData as unknown as UserInfo);
           }
 
           if (appContextData?.organizationId && hostState?.xmCloudTenantInfo?.name) {
@@ -73,34 +74,31 @@ export const MarketplaceProvider: React.FC<ClientSDKProviderProps> = ({
             }
 
             setError({
-              title: "Configuration Error",
-              message: "Unable to retrieve required Sitecore Marketplace context.",
-              details: `Missing fields: ${missingFields.join(", ")}. Please ensure the app is properly configured in the Marketplace.`
+              ...ERROR_CONFIGURATION,
+              details: getConfigurationErrorDetails(missingFields),
             });
             setIsMarketplaceLoading(false);
           }
-        } catch (error) {
+        } catch (err) {
           setError({
-            title: "SDK Error",
-            message: "Failed to communicate with Sitecore Marketplace SDK.",
-            details: error instanceof Error ? error.message : String(error)
+            ...ERROR_SDK,
+            details: err instanceof Error ? err.message : String(err),
           });
           setIsMarketplaceLoading(false);
         }
       };
 
       fetchContext();
-    } else if (isInitialized && !client) {
-      queueMicrotask(() => {
-        setError({
-          title: "Marketplace Context Required",
-          message: "This app must be run within the Sitecore Marketplace.",
-          details: "The app cannot operate in standalone mode. Please access it through your Sitecore XM Cloud instance."
-        });
-        setIsMarketplaceLoading(false);
-      });
     }
   }, [client, isInitialized]);
+
+  // When SDK is initialized but no client (e.g. not in marketplace), set error after commit
+  useEffect(() => {
+    if (isInitialized && !client) {
+      setError(ERROR_MARKETPLACE_REQUIRED);
+      setIsMarketplaceLoading(false);
+    }
+  }, [isInitialized, client]);
 
   return (
     <MarketplaceLoadingContext.Provider value={isMarketplaceLoading}>
@@ -154,3 +152,5 @@ export const useMarketplaceLoading = () => {
 export const useMarketplaceError = () => {
   return useContext(MarketplaceErrorContext);
 };
+
+export type { MarketplaceError, UserInfo } from "./marketplace-types";

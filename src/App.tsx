@@ -1,12 +1,23 @@
-import * as React from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { 
-  SearchConfiguration, 
-  SearchConfigSkeleton 
+import {
+  SearchConfiguration,
+  SearchConfigSkeleton,
 } from "@/components/search-configuration";
-import { useState } from "react";
 import { useSearchConfigApi } from "@/utils";
-import { MarketplaceProvider, useMarketplaceLoading, useMarketplaceError, useAppContextOptional, useMarketplaceClientOptional } from "@/providers/marketplace";
+import {
+  MarketplaceProvider,
+  useMarketplaceLoading,
+  useMarketplaceError,
+  useAppContextOptional,
+  useMarketplaceClientOptional,
+} from "@/providers/marketplace";
+import { MarketplaceErrorScreen } from "@/app/MarketplaceErrorScreen";
+import {
+  MIN_LOADING_DELAY_MS,
+  CONTENT_LAYOUT_CLASS,
+  APP_MESSAGES,
+} from "@/app/constants";
 
 function SearchApp() {
   const isMarketplaceLoading = useMarketplaceLoading();
@@ -15,10 +26,14 @@ function SearchApp() {
   const client = useMarketplaceClientOptional();
   const [minLoadingComplete, setMinLoadingComplete] = useState(false);
 
-  // Sitecore context ID for search config (used by xmc.search.getConfigs)
-  // Prefer resourceAccess[0].context.live, fallback to resource[0].context.live, else null
-  const sitecoreContextId = appContext?.resourceAccess?.[0]?.context.live ?? appContext?.resources?.[0]?.context.live ?? null;
-  // Fetch search config via Marketplace SDK (xmc.search.getConfigs)
+  const sitecoreContextId = useMemo(
+    () =>
+      appContext?.resourceAccess?.[0]?.context.live ??
+      appContext?.resources?.[0]?.context.live ??
+      null,
+    [appContext]
+  );
+
   const {
     searchIndexOptions,
     fieldsMap,
@@ -26,63 +41,20 @@ function SearchApp() {
     error: apiError,
   } = useSearchConfigApi(client, sitecoreContextId);
 
-  // Minimum loading time to prevent flash (2 seconds)
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setMinLoadingComplete(true);
-    }, 2000);
-
+  useEffect(() => {
+    const timer = setTimeout(() => setMinLoadingComplete(true), MIN_LOADING_DELAY_MS);
     return () => clearTimeout(timer);
   }, []);
 
-  // Show marketplace error if it exists
   if (marketplaceError) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
-        <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-          <div className="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full mb-4">
-            <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-          </div>
-          <h2 className="text-xl font-semibold text-gray-900 text-center mb-2">
-            {marketplaceError.title}
-          </h2>
-          <p className="text-gray-600 text-center mb-4">
-            {marketplaceError.message}
-          </p>
-          {marketplaceError.details && (
-            <div className="bg-gray-50 rounded-md p-4 border border-gray-200">
-              <p className="text-sm text-gray-700 font-mono break-words">
-                {marketplaceError.details}
-              </p>
-            </div>
-          )}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-500 text-center">
-              If this problem persists, please contact your system administrator or check the browser console for more details.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+    return <MarketplaceErrorScreen error={marketplaceError} />;
   }
 
-  // Determine if we should show skeleton
-  const shouldShowSkeleton = isMarketplaceLoading || !minLoadingComplete;
-
-  // Show skeleton during all loading states
+  const shouldShowSkeleton =
+    isMarketplaceLoading || !minLoadingComplete || apiLoading;
   if (shouldShowSkeleton) {
     return (
-      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
-         <SearchConfigSkeleton />
-      </div>
-    );
-  }
-
-  if (apiLoading) {
-    return (
-      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
+      <div className={CONTENT_LAYOUT_CLASS}>
         <SearchConfigSkeleton />
       </div>
     );
@@ -90,9 +62,11 @@ function SearchApp() {
 
   if (apiError) {
     return (
-      <div className="w-full px-4 py-6 sm:px-6 lg:px-8 flex flex-col items-center justify-center space-y-4">
+      <div className={`${CONTENT_LAYOUT_CLASS} flex flex-col items-center justify-center space-y-4`}>
         <div className="text-center max-w-md">
-          <h3 className="text-lg font-medium text-red-600">Search configuration error</h3>
+          <h3 className="text-lg font-medium text-red-600">
+            {APP_MESSAGES.searchConfigErrorTitle}
+          </h3>
           <p className="text-sm text-gray-500 mt-2">{apiError}</p>
         </div>
       </div>
@@ -100,7 +74,7 @@ function SearchApp() {
   }
 
   return (
-    <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
+    <div className={CONTENT_LAYOUT_CLASS}>
       <SearchConfiguration
         searchIndices={searchIndexOptions}
         fieldsMap={fieldsMap}
