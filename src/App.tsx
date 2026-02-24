@@ -26,13 +26,9 @@ function SearchApp() {
   const client = useMarketplaceClientOptional();
   const [minLoadingComplete, setMinLoadingComplete] = useState(false);
 
-  const sitecoreContextId = useMemo(
-    () =>
-      appContext?.resourceAccess?.[0]?.context.live ??
-      appContext?.resources?.[0]?.context.live ??
-      null,
-    [appContext]
-  );
+  // Sitecore context ID for search config (used by xmc.search.getConfigs)
+  // Prefer resourceAccess[0].context.live, fallback to resource[0].context.live, else null
+  const sitecoreContextId = appContext?.resourceAccess?.[0]?.context.live ?? appContext?.resources?.[0]?.context.live ?? null;
 
   const {
     searchIndexOptions,
