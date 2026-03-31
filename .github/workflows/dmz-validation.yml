@@ -1,5 +1,8 @@
 name: DMZ Branch Validation
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [dmz]
