@@ -12,6 +12,9 @@
     "name": "Sitecore Corporation",
     "url": "https://doc.sitecore.com/xmc/en/developers/content-sdk/index.html"
   },
+  "overrides": {
+    "flatted": "3.4.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sitecore/content-sdk.git"
@@ -73,7 +76,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "embla-carousel-react": "^8.6.0",
-    "fast-xml-parser": "^5.4.2",
+    "fast-xml-parser": "^5.5.9",
     "focus-trap-react": "^11.0.4",
     "framer-motion": "^12.23.0",
     "geist": "^1.4.2",
