@@ -1,7 +1,10 @@
 {
   "name": "angular-starter",
   "overrides": {
-    "qs": "6.14.1"
+    "qs": "6.14.1",
+    "request": {
+      "form-data": "2.5.5"
+    }
   },
   "version": "0.1.0",
   "description": "Application utilizing Sitecore JavaScript Services and Angular (angular-cli).",
