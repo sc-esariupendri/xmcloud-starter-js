@@ -12,6 +12,9 @@
     "name": "Sitecore Corporation",
     "url": "https://doc.sitecore.com/xmc/en/developers/content-sdk/index.html"
   },
+  "overrides": {
+    "flatted": "3.4.2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sitecore/content-sdk.git"
