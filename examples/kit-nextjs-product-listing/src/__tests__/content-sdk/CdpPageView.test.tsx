@@ -16,9 +16,9 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
   },
 }));
 
-// Mock pageView from Content SDK events
+// Mock pageView from Sitecore Cloud SDK
 const mockPageView = jest.fn().mockReturnValue(Promise.resolve());
-jest.mock('@sitecore-content-sdk/events', () => ({
+jest.mock('@sitecore-cloudsdk/events/browser', () => ({
   pageView: (config: unknown) => mockPageView(config),
 }));
 

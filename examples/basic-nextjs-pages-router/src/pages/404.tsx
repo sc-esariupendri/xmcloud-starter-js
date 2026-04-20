@@ -13,12 +13,7 @@ const Custom404 = (props: SitecorePageProps): JSX.Element => {
   }
 
   return (
-    <SitecoreProvider
-      api={scConfig.api}
-      componentMap={components}
-      page={props.page}
-      loadImportMap={() => import('.sitecore/import-map')}
-    >
+    <SitecoreProvider api={scConfig.api} componentMap={components} page={props.page}>
       <Layout page={props.page} />
     </SitecoreProvider>
   );

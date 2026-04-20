@@ -1,8 +1,7 @@
 import { useEffect, JSX } from 'react';
-import { initContentSdk } from '@sitecore-content-sdk/nextjs'; 
-import { eventsPlugin } from '@sitecore-content-sdk/events'; 
-import { analyticsBrowserAdapter, analyticsPlugin } from '@sitecore-content-sdk/analytics-core'; 
+import { CloudSDK } from '@sitecore-cloudsdk/core/browser';
 import { SitecorePageProps } from '@sitecore-content-sdk/nextjs';
+import '@sitecore-cloudsdk/events/browser';
 import config from 'sitecore.config';
 
 /**
@@ -26,23 +25,16 @@ const Bootstrap = (props: SitecorePageProps): JSX.Element | null => {
       console.debug('Browser Events SDK is not initialized in edit and preview modes');
     else {
       if (config.api.edge?.clientContextId) {
-        initContentSdk({ 
-          config: { 
-            contextId: config.api.edge.clientContextId, 
-            edgeUrl: config.api.edge.edgeUrl, 
-            siteName: page.siteName || config.defaultSite, 
-          }, 
-          plugins: [ 
-            analyticsPlugin({ 
-              options: { 
-                enableCookie: true, 
-                cookieDomain: window.location.hostname.replace(/^www\./, ''), 
-              }, 
-              adapter: analyticsBrowserAdapter(), 
-            }), 
-            eventsPlugin(), 
-          ], 
-        });
+        CloudSDK({
+          sitecoreEdgeUrl: config.api.edge.edgeUrl,
+          sitecoreEdgeContextId: config.api.edge.clientContextId,
+          siteName: page.siteName || config.defaultSite,
+          enableBrowserCookie: true,
+          // Replace with the top level cookie domain of the website that is being integrated e.g ".example.com" and not "www.example.com"
+          cookieDomain: window.location.hostname.replace(/^www\./, ''),
+        })
+          .addEvents()
+          .initialize();
       } else {
         console.error('Client Edge API settings missing from configuration');
       }

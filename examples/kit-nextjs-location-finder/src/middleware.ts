@@ -1,16 +1,16 @@
-import { type NextRequest } from 'next/server';
+import { type NextRequest, type NextFetchEvent } from 'next/server';
 import {
-  defineProxy,
-  AppRouterMultisiteProxy,
-  PersonalizeProxy,
-  RedirectsProxy,
-  LocaleProxy,
-} from '@sitecore-content-sdk/nextjs/proxy';
+  defineMiddleware,
+  AppRouterMultisiteMiddleware,
+  PersonalizeMiddleware,
+  RedirectsMiddleware,
+  LocaleMiddleware,
+} from '@sitecore-content-sdk/nextjs/middleware';
 import sites from '.sitecore/sites.json';
 import scConfig from 'sitecore.config';
 import { routing } from './i18n/routing';
 
-const locale = new LocaleProxy({
+const locale = new LocaleMiddleware({
   /**
    * List of sites for site resolver to work with
    */
@@ -26,7 +26,7 @@ const locale = new LocaleProxy({
   skip: () => false,
 });
 
-const multisite = new AppRouterMultisiteProxy({
+const multisite = new AppRouterMultisiteMiddleware({
   /**
    * List of sites for site resolver to work with
    */
@@ -39,7 +39,7 @@ const multisite = new AppRouterMultisiteProxy({
   skip: () => false,
 });
 
-const redirects = new RedirectsProxy({
+const redirects = new RedirectsMiddleware({
   /**
    * List of sites for site resolver to work with
    */
@@ -54,7 +54,7 @@ const redirects = new RedirectsProxy({
   skip: () => false,
 });
 
-const personalize = new PersonalizeProxy({
+const personalize = new PersonalizeMiddleware({
   /**
    * List of sites for site resolver to work with
    */
@@ -68,8 +68,8 @@ const personalize = new PersonalizeProxy({
   skip: () => false,
 });
 
-export default function proxy(req: NextRequest) {
-  return defineProxy(locale, multisite, redirects, personalize).exec(req);
+export function middleware(req: NextRequest, ev: NextFetchEvent) {
+  return defineMiddleware(locale, multisite, redirects, personalize).exec(req, ev);
 }
 
 export const config = {

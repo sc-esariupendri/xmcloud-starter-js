@@ -1,14 +1,14 @@
-import { type NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, type NextFetchEvent, NextResponse } from 'next/server';
 import {
-  defineProxy,
-  MultisiteProxy,
-  PersonalizeProxy,
-  RedirectsProxy,
-} from '@sitecore-content-sdk/nextjs/proxy';
+  defineMiddleware,
+  MultisiteMiddleware,
+  PersonalizeMiddleware,
+  RedirectsMiddleware,
+} from '@sitecore-content-sdk/nextjs/middleware';
 import sites from '.sitecore/sites.json';
 import scConfig from 'sitecore.config';
 
-export default function proxy(req: NextRequest) {
+export function middleware(req: NextRequest, ev: NextFetchEvent) {
   // If no Edge server contextId, skip Edge middlewares entirely.
   // (SSR/API can still use Local creds; no crash in Edge runtime.)
   if (!scConfig.api?.edge?.contextId) {
@@ -16,7 +16,7 @@ export default function proxy(req: NextRequest) {
   }
 
   // Instantiate AFTER the guard so constructors don’t run in local-only mode
-  const multisite = new MultisiteProxy({
+  const multisite = new MultisiteMiddleware({
     /**
      * List of sites for site resolver to work with
      */
@@ -29,7 +29,7 @@ export default function proxy(req: NextRequest) {
     skip: () => false,
   });
 
-  const redirects = new RedirectsProxy({
+  const redirects = new RedirectsMiddleware({
     /**
      * List of sites for site resolver to work with
      */
@@ -43,7 +43,7 @@ export default function proxy(req: NextRequest) {
     skip: () => false,
   });
 
-  const personalize = new PersonalizeProxy({
+  const personalize = new PersonalizeMiddleware({
     /**
      * List of sites for site resolver to work with
      */
@@ -57,7 +57,7 @@ export default function proxy(req: NextRequest) {
     skip: () => false,
   });
 
-  return defineProxy(multisite, redirects, personalize).exec(req);
+  return defineMiddleware(multisite, redirects, personalize).exec(req, ev);
 }
 
 export const config = {

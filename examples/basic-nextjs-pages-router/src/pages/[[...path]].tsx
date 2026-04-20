@@ -29,12 +29,7 @@ const SitecorePage = ({ page, notFound, componentProps }: SitecorePageProps): JS
 
   return (
     <ComponentPropsContext value={componentProps || {}}>
-      <SitecoreProvider
-        componentMap={components}
-        api={scConfig.api}
-        page={page}
-        loadImportMap={() => import('.sitecore/import-map')}
-      >
+      <SitecoreProvider componentMap={components} api={scConfig.api} page={page}>
         <Layout page={page} />
       </SitecoreProvider>
     </ComponentPropsContext>

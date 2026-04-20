@@ -1,7 +1,6 @@
-import { Suspense } from 'react';
 import { isDesignLibraryPreviewData } from '@sitecore-content-sdk/nextjs/editing';
 import { notFound } from 'next/navigation';
-import { draftMode } from 'next/headers';
+import { draftMode, headers } from 'next/headers';
 import { SiteInfo } from '@sitecore-content-sdk/nextjs';
 import sites from '.sitecore/sites.json';
 import { routing } from 'src/i18n/routing';
@@ -12,7 +11,10 @@ import components from '.sitecore/component-map';
 import Providers from 'src/Providers';
 import { NextIntlClientProvider } from 'next-intl';
 import { setRequestLocale } from 'next-intl/server';
-import { getBaseUrl } from 'lib/utils';
+
+// Configure dynamic rendering to avoid SSR issues with client-side hooks
+// This ensures all pages are rendered on-demand rather than pre-rendered at build time
+export const dynamic = 'force-dynamic';
 
 type PageProps = {
   params: Promise<{
@@ -27,7 +29,11 @@ type PageProps = {
 export default async function Page({ params, searchParams }: PageProps) {
   const { site, locale, path } = await params;
   const draft = await draftMode();
-  const baseUrl = getBaseUrl();
+  const headersList = await headers();
+  const host = headersList.get('host') || '';
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || (host ? `${protocol}://${host}` : '') || '';
 
   // Set site and locale to be available in src/i18n/request.ts for fetching the dictionary
   setRequestLocale(`${site}_${locale}`);
@@ -55,11 +61,9 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <NextIntlClientProvider>
-      <Suspense fallback={null}>
-        <Providers page={page} componentProps={componentProps}>
-          <Layout page={page} baseUrl={baseUrl || undefined} />
-        </Providers>
-      </Suspense>
+      <Providers page={page} componentProps={componentProps}>
+        <Layout page={page} baseUrl={baseUrl || undefined} />
+      </Providers>
     </NextIntlClientProvider>
   );
 }
@@ -82,7 +86,10 @@ export const generateStaticParams = async () => {
 };
 
 export const generateMetadata = async ({ params }: PageProps) => {
-  const baseUrl = getBaseUrl();
+  const headersList = await headers();
+  const host = headersList.get('host') || '';
+  const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || (host ? `${protocol}://${host}` : '');
 
   const { path, site, locale } = await params;
 
@@ -107,12 +114,18 @@ export const generateMetadata = async ({ params }: PageProps) => {
     routeFields?.pageSummary?.value?.toString() ||
     'SYNC - Premium audio gear for professionals';
 
-  const ogTitle = routeFields?.ogTitle?.value?.toString() || metadataTitle;
+  const ogTitle =
+    routeFields?.ogTitle?.value?.toString() ||
+    metadataTitle;
 
-  const ogDescription = routeFields?.ogDescription?.value?.toString() || metadataDescription;
+  const ogDescription =
+    routeFields?.ogDescription?.value?.toString() ||
+    metadataDescription;
 
   // Ensure image URL is absolute (HTTPS preferred)
-  const imageSource = routeFields?.ogImage?.value?.src || routeFields?.thumbnailImage?.value?.src;
+  const imageSource =
+    routeFields?.ogImage?.value?.src ||
+    routeFields?.thumbnailImage?.value?.src;
 
   const ogImageUrl = imageSource
     ? imageSource.startsWith('http')
@@ -124,7 +137,9 @@ export const generateMetadata = async ({ params }: PageProps) => {
 
   // Parse keywords from comma-separated string to array (for <meta name="keywords">)
   const keywordsString = routeFields?.metadataKeywords?.value?.toString() || '';
-  const keywords = keywordsString ? keywordsString.split(',').map((k: string) => k.trim()) : [];
+  const keywords = keywordsString
+    ? keywordsString.split(',').map((k: string) => k.trim())
+    : [];
 
   const metadataAuthor = routeFields?.metadataAuthor?.value?.toString() || 'Sitecore';
 
