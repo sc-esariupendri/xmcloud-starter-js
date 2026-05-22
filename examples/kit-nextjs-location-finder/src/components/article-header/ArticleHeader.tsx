@@ -13,40 +13,7 @@ import { ButtonBase } from '../button-component/ButtonComponent';
 import { FloatingDock } from '@/components/floating-dock/floating-dock.dev';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
-import { ComponentProps } from '@/lib/component-props';
-
-interface ArticleHeaderParams {
-  [key: string]: any; // eslint-disable-line
-}
-
-interface ArticleHeaderFields {
-  imageRequired?: ImageField;
-  eyebrowOptional?: Field<string>;
-  pageDisplayDate?: Field<string>;
-  pageAuthor?: Field<string>;
-}
-
-interface ArticleHeaderExternalFields {
-  pageHeaderTitle: Field<string>;
-  pageReadTime?: Field<string>;
-  pageDisplayDate?: Field<string>;
-  pageAuthor?: { value: PersonItem };
-}
-
-interface ArticleHeaderProps extends ComponentProps {
-  params: ArticleHeaderParams;
-  fields: ArticleHeaderFields;
-  externalFields: ArticleHeaderExternalFields;
-}
-
-interface PersonItem extends ComponentProps {
-  personProfileImage?: ImageField;
-  personFirstName: Field<string>;
-  personLastName: Field<string>;
-  personJobTitle?: Field<string>;
-  personBio?: Field<string>;
-  personLinkedIn?: LinkField;
-}
+import type { ArticleHeaderProps, PersonItem } from './article-header.props';
 
 export const Default: React.FC<ArticleHeaderProps> = (props) => {
   const { fields, externalFields, page } = props;

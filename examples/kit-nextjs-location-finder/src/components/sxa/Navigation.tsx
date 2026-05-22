@@ -8,27 +8,11 @@ import Link from 'next/link';
 import { NavigationMenuToggle } from './NavigationMenuToggle.client';
 import { NavigationList } from './NavigationList.client';
 import { ButtonNavigationClient } from './ButtonNavigation.client';
+import type { NavigationFields, NavigationProps } from './navigation.props';
 
-export interface Fields {
-  Id: string;
-  DisplayName: string;
-  Title: TextField;
-  NavigationTitle: TextField;
-  Href: string;
-  Querystring: string;
-  Children: Array<Fields>;
-  Styles: string[];
-}
+export type { NavigationFields, NavigationProps };
 
-export type NavigationProps = {
-  params?: { [key: string]: string };
-  fields: Fields;
-  handleClick: (event?: React.MouseEvent<HTMLElement>) => void;
-  relativeLevel: number;
-  isEditing?: boolean;
-};
-
-const getNavigationText = function (props: { fields: Fields }): JSX.Element | string {
+const getNavigationText = function (props: { fields: NavigationFields }): JSX.Element | string {
   let text;
 
   if (props.fields.NavigationTitle) {
@@ -42,7 +26,7 @@ const getNavigationText = function (props: { fields: Fields }): JSX.Element | st
   return text;
 };
 
-const getLinkField = (props: { fields: Fields }): LinkField => ({
+const getLinkField = (props: { fields: NavigationFields }): LinkField => ({
   value: {
     href: props.fields.Href,
     title: getLinkTitle(props),
@@ -50,7 +34,7 @@ const getLinkField = (props: { fields: Fields }): LinkField => ({
   },
 });
 
-const getLinkTitle = (props: { fields: Fields }): string | undefined => {
+const getLinkTitle = (props: { fields: NavigationFields }): string | undefined => {
   let title;
   if (props.fields.NavigationTitle?.value) {
     title = props.fields.NavigationTitle.value.toString();
@@ -90,7 +74,7 @@ export const Default = (props: NavigationProps): JSX.Element => {
 
   const list = Object.values(props.fields)
     .filter((element) => element)
-    .map((element: Fields, key: number) => (
+    .map((element: NavigationFields, key: number) => (
       <NavigationList
         key={`${key}${element.Id}`}
         fields={element}

@@ -2,39 +2,12 @@
 
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Text, Field, ImageField, LinkField } from '@sitecore-content-sdk/nextjs';
+import { Text } from '@sitecore-content-sdk/nextjs';
 import { Default as ImageWrapper } from '@/components/image/ImageWrapper.dev';
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import { m, AnimatePresence } from 'framer-motion';
 import { ButtonBase as Button } from '@/components/button-component/ButtonComponent';
-import { ComponentProps } from '@/lib/component-props';
-
-interface VerticalImageAccordionParams {
-  [key: string]: any; // eslint-disable-line
-}
-
-interface AccordionItem {
-  title: { jsonValue: Field<string> };
-  description: { jsonValue: Field<string> };
-  image: ImageField;
-  cta?: { jsonValue: LinkField };
-}
-
-interface VerticalImageAccordionFields {
-  data: {
-    datasource: {
-      title?: { jsonValue: Field<string> };
-      items?: {
-        results: AccordionItem[];
-      };
-    };
-  };
-}
-
-interface VerticalImageAccordionProps extends ComponentProps {
-  params: VerticalImageAccordionParams;
-  fields: VerticalImageAccordionFields;
-}
+import type { VerticalImageAccordionProps } from './vertical-image-accordion.props';
 
 export const Default: React.FC<VerticalImageAccordionProps> = (props) => {
   const { fields, page } = props;

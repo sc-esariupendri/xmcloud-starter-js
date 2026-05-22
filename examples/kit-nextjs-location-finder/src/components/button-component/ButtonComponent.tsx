@@ -9,7 +9,6 @@ import {
   ComponentRendering,
   Page,
 } from '@sitecore-content-sdk/nextjs';
-import { ComponentProps } from '@/lib/component-props';
 import { Button } from '@/components/ui/button';
 import { EnumValues } from '@/enumerations/generic.enum';
 import { IconPosition } from '@/enumerations/IconPosition.enum';
@@ -17,57 +16,12 @@ import { NoDataFallback } from '@/utils/NoDataFallback';
 import { Default as ImageWrapper } from '@/components/image/ImageWrapper.dev';
 import { ImageField } from '@sitecore-content-sdk/nextjs';
 import { ButtonVariants, ButtonSize } from '@/enumerations/ButtonStyle.enum';
-/**
- * Model used for Sitecore Component integration
- */
+import type { ButtonBaseProps, ButtonComponentProps } from './button-component.props';
 
-export type ButtonFields = {
-  fields: {
-    buttonLink: LinkField;
-    icon?: { value: EnumValues<typeof IconName> };
-    iconClassName?: string;
-    isAriaHidden?: boolean;
-  };
-  variant?: EnumValues<typeof ButtonVariants>;
-  params: {
-    size?: EnumValues<typeof ButtonSize>;
-    iconPosition?: EnumValues<typeof IconPosition>;
-    iconClassName?: string;
-    isPageEditing?: boolean;
-  };
-  page?: { mode?: { isEditing?: boolean } };
-};
+export type { ButtonComponentProps, ButtonFields, ButtonBaseProps } from './button-component.props';
+import { isValidEditableLink, linkIsValid } from './button-component.props';
 
-export type ButtonRendering = { rendering: ComponentRendering };
-const linkIsValid = (link: LinkField) => {
-  const href = link?.value?.href || link?.value?.url;
-  return (
-    !!link?.value?.text &&
-    !!href &&
-    href !== 'http://' &&
-    href !== 'http://#' &&
-    href !== '#'
-  );
-};
-const isValidEditableLink = (link: LinkField, icon?: ImageField) => {
-  const href = link?.value?.href || link?.value?.url;
-  return (
-    !!link?.value?.text ||
-    (icon?.value?.src &&
-      !!href &&
-      href !== 'http://' &&
-      href !== 'http://#' &&
-      href !== '#')
-  );
-};
-
-export type ButtonComponentProps = ComponentProps & ButtonFields;
-const ButtonBase = (
-  props: ButtonFields['params'] &
-    ButtonFields['fields'] & { variant?: EnumValues<typeof ButtonVariants> } & {
-      className?: string;
-    },
-): JSX.Element | null => {
+const ButtonBase = (props: ButtonBaseProps): JSX.Element | null => {
   const {
     buttonLink,
     icon,

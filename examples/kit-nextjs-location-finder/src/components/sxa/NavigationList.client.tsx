@@ -4,28 +4,18 @@ import { useState } from 'react';
 import {
   Link as ContentSdkLink,
   LinkField,
-  TextField,
 } from '@sitecore-content-sdk/nextjs';
 import type { JSX } from 'react';
 
-interface Fields {
-  Id: string;
-  DisplayName: string;
-  Title: TextField;
-  NavigationTitle: TextField;
-  Href: string;
-  Querystring: string;
-  Children: Array<Fields>;
-  Styles: string[];
-}
+import type { NavigationFields } from './navigation.props';
 
 type NavigationListProps = {
-  fields: Fields;
+  fields: NavigationFields;
   handleClick: (event?: React.MouseEvent<HTMLElement>) => void;
   relativeLevel: number;
   isEditing: boolean;
-  getLinkField: (props: { fields: Fields }) => LinkField;
-  getNavigationText: (props: { fields: Fields }) => JSX.Element | string;
+  getLinkField: (props: { fields: NavigationFields }) => LinkField;
+  getNavigationText: (props: { fields: NavigationFields }) => JSX.Element | string;
 };
 
 /**
@@ -44,7 +34,7 @@ export const NavigationList = ({
 
   let children: JSX.Element[] = [];
   if (fields.Children && fields.Children.length) {
-    children = fields.Children.map((element: Fields, index: number) => (
+    children = fields.Children.map((element: NavigationFields, index: number) => (
       <NavigationList
         key={`${index}${element.Id}`}
         fields={element}

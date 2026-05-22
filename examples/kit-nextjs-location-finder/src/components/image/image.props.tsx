@@ -1,10 +1,10 @@
 import { Field, ImageField } from '@sitecore-content-sdk/nextjs';
-import { ComponentProps } from '@/lib/component-props';
+import type { OptionalComponentProps } from '@/lib/component-props';
 
 /**
  * Model used for Sitecore Component integration
  */
-export type ImageProps = ComponentProps & ImageFields;
+export type ImageProps = OptionalComponentProps & ImageFields;
 
 export type ImageFields = {
   fields: {
@@ -12,3 +12,4 @@ export type ImageFields = {
     caption?: Field<string>;
   };
 };
+
