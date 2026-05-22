@@ -7,39 +7,14 @@ import {
   Link as ContentSdkLink,
   Text as ContentSdkText,
 } from '@sitecore-content-sdk/nextjs';
-import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'src/types/igql';
 import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { AnimatePresence, m } from 'framer-motion';
 import { cn } from 'lib/utils';
+import type { CarouselProps } from './carousel.props';
 
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: CarouselFields[];
-      };
-      title: IGQLTextField;
-      tagLine: IGQLTextField;
-    };
-  };
-}
-
-interface CarouselFields {
-  id: string;
-  callToAction: IGQLLinkField;
-  title: IGQLTextField;
-  bodyText: IGQLTextField;
-  slideImage: IGQLImageField;
-}
-
-type CarouselsProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-export const Default = (props: CarouselsProps): JSX.Element => {
+export const Default = (props: CarouselProps): JSX.Element => {
   const datasource = useMemo(() => props.fields.data.datasource, [props.fields.data.datasource]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);

@@ -3,36 +3,11 @@
 import React, { useEffect, useState, type JSX } from 'react';
 import { Link as ContentSdkLink, Text, LinkField, TextField } from '@sitecore-content-sdk/nextjs';
 
-type ResultsFieldLink = {
-  field: {
-    link: LinkField;
-  };
-};
-
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: ResultsFieldLink[];
-      };
-      field: {
-        title: TextField;
-      };
-    };
-  };
-}
-
-type LinkListProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-type LinkListItemProps = {
-  key: string;
-  index: number;
-  total: number;
-  field: LinkField;
-};
+import type {
+  LinkListItemProps,
+  LinkListProps,
+  LinkListResultFieldLink,
+} from './link-list.props';
 
 const LinkListItem = (props: LinkListItemProps) => {
   let className = `item${props.index}`;
@@ -63,8 +38,8 @@ export const Default = (props: LinkListProps): JSX.Element => {
 
   if (datasource) {
     const list = datasource.children.results
-      .filter((element: ResultsFieldLink) => element?.field?.link)
-      .map((element: ResultsFieldLink, key: number) => (
+      .filter((element: LinkListResultFieldLink) => element?.field?.link)
+      .map((element: LinkListResultFieldLink, key: number) => (
         <LinkListItem
           index={key}
           key={`${key}${element.field.link}`}
@@ -141,8 +116,8 @@ export const AnchorNav = (props: LinkListProps): JSX.Element => {
 
   if (datasource) {
     const list = datasource.children.results
-      .filter((element: ResultsFieldLink) => element?.field?.link)
-      .map((element: ResultsFieldLink, key: number) => {
+      .filter((element: LinkListResultFieldLink) => element?.field?.link)
+      .map((element: LinkListResultFieldLink, key: number) => {
         const link = element.field.link;
         const href = link?.value?.href || '';
         const targetId = href.replace('#', '');
