@@ -7,32 +7,10 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { NoDataFallback } from '@/utils/NoDataFallback';
-import { ComponentProps } from '@/lib/component-props';
-import { GqlFieldString } from '@/types/gql.props';
-import { LinkFieldValue } from '@sitecore-content-sdk/nextjs';
 import { generateBreadcrumbListSchema } from '@/lib/structured-data/schema';
 import { getBaseUrl } from '@/lib/utils';
 import { StructuredData } from '@/components/structured-data/StructuredData';
-
-type BreadcrumbsProps = ComponentProps & BreadcrumbsData;
-
-type BreadcrumbsData = {
-  fields: {
-    data: {
-      datasource: {
-        ancestors: BreadcrumbsPage[];
-        name: string;
-      };
-    };
-  };
-};
-
-type BreadcrumbsPage = {
-  name: string;
-  title: GqlFieldString;
-  navigationTitle: GqlFieldString;
-  url?: LinkFieldValue;
-};
+import type { BreadcrumbsPage, BreadcrumbsProps } from './breadcrumbs.props';
 
 export const Default: React.FC<BreadcrumbsProps> = (props) => {
   const { fields } = props;

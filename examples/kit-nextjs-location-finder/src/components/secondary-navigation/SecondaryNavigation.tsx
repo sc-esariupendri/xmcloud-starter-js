@@ -7,40 +7,10 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { cn } from '@/lib/utils';
 import { NoDataFallback } from '@/utils/NoDataFallback';
-import { ComponentProps } from '@/lib/component-props';
-import { GqlFieldString } from '../../utils/graphQlClient';
-import { LinkFieldValue } from '@sitecore-content-sdk/nextjs';
-
-/**
- * Model used for Sitecore Component integration
- */
-type SecondaryNavigationProps = ComponentProps & SecondaryNavigationFields;
-
-type SecondaryNavigationFields = {
-  fields: {
-    data: {
-      datasource: {
-        id: string;
-        children: {
-          results: SecondaryNavigationPage[];
-        };
-        parent: {
-          children?: {
-            results: SecondaryNavigationPage[];
-          };
-        };
-      };
-    };
-  };
-};
-
-type SecondaryNavigationPage = {
-  id: string;
-  name: string;
-  title?: GqlFieldString;
-  navigationTitle?: GqlFieldString;
-  url?: LinkFieldValue;
-};
+import type {
+  SecondaryNavigationPage,
+  SecondaryNavigationProps,
+} from './secondary-navigation.props';
 
 export const Default: React.FC<SecondaryNavigationProps> = (props) => {
   const { fields } = props;

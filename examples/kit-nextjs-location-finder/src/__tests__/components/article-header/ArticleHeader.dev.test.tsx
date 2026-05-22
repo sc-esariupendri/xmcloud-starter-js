@@ -105,7 +105,6 @@ const mockProps = {
     },
   },
   page: mockPageBase,
-  componentMap: new Map(),
 };
 
 describe('ArticleHeader Component', () => {

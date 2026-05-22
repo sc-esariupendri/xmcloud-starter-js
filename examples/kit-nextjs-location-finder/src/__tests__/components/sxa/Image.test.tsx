@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { Default as Image, Banner } from '@/components/sxa/Image';
-import { Page } from '@sitecore-content-sdk/nextjs';
+import { baseSitecoreProps } from '@/__tests__/test-utils/component-props';
 
 // Mock Sitecore SDK
 jest.mock('@sitecore-content-sdk/nextjs', () => ({
@@ -32,24 +32,6 @@ jest.mock('@sitecore-content-sdk/nextjs', () => ({
 }));
 
 describe('SXA Image', () => {
-  const mockPage = {
-    mode: {
-      isEditing: false,
-      isPreview: false,
-      isNormal: true,
-      name: 'normal' as const,
-      designLibrary: { isVariantGeneration: false },
-      isDesignLibrary: false,
-    },
-    layout: {
-      sitecore: {
-        context: {},
-        route: null,
-      },
-    },
-    locale: 'en',
-  } as Page;
-
   const mockFields = {
     Image: {
       value: {
@@ -68,7 +50,13 @@ describe('SXA Image', () => {
   };
 
   it('renders image with caption and link', () => {
-    render(<Image params={{ styles: '', RenderingIdentifier: 'img-1' }} fields={mockFields} page={mockPage} />);
+    render(
+      <Image
+        {...baseSitecoreProps}
+        params={{ styles: '', RenderingIdentifier: 'img-1' }}
+        fields={mockFields}
+      />
+    );
 
     expect(screen.getByTestId('sxa-image')).toHaveAttribute(
       'src',
@@ -90,7 +78,11 @@ describe('SXA Image', () => {
     };
 
     render(
-      <Image params={{ styles: '', RenderingIdentifier: 'img-2' }} fields={fieldsWithoutLink} page={mockPage} />
+      <Image
+        {...baseSitecoreProps}
+        params={{ styles: '', RenderingIdentifier: 'img-2' }}
+        fields={fieldsWithoutLink}
+      />
     );
 
     expect(screen.getByTestId('sxa-image')).toBeInTheDocument();
@@ -100,9 +92,9 @@ describe('SXA Image', () => {
   it('renders Banner variant with background image', () => {
     const { container } = render(
       <Banner
+        {...baseSitecoreProps}
         params={{ styles: 'hero-section', RenderingIdentifier: 'banner-1' }}
         fields={mockFields}
-        page={mockPage}
       />
     );
 
