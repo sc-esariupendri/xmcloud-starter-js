@@ -1,41 +1,11 @@
 'use client';
 
 import React, { useEffect, useState, type JSX } from 'react';
-import { Link as ContentSdkLink, Text, LinkField, TextField, useSitecore } from '@sitecore-content-sdk/nextjs';
+import { Link as ContentSdkLink, Text, useSitecore } from '@sitecore-content-sdk/nextjs';
 import Link from 'next/link';
+import type { LinkListItemProps, LinkListProps, ResultsFieldLink } from './sxa-link-list.props';
 
-type ResultsFieldLink = {
-  field: {
-    link: LinkField;
-  };
-};
-
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: ResultsFieldLink[];
-      };
-      field: {
-        title: TextField;
-      };
-    };
-  };
-}
-
-type LinkListProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-type LinkListItemProps = {
-  key: string;
-  index: number;
-  total: number;
-  field: LinkField;
-};
-
-const LinkListItem = (props: LinkListItemProps & { isPageEditing?: boolean }) => {
+const LinkListItem = (props: LinkListItemProps) => {
   const { page } = useSitecore();
   const isEditing = props.isPageEditing || page?.mode?.isEditing;
   let className = `item${props.index}`;

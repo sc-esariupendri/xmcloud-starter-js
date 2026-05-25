@@ -5,24 +5,8 @@ import {
   Text as ContentSdkText,
   NextImage as ContentSdkImage,
   Link as ContentSdkLink,
-  ImageField,
-  Field,
-  LinkField,
 } from '@sitecore-content-sdk/nextjs';
-
-interface Fields {
-  Eyebrow: Field<string>;
-  Title: Field<string>;
-  Image1: ImageField;
-  Image2: ImageField;
-  Link1: LinkField;
-  Link2: LinkField;
-}
-
-type PageHeaderSTProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { PageHeaderSTProps } from './hero-st.props';
 
 export const Default = (props: PageHeaderSTProps) => {
   const { containerRef, rightOffset } = useContainerOffsets();

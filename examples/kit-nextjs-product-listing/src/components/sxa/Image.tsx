@@ -1,24 +1,10 @@
 import {
-  Field,
-  ImageField,
   NextImage as ContentSdkImage,
   Link as ContentSdkLink,
-  LinkField,
   Text,
 } from '@sitecore-content-sdk/nextjs';
-import { ComponentProps } from 'lib/component-props';
-import React, { CSSProperties, type JSX } from 'react';
-
-interface Fields {
-  Image: ImageField & { metadata?: { [key: string]: unknown } };
-  ImageCaption: Field<string>;
-  TargetUrl: LinkField;
-}
-
-type ImageProps = ComponentProps & {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import React, { type JSX } from 'react';
+import type { BackgroundStyle, ImageProps } from './sxa-image.props';
 
 const ImageDefault = (props: ImageProps): JSX.Element => (
   <div className={`component image ${props.params.styles}`.trimEnd()}>
@@ -38,7 +24,7 @@ export const Banner = (props: ImageProps): JSX.Element => {
       : '';
   const backgroundStyle = (props?.fields?.Image?.value?.src && {
     backgroundImage: `url('${props.fields.Image.value.src}')`,
-  }) as CSSProperties;
+  }) as BackgroundStyle;
 
   if (!props.fields?.Image) {
     return <ImageDefault {...props} />;

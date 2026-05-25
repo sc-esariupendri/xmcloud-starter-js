@@ -6,7 +6,7 @@ import {
   RichText as ContentSdkRichText,
 } from '@sitecore-content-sdk/nextjs';
 import { useMemo } from 'react';
-import { IGQLLinkField, IGQLRichTextField, IGQLTextField } from 'types/igql';
+import { IGQLLinkField, IGQLRichTextField, IGQLTextField } from '@/lib/component-props';
 
 import {
   Accordion,
@@ -14,31 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from 'shadcd/components/ui/accordion';
-
-
-interface Fields {
-  data: {
-    datasource: {
-      heading?: IGQLTextField;
-      description?: IGQLTextField;
-      link: IGQLLinkField;
-      children: {
-        results: AccordionItemFields[];
-      };
-    };
-  };
-}
-
-interface AccordionItemFields {
-  id: string;
-  heading?: IGQLTextField;
-  description?: IGQLRichTextField;
-}
-
-type AccordionProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { AccordionItemFields, AccordionProps } from './accordion-block.props';
 
 const AccordionBlockItem = (props: AccordionItemFields) => {
   return (

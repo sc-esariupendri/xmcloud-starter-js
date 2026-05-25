@@ -5,7 +5,6 @@ import {
   Link as ContentSdkLink,
   Text as ContentSdkText,
 } from '@sitecore-content-sdk/nextjs';
-import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'src/types/igql';
 import { useEffect, useMemo, useState, type JSX } from 'react';
 import {
   Carousel,
@@ -17,33 +16,7 @@ import {
 } from 'shadcd/components/ui/carousel';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: ProductFields[];
-      };
-      heading: IGQLTextField;
-      link: IGQLLinkField;
-    };
-  };
-}
-
-interface ProductFields {
-  id: string;
-  productImage: IGQLImageField;
-  productTagLine: IGQLTextField;
-  productLink: IGQLLinkField;
-  productDescription: IGQLTextField;
-  productPrice: IGQLTextField;
-  productDiscountedPrice: IGQLTextField;
-}
-
-type ProductSectionProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { ProductSectionProps } from './products-section.props';
 
 function useSlidesToScroll() {
   const [slidesToScroll, setSlidesToScroll] = useState(1);

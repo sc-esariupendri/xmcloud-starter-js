@@ -7,37 +7,12 @@ import {
   Link as ContentSdkLink,
   Text as ContentSdkText,
 } from '@sitecore-content-sdk/nextjs';
-import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'src/types/igql';
 import { useEffect, useMemo, useRef, useState, type JSX } from 'react';
 import { Button } from '@/components/ui/button';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from 'lib/utils';
-
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: CarouselFields[];
-      };
-      title: IGQLTextField;
-      tagLine: IGQLTextField;
-    };
-  };
-}
-
-interface CarouselFields {
-  id: string;
-  callToAction: IGQLLinkField;
-  title: IGQLTextField;
-  bodyText: IGQLTextField;
-  slideImage: IGQLImageField;
-}
-
-type CarouselsProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { CarouselsProps } from './carousel.props';
 
 export const Default = (props: CarouselsProps): JSX.Element => {
   const datasource = useMemo(() => props.fields.data.datasource, [props.fields.data.datasource]);

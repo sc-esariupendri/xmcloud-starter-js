@@ -3,26 +3,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 import {
-  Field,
   Image as ContentSdkImage,
-  ImageField,
   RichText as ContentSdkRichText,
-  RichTextField,
   Text as ContentSdkText,
 } from '@sitecore-content-sdk/nextjs';
 import { useTranslations } from 'next-intl';
-
-interface Fields {
-  Heading: Field<string>;
-  Subheading: RichTextField;
-  Image: ImageField;
-  Image2: ImageField;
-}
-
-type SignupBannerProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { SignupBannerProps } from './signup-banner.props';
 
 const DICTIONARY_KEYS = {
   SIGNUPBANNER_ButtonLabel: 'Signup_Form_Button_Label',

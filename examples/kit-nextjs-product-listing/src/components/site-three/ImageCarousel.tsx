@@ -4,28 +4,8 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { Image as ContentSdkImage } from '@sitecore-content-sdk/nextjs';
-import { IGQLImageField } from 'types/igql';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-
-interface Fields {
-  data: {
-    datasource: {
-      imageItems: {
-        results: ImageCarouselItem[];
-      };
-    };
-  };
-}
-
-export interface ImageCarouselItem {
-  id: string;
-  image: IGQLImageField;
-}
-
-type ImageCarouselProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { ImageCarouselProps } from './image-carousel.props';
 
 export const Default = (props: ImageCarouselProps) => {
   const images = props.fields?.data?.datasource?.imageItems?.results || [];

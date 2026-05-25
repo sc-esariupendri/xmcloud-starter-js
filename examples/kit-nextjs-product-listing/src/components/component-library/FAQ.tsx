@@ -5,7 +5,6 @@ import {
   Link as ContentSdkLink,
   Text as ContentSdkText,
 } from '@sitecore-content-sdk/nextjs';
-import { IGQLImageField, IGQLLinkField, IGQLRichTextField, IGQLTextField } from 'src/types/igql';
 import { Button } from 'shadcd/components/ui/button';
 import { useMemo, useState, type JSX } from 'react';
 import {
@@ -17,45 +16,11 @@ import {
 import ContentSdkRichText from '@/components/content-sdk-rich-text/ContentSdkRichText';
 import { generateFAQPageSchema } from '@/lib/structured-data/schema';
 import { StructuredData } from '@/components/structured-data/StructuredData';
-
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: QuestionFields[];
-      };
-      heading: IGQLTextField;
-      text: IGQLRichTextField;
-      heading2: IGQLTextField;
-      text2: IGQLRichTextField;
-      link: IGQLLinkField;
-    };
-  };
-}
-
-interface QuestionFields {
-  id: string;
-  question: IGQLTextField;
-  answer: IGQLRichTextField;
-  image: IGQLImageField;
-}
-
-type FAQProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-type QuestionAccordionItemProps = {
-  q: QuestionFields;
-  type: 'simple' | 'bordered' | 'boxed';
-  className?: string;
-};
-
-type QuestionItemProps = {
-  q: QuestionFields;
-  type: 'simple' | 'bordered' | 'centered';
-  showIcon?: boolean;
-};
+import type {
+  FAQProps,
+  QuestionAccordionItemProps,
+  QuestionItemProps,
+} from './faq.props';
 
 const QuestionAccordionItem = (props: QuestionAccordionItemProps) => {
   switch (props.type) {

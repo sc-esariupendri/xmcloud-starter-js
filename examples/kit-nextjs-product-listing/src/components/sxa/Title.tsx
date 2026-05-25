@@ -1,47 +1,7 @@
 import { LinkField, Text, TextField } from '@sitecore-content-sdk/nextjs';
 import NextLink from 'next/link';
-import { ComponentProps } from 'lib/component-props';
 import React, { type JSX } from 'react';
-
-interface Fields {
-  data: {
-    datasource: {
-      url: {
-        path: string;
-        siteName: string;
-      };
-      field: {
-        jsonValue: {
-          value: string;
-          metadata?: { [key: string]: unknown };
-        };
-      };
-    };
-    contextItem: {
-      url: {
-        path: string;
-        siteName: string;
-      };
-      field: {
-        jsonValue: {
-          value: string;
-          metadata?: { [key: string]: unknown };
-        };
-      };
-    };
-  };
-}
-
-type TitleProps = ComponentProps & {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-type ComponentContentProps = {
-  id: string;
-  styles: string;
-  children: JSX.Element;
-};
+import type { ComponentContentProps, TitleProps } from './sxa-title.props';
 
 const ComponentContent = (props: ComponentContentProps) => {
   const id = props.id;

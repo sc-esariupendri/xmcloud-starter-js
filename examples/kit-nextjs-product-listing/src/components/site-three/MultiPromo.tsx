@@ -6,37 +6,8 @@ import {
   NextImage as ContentSdkImage,
   Link as ContentSdkLink,
 } from '@sitecore-content-sdk/nextjs';
-import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
 import { NoDataFallback } from '@/utils/NoDataFallback';
-
-interface Fields {
-  data: {
-    datasource: {
-      title?: IGQLTextField;
-      description?: IGQLTextField;
-      children: {
-        results: SimplePromoFields[];
-      };
-    };
-  };
-}
-
-interface SimplePromoFields {
-  id: string;
-  heading: IGQLTextField;
-  description: IGQLTextField;
-  image: IGQLImageField;
-  link: IGQLLinkField;
-}
-
-type MultiPromoProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-type PromoItemProps = SimplePromoFields & {
-  isHorizontal?: boolean;
-};
+import type { MultiPromoProps, PromoItemProps } from './multi-promo.props';
 
 const PromoItem = ({ isHorizontal, ...promo }: PromoItemProps) => {
   const { image, heading, description, link } = promo ?? {};

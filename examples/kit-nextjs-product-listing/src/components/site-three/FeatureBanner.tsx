@@ -2,30 +2,7 @@
 
 import { Text as ContentSdkText, NextImage as ContentSdkImage } from '@sitecore-content-sdk/nextjs';
 import { useMemo } from 'react';
-import { IGQLImageField, IGQLLinkField, IGQLTextField } from 'types/igql';
-
-interface Fields {
-  data: {
-    datasource: {
-      title: IGQLTextField;
-      link: IGQLLinkField;
-      children: {
-        results: FeatureItemFields[];
-      };
-    };
-  };
-}
-
-interface FeatureItemFields {
-  id: string;
-  image: IGQLImageField;
-  heading: IGQLTextField;
-}
-
-type FeatureBannerProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { FeatureBannerProps, FeatureItemFields } from './feature-banner.props';
 
 const FeatureItem = (props: FeatureItemFields) => {
   return (
