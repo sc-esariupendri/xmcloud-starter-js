@@ -6,34 +6,9 @@ import {
   Text as ContentSdkText,
 } from '@sitecore-content-sdk/nextjs';
 import { Button } from 'shadcd/components/ui/button';
-import { IGQLImageField, IGQLLinkField, IGQLRichTextField, IGQLTextField } from 'src/types/igql';
 
 import type { JSX } from 'react';
-import { ComponentProps } from 'lib/component-props';
-
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: LogoFields[];
-      };
-      title: IGQLTextField;
-      bodyText: IGQLRichTextField;
-      link1: IGQLLinkField;
-      link2: IGQLLinkField;
-    };
-  };
-}
-
-interface LogoFields {
-  logoImage: IGQLImageField;
-  logoLink: IGQLLinkField;
-}
-
-type LogoCloudProps = ComponentProps & {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { LogoCloudProps } from './logo-cloud.props';
 
 export const Default = (props: LogoCloudProps): JSX.Element => {
   const { page } = props;

@@ -4,26 +4,11 @@ import {
   RichText as ContentSdkRichText,
   Text as ContentSdkText,
   Link as ContentSdkLink,
-  Field,
-  RichTextField,
   LinkField,
   AppPlaceholder,
 } from '@sitecore-content-sdk/nextjs';
-import { ComponentProps } from 'lib/component-props';
 import componentMap from '.sitecore/component-map';
-
-interface Fields {
-  Title: Field<string>;
-  CopyrightText: RichTextField;
-  FacebookLink: LinkField;
-  InstagramLink: LinkField;
-  LinkedinLink: LinkField;
-}
-
-type FooterSTProps = ComponentProps & {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { FooterSTFields, FooterSTProps, SocialLinksProps } from './footer-st.props';
 
 /** Returns true if the link field has a valid href (not a placeholder like # or http://#). */
 function hasValidLink(field: LinkField | undefined): boolean {
@@ -31,7 +16,7 @@ function hasValidLink(field: LinkField | undefined): boolean {
   return !!(href && href !== '#' && !href.startsWith('http://#'));
 }
 
-const SocialLinks = ({ fields }: { fields: Fields }) => (
+const SocialLinks = ({ fields }: SocialLinksProps) => (
   <div className="flex justify-center gap-4">
     {hasValidLink(fields?.FacebookLink) ? (
       <ContentSdkLink

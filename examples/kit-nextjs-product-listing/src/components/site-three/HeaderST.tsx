@@ -3,28 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Link as ContentSdkLink,
   NextImage as ContentSdkImage,
-  LinkField,
-  ImageField,
   AppPlaceholder,
 } from '@sitecore-content-sdk/nextjs';
 import Link from 'next/link';
 import { MiniCart } from './non-sitecore/MiniCart';
 import { SearchBox } from './non-sitecore/SearchBox';
-import { ComponentProps } from 'lib/component-props';
 import componentMap from '.sitecore/component-map';
 import { MobileMenuWrapper } from './MobileMenuWrapper';
-
-interface Fields {
-  Logo: ImageField;
-  SupportLink: LinkField;
-  SearchLink: LinkField;
-  CartLink: LinkField;
-}
-
-type HeaderSTProps = ComponentProps & {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { HeaderSTProps } from './header-st.props';
 
 const navLinkClass = 'block p-4 font-[family-name:var(--font-accent)] font-medium';
 

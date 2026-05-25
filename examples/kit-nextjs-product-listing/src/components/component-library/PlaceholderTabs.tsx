@@ -1,27 +1,8 @@
 import { Text as ContentSdkText, AppPlaceholder } from '@sitecore-content-sdk/nextjs';
-import { ComponentProps } from 'lib/component-props';
 import { useMemo, type JSX } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from 'shadcd/components/ui/tabs';
-import { IGQLTextField } from 'types/igql';
 import componentMap from '.sitecore/component-map';
-
-type Fields = {
-  data: {
-    datasource: {
-      children: {
-        results: {
-          id: string;
-          title: IGQLTextField;
-        }[];
-      };
-    };
-  };
-};
-
-type PlaceholderTabsProps = ComponentProps & {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import type { PlaceholderTabsProps } from './placeholder-tabs.props';
 
 export const Default = (props: PlaceholderTabsProps): JSX.Element => {
   const datasource = useMemo(() => props.fields.data.datasource, [props.fields.data.datasource]);
