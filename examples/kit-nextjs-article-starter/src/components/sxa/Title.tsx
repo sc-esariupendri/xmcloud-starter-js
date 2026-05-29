@@ -2,40 +2,7 @@
 
 import { Text, TextField, useSitecore } from '@sitecore-content-sdk/nextjs';
 import React, { JSX } from 'react';
-
-interface Fields {
-  data: {
-    datasource: {
-      url: {
-        path: string;
-        siteName: string;
-      };
-      field: {
-        jsonValue: {
-          value: string;
-          metadata?: { [key: string]: unknown };
-        };
-      };
-    };
-    contextItem: {
-      url: {
-        path: string;
-        siteName: string;
-      };
-      field: {
-        jsonValue: {
-          value: string;
-          metadata?: { [key: string]: unknown };
-        };
-      };
-    };
-  };
-}
-
-type TitleProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
+import { TitleProps } from './sxa-title.props';
 
 export const Default = (props: TitleProps): JSX.Element => {
   const { page } = useSitecore();

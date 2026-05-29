@@ -2,31 +2,12 @@ import React, { type JSX } from 'react';
 import {
   LinkField,
   Text,
-  TextField,
 } from '@sitecore-content-sdk/nextjs';
 import { NavigationMenuToggle } from './NavigationMenuToggle.client';
 import { NavigationList } from './NavigationList.client';
-import { ComponentProps } from 'lib/component-props';
+import { NavigationFields, NavigationProps } from './sxa-navigation.props';
 
-export interface Fields {
-  Id: string;
-  DisplayName: string;
-  Title: TextField;
-  NavigationTitle: TextField;
-  Href: string;
-  Querystring: string;
-  Children: Array<Fields>;
-  Styles: string[];
-}
-
-export type NavigationProps = ComponentProps & {
-  params?: { [key: string]: string };
-  fields: Fields;
-  handleClick: (event?: React.MouseEvent<HTMLElement>) => void;
-  relativeLevel: number;
-};
-
-const getNavigationText = function (props: { fields: Fields }): JSX.Element | string {
+const getNavigationText = function (props: { fields: NavigationFields }): JSX.Element | string {
   let text: JSX.Element | string;
 
   if (props.fields.NavigationTitle) {
@@ -40,7 +21,7 @@ const getNavigationText = function (props: { fields: Fields }): JSX.Element | st
   return text;
 };
 
-const getLinkField = (props: { fields: Fields }): LinkField => ({
+const getLinkField = (props: { fields: NavigationFields }): LinkField => ({
   value: {
     href: props.fields.Href,
     title: getLinkTitle(props),
@@ -48,7 +29,7 @@ const getLinkField = (props: { fields: Fields }): LinkField => ({
   },
 });
 
-const getLinkTitle = (props: { fields: Fields }): string | undefined => {
+const getLinkTitle = (props: { fields: NavigationFields }): string | undefined => {
   let title: string | undefined;
   if (props.fields.NavigationTitle?.value) {
     title = props.fields.NavigationTitle.value.toString();
@@ -89,7 +70,7 @@ export const Default = (props: NavigationProps): JSX.Element => {
 
   const list = Object.values(props.fields)
     .filter((element) => element)
-    .map((element: Fields, key: number) => (
+    .map((element: NavigationFields, key: number) => (
       <NavigationList
         key={`${key}${element.Id}`}
         fields={element}

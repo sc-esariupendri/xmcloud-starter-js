@@ -5,15 +5,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Facebook, Linkedin, Twitter, Link, Check, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import {
-  Field,
-  Item,
-  ImageField,
-  LinkField,
-  Text,
-  DateField,
-} from '@sitecore-content-sdk/nextjs';
-import { ComponentProps } from '@/lib/component-props';
+import { Text, DateField } from '@sitecore-content-sdk/nextjs';
+import { ArticleHeaderProps } from './article-header.props';
 
 import { NoDataFallback } from '@/utils/NoDataFallback';
 import { Badge } from '@/components/ui/badge';
@@ -32,54 +25,6 @@ import {
   generatePersonSchema,
 } from '@/lib/structured-data/schema';
 
-interface ArticleHeaderParams {
-  [key: string]: any; // eslint-disable-line
-}
-
-type ReferenceField = {
-  id: string;
-  name: string;
-  url?: string;
-  displayName?: string;
-  fields?: {
-    [key: string]: Field | Item[] | ReferenceField | null;
-  };
-};
-
-type AuthorReferenceField = ReferenceField & {
-  fields: PersonItem;
-};
-
-interface ArticleHeaderFields {
-  imageRequired?: { jsonValue: ImageField };
-  eyebrowOptional?: { jsonValue: Field<string> };
-}
-
-interface ArticleHeaderExternalFields {
-  pageHeaderTitle: { jsonValue: Field<string> };
-  pageReadTime?: { jsonValue: Field<string> };
-  pageDisplayDate?: { jsonValue: Field<string> };
-  pageAuthor?: { jsonValue: AuthorReferenceField };
-}
-
-interface ArticleHeaderProps extends ComponentProps {
-  params: ArticleHeaderParams;
-  fields: {
-    data: {
-      datasource: ArticleHeaderFields;
-      externalFields: ArticleHeaderExternalFields;
-    };
-  };
-}
-
-interface PersonItem {
-  personProfileImage?: ImageField;
-  personFirstName: Field<string>;
-  personLastName: Field<string>;
-  personJobTitle?: Field<string>;
-  personBio?: Field<string>;
-  personLinkedIn?: LinkField;
-}
 
 export const Default: React.FC<ArticleHeaderProps> = ({ fields, page }) => {
   const { imageRequired, eyebrowOptional } = fields?.data?.datasource ?? {};

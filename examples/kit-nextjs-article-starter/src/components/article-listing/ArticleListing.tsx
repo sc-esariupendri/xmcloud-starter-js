@@ -5,54 +5,13 @@ import Image from 'next/image';
 import {
   Link,
   Text,
-  Field,
-  ImageField,
-  LinkField,
 } from '@sitecore-content-sdk/nextjs';
 import { cn } from '@/lib/utils';
 import { EditableButton as Button } from '@/components/button-component/ButtonComponent';
-import { ComponentProps } from '@/lib/component-props';
-import { ReferenceField } from '@/types/ReferenceField.props';
-import { AuthorReferenceField } from '@/types/AuthorTaxonomy.props';
-
-interface ArticleListingParams {
-  [key: string]: any; // eslint-disable-line
-}
-
-type ArticleItemReferenceField = ReferenceField & {
-  fields: ArticleItem;
-};
-
-interface ArticleItem {
-  pageTitle: Field<string>;
-  pageSummary: Field<string>;
-  pageThumbnail: ImageField;
-  pageReadTime: Field<string>;
-  taxAuthor: AuthorReferenceField;
-}
-
-interface ArticleListingFields {
-  titleOptional?: Field<string>;
-  descriptionOptional?: Field<string>;
-  linkOptional?: LinkField;
-  featuredContent: ArticleItemReferenceField[];
-}
-
-interface ArticleListingProps extends ComponentProps {
-  params: ArticleListingParams;
-  fields: ArticleListingFields;
-  isPageEditing?: boolean;
-}
-
-interface TransformedArticle {
-  link: string;
-  image: string;
-  title: string;
-  summary: string;
-  author: string;
-  authorImage: string;
-  readTime: string;
-}
+import {
+  ArticleListingProps,
+  TransformedArticle,
+} from './article-listing.props';
 
 export const Default: React.FC<ArticleListingProps> = ({
   fields,

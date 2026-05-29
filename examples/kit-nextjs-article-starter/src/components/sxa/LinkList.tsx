@@ -1,37 +1,7 @@
 import React, { JSX } from 'react';
-import { Link as ContentSdkLink, Text, LinkField, TextField } from '@sitecore-content-sdk/nextjs';
+import { Link as ContentSdkLink, Text } from '@sitecore-content-sdk/nextjs';
 import { getDescriptiveLinkText } from '@/utils/link-text';
-
-type ResultsFieldLink = {
-  field: {
-    link: LinkField;
-  };
-};
-
-interface Fields {
-  data: {
-    datasource: {
-      children: {
-        results: ResultsFieldLink[];
-      };
-      field: {
-        title: TextField;
-      };
-    };
-  };
-}
-
-type LinkListProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-type LinkListItemProps = {
-  key: string;
-  index: number;
-  total: number;
-  field: LinkField;
-};
+import { LinkListProps, LinkListItemProps, ResultsFieldLink } from './sxa-link-list.props';
 
 const LinkListItem = (props: LinkListItemProps) => {
   let className = `item${props.index}`;

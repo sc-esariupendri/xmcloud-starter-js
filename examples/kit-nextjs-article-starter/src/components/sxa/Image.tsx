@@ -1,27 +1,14 @@
 'use client';
 
 import {
-  Field,
-  ImageField,
   NextImage as ContentSdkImage,
   Link as ContentSdkLink,
-  LinkField,
   useSitecore,
 } from '@sitecore-content-sdk/nextjs';
 import React, { JSX } from 'react';
+import { SXAImageProps } from './sxa-image.props';
 
-interface Fields {
-  Image: ImageField & { metadata?: { [key: string]: unknown } };
-  ImageCaption: Field<string>;
-  TargetUrl: LinkField;
-}
-
-type ImageProps = {
-  params: { [key: string]: string };
-  fields: Fields;
-};
-
-export const Banner = (props: ImageProps): JSX.Element => {
+export const Banner = (props: SXAImageProps): JSX.Element => {
   const { page } = useSitecore();
   const { Image } = props.fields;
   const { TargetUrl } = props.fields;
@@ -47,7 +34,7 @@ export const Banner = (props: ImageProps): JSX.Element => {
   return <div className={classNameList}></div>;
 };
 
-export const Default = (props: ImageProps): JSX.Element => {
+export const Default = (props: SXAImageProps): JSX.Element => {
   const { fields, params } = props;
   const sxaStyles = params?.Styles ?? '';
   const classNameList = `component image ${sxaStyles}`.trimEnd();

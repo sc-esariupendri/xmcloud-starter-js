@@ -1,13 +1,6 @@
 import { Image } from '@sitecore-content-sdk/nextjs';
 import { cn } from '@/lib/utils';
-import { LogoItemProps } from './logo-tabs.props';
-
-interface LogoButtonProps extends LogoItemProps {
-  isActive: boolean;
-  onClick: () => void;
-  id: string;
-  controls: string;
-}
+import { LogoButtonProps } from './logo-item.props';
 
 export const LogoItem: React.FC<LogoButtonProps> = ({
   logo,
