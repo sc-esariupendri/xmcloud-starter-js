@@ -1,8 +1,8 @@
 ﻿---
 ID: "3c2b7d00-8de2-4636-a65f-d667a75ec4a7"
-Parent: "544cb75b-b370-47fd-a85c-11c31c7f244b"
+Parent: "baddac4b-e97f-4174-9b7f-105773732974"
 Template: "455a3e98-a627-4b40-8035-e683a0331ac7"
-Path: "/sitecore/templates/Project/click-click-launch/Components/Banners/Hero/Hero/description"
+Path: "/sitecore/templates/Project/click-click-launch/Components/Page Content/_Summary Base/Page Content/description"
 SharedFields:
 - ID: "ab162cc0-dc80-4abf-8871-998ee5d7ba32"
   Hint: Type

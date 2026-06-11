@@ -1,8 +1,8 @@
-﻿---
+---
 ID: "fcaa6879-c4b3-47c0-a2e4-c271b592ebe2"
 Parent: "4de6da0c-90e0-407d-8076-c2265e18a1b5"
 Template: "4de6da0c-90e0-407d-8076-c2265e18a1b5"
-Path: "/sitecore/templates/Project/click-click-launch/Components/CTA Sectoins/CallToAction/__Standard Values"
+Path: "/sitecore/templates/Project/click-click-launch/Components/CTA Sections/CallToAction/__Standard Values"
 SharedFields:
 - ID: "ca9b9f52-4fb0-4f87-a79f-24dea62cda65"
   Hint: __Default workflow

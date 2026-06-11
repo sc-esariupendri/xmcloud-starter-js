@@ -1,32 +1,30 @@
-﻿---
-ID: "4de6da0c-90e0-407d-8076-c2265e18a1b5"
-Parent: "5518d63d-3684-452b-9b40-7ad2079d7133"
-Template: "ab86861a-6030-46c5-b394-e8f99e8b87db"
-Path: "/sitecore/templates/Project/click-click-launch/Components/CTA Sectoins/CallToAction"
+---
+ID: "db177faa-b2b1-4764-8c1b-25b24ec5ecfc"
+Parent: "52cbcc6c-c505-4f20-a391-9070376878f4"
+Template: "455a3e98-a627-4b40-8035-e683a0331ac7"
+Path: "/sitecore/templates/Project/click-click-launch/Components/CTA Sections/CallToAction/Call To Action/CTABody"
 SharedFields:
-- ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
-  Hint: __Icon
-  Value: Office/32x32/megaphone.png
-- ID: "12c33f3f-86c5-43a5-aeb4-5598cec45116"
-  Hint: __Base template
-  Value: |
-    {1930BBEB-7805-471A-A3BE-4858AC7CF696}
-    {44A022DB-56D3-419A-B43B-E27E4D8E9C41}
+- ID: "1eb8ae32-e190-44a6-968d-ed904c794ebf"
+  Hint: Source
+  Value: "query:$xaRichTextProfile"
+- ID: "24cb32f0-e364-4f37-b400-0f2899097b5b"
+  Hint: Enable Shared Language Fallback
+  Value: 1
+- ID: "ab162cc0-dc80-4abf-8871-998ee5d7ba32"
+  Hint: Type
+  Value: Rich Text
 - ID: "ba3f86a2-4a1c-4d78-b63d-91c2779c1b5e"
   Hint: __Sortorder
-  Value: 50
-- ID: "dbbbeca1-21c7-4906-9dd2-493c1efa59a2"
-  Hint: __Shared revision
-  Value: "1fae72f5-d85a-4bd8-9d45-c133492d150a"
-- ID: "f7d48a55-2158-4f02-9356-756654404f73"
-  Hint: __Standard values
-  Value: "{FCAA6879-C4B3-47C0-A2E4-C271B592EBE2}"
+  Value: 150
 Languages:
 - Language: "de-DE"
   Fields:
+  - ID: "19a69332-a23e-4e70-8d16-b2640cb24cc8"
+    Hint: Title
+    Value: Text 2
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: Promo
+    Value: PromoText2
   Versions:
   - Version: 1
     Fields:
@@ -53,34 +51,40 @@ Languages:
       Value: 20250216T095731Z
 - Language: en
   Fields:
-  - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
-    Hint: __Display name
-    Value: 
+  - ID: "19a69332-a23e-4e70-8d16-b2640cb24cc8"
+    Hint: Title
+    Value: Body
   Versions:
   - Version: 1
     Fields:
     - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
       Hint: __Created
-      Value: 20111213T133000Z
+      Value: 20141106T115010
     - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
       Hint: __Created by
       Value: |
-        sitecore\admin
+        sitecore\adamnaj
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "c7cae301-cdf2-4c1d-88fd-a7bd5e4e789c"
+      Value: "e25fe92b-2833-4fcb-bb13-6d82520681c5"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
-        sitecore\anton.kechashin@sitecore.com
+        sitecore\richard.seal@sitecore.com
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20250717T132707Z
+      Value: 20250216T190746Z
+    - ID: "fa622538-0c13-4130-a001-45984241aa00"
+      Hint: Enable Language Fallback
+      Value: 1
 - Language: "ja-JP"
   Fields:
+  - ID: "19a69332-a23e-4e70-8d16-b2640cb24cc8"
+    Hint: Title
+    Value: ???? 2
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: プロモ
+    Value: ??? ????2
   Versions:
   - Version: 1
     Fields:
@@ -107,9 +111,12 @@ Languages:
       Value: 20250216T095731Z
 - Language: "zh-CN"
   Fields:
+  - ID: "19a69332-a23e-4e70-8d16-b2640cb24cc8"
+    Hint: Title
+    Value: ??2
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: 促销
+    Value: ????2
   Versions:
   - Version: 1
     Fields:

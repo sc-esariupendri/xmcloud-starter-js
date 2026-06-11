@@ -1,8 +1,8 @@
-﻿---
+---
 ID: "52cbcc6c-c505-4f20-a391-9070376878f4"
 Parent: "4de6da0c-90e0-407d-8076-c2265e18a1b5"
 Template: "e269fbb5-3750-427a-9149-7aa950b49301"
-Path: "/sitecore/templates/Project/click-click-launch/Components/CTA Sectoins/CallToAction/Call To Action"
+Path: "/sitecore/templates/Project/click-click-launch/Components/CTA Sections/CallToAction/Call To Action"
 SharedFields:
 - ID: "06d5295c-ed2f-4a54-9bf2-26228d113318"
   Hint: __Icon
@@ -62,7 +62,7 @@ Languages:
   Fields:
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: プロモ
+    Value: ???
   Versions:
   - Version: 1
     Fields:
@@ -91,7 +91,7 @@ Languages:
   Fields:
   - ID: "b5e02ad9-d56f-4c41-a065-a133db87bdeb"
     Hint: __Display name
-    Value: 促销
+    Value: ??
   Versions:
   - Version: 1
     Fields:
