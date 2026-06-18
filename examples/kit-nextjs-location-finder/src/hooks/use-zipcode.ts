@@ -1,7 +1,11 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { USER_ZIPCODE } from '@/lib/constants';
+import {
+  clearZipcodeFromSession,
+  readZipcodeFromSession,
+  storeZipcodeInSession,
+} from '@/utils/zipcode-storage';
 
 type ZipcodeState = {
   zipcode: string | null;
@@ -9,8 +13,6 @@ type ZipcodeState = {
   error: string | null;
   showModal: boolean;
 };
-
-const STORAGE_KEY = USER_ZIPCODE;
 
 const GEOLOCATION_TIMEOUT = 8000; // 8 seconds timeout before showing modal
 
@@ -76,7 +78,7 @@ export function useZipcode(defaultZipcode: string) {
         const data = await response.json();
 
         if (data.postal) {
-          sessionStorage.setItem(STORAGE_KEY, data.postal);
+          storeZipcodeInSession(data.postal);
 
           setState((prev) => ({
             ...prev,
@@ -131,8 +133,7 @@ export function useZipcode(defaultZipcode: string) {
           const zipcode = data.address?.postcode || null;
 
           if (zipcode) {
-            // Save to sessionStorage
-            sessionStorage.setItem(STORAGE_KEY, zipcode);
+            storeZipcodeInSession(zipcode);
 
             setState((prev) => {
               return {
@@ -224,9 +225,9 @@ export function useZipcode(defaultZipcode: string) {
   // Function to manually update zipcode
   const updateZipcode = useCallback((newZipcode: string | null) => {
     if (newZipcode) {
-      sessionStorage.setItem(STORAGE_KEY, newZipcode);
+      storeZipcodeInSession(newZipcode);
     } else {
-      sessionStorage.removeItem(STORAGE_KEY);
+      clearZipcodeFromSession();
     }
 
     setState((prev) => ({
@@ -262,7 +263,7 @@ export function useZipcode(defaultZipcode: string) {
     }
 
     // Try to get zipcode from sessionStorage first (synchronous & fast)
-    const storedZipcode = sessionStorage.getItem(STORAGE_KEY);
+    const storedZipcode = readZipcodeFromSession();
 
     if (storedZipcode) {
       setState((prev) => ({
